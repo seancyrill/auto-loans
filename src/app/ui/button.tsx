@@ -15,15 +15,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-white",
+        default: "text-primary",
         subtle: "",
-        ghost: "bg-white",
+        ghost: "bg-primary",
         link: "bg-transparent underline-offset-4 hover:underline px-0",
-      },
-      color: {
-        primary: "",
-        red: "",
-        neutral: "",
       },
       size: {
         default: "h-10 px-4 py-2 text-base",
@@ -33,16 +28,11 @@ const buttonVariants = cva(
       },
     },
     compoundVariants: [
-      // Primary logic
-      { variant: "default", color: "primary", className: "bg-blue-600 hover:bg-blue-700" },
-      { variant: "subtle", color: "primary", className: "bg-blue-50 text-blue-600 hover:bg-blue-100" },
-      // Red logic
-      { variant: "default", color: "red", className: "bg-red-600 hover:bg-red-700" },
-      { variant: "ghost", color: "red", className: "text-red-600 hover:bg-red-50" },
+      { variant: "default", className: "bg-secondary" },
+      { variant: "subtle", className: "bg-primary text-negative" },
     ],
     defaultVariants: {
       variant: "default",
-      color: "primary",
       size: "default",
     },
   },
@@ -58,14 +48,11 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
 
 // 3. The Component
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { className, variant, color, size, leftIcon: LeftIcon, rightIcon: RightIcon, isLoading, children, ...props },
-    ref,
-  ) => {
+  ({ className, variant, size, leftIcon: LeftIcon, rightIcon: RightIcon, isLoading, children, ...props }, ref) => {
     return (
       <button
         ref={ref}
-        className={cn(buttonVariants({ variant, color, size, className }))}
+        className={cn(buttonVariants({ variant, size, className }))}
         disabled={isLoading || props.disabled}
         {...props}
       >
