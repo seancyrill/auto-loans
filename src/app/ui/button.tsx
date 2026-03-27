@@ -1,3 +1,5 @@
+"use client"
+
 import { cva, type VariantProps } from "class-variance-authority"
 import { clsx, type ClassValue } from "clsx"
 import { LucideIcon } from "lucide-react"
@@ -11,13 +13,14 @@ function cn(...inputs: ClassValue[]) {
 
 // 1. Define Variants
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md font-medium transition-all duration-300 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60",
+  "inline-flex items-center justify-center rounded-md font-medium cursor-pointer transition-all duration-300 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60 hover:brightness-90",
   {
     variants: {
       variant: {
-        default: "text-primary",
-        subtle: "",
-        ghost: "bg-primary",
+        default: "text-primary bg-secondary",
+        yellow: "text-primary bg-accent",
+        subtle: "border bg-primary",
+        ghost: "bg-primary text-negative",
         link: "bg-transparent underline-offset-4 hover:underline px-0",
       },
       size: {
@@ -27,10 +30,6 @@ const buttonVariants = cva(
         lg: "h-11 px-5 text-lg",
       },
     },
-    compoundVariants: [
-      { variant: "default", className: "bg-secondary" },
-      { variant: "subtle", className: "bg-primary text-negative" },
-    ],
     defaultVariants: {
       variant: "default",
       size: "default",

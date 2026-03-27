@@ -8,27 +8,20 @@ import { formatPhone } from "../utils/format-number"
 import { SubmitModal } from "./components/submit-options"
 
 export default function Form() {
-  const { applicationData, updateApplicationData, resetApplication } = useApplication()
+  const { applicationData, updateApplicationData, applicationLoading } = useApplication()
   const [open, setOpen] = useState(false)
-  const [isLoaidng, setIsLoaidng] = useState(false)
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
-    setIsLoaidng(true)
+    setOpen(true)
+  }
 
-    // const res = await fetch("/api/submit", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ applicationData, lender: "gdfi" }),
-    // })
-
-    // const data = await res.json()
-    // if (data.success) {
-    alert("Submitted successfully!")
-    resetApplication()
-    // }
-
-    setIsLoaidng(false)
+  if (applicationLoading.loading) {
+    return (
+      <div className="bg-primary fixed top-0 left-0 grid h-full w-full place-content-center">
+        <p>{applicationLoading.text ?? "Initializing..."}</p>
+      </div>
+    )
   }
 
   return (
@@ -70,28 +63,17 @@ export default function Form() {
             }
           }}
           maxLength={12}
-          placeholder="912 123 1234"
+          minLength={12}
+          placeholder="9XX XXX XXXX"
           label="Mobile Number"
           mobile
         />
 
-        <Button type="submit" className="mt-4" disabled={isLoaidng}>
+        <Button className="mt-4" disabled={applicationLoading.loading}>
           Submit
         </Button>
-
-        <SubmitModal
-          open={open}
-          onSubmitAsIs={() => {
-            alert("Submitted as is!")
-            setOpen(false)
-          }}
-          onFillMoreForms={() => {
-            alert("Redirecting to extended form...")
-            setOpen(false)
-          }}
-          onClose={() => setOpen(false)}
-        />
       </form>
+      <SubmitModal open={open} onClose={() => setOpen(false)} />
     </div>
   )
 }
