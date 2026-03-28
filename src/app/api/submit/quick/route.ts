@@ -1,8 +1,7 @@
-import fs from "fs"
+import { ApplicationFormType } from "@/app/context/form-context"
 import { NextRequest, NextResponse } from "next/server"
 import nodemailer from "nodemailer"
-import path from "path"
-import { fillPdf } from "./fill-pdf"
+import { getEmailHTML } from "../email-template"
 
 export async function POST(req: NextRequest) {
   const GMAIL_USER = process.env.GMAIL_USER
@@ -14,10 +13,11 @@ export async function POST(req: NextRequest) {
 
   const { applicationData, lender } = await req.json()
 
-  // Load the PDF template sitting next to this route.ts
-  const pdfPath = path.join(process.cwd(), "src/templates/gdfi-application.pdf")
-  const templateBytes = fs.readFileSync(pdfPath)
-  const filledPdfBytes = await fillPdf(templateBytes, applicationData)
+  const { firstName, lastName, mobile } = applicationData as ApplicationFormType
+
+  if (!firstName || !lastName || !mobile) {
+    return NextResponse.json({ success: false, message: "Missing basic requiremnets" }, { status: 400 })
+  }
 
   // setup mailer
   const transporter = nodemailer.createTransport({
@@ -34,14 +34,8 @@ export async function POST(req: NextRequest) {
   await transporter.sendMail({
     from: GMAIL_USER,
     to: lenderEmail,
-    subject: "New Form Submission",
-    text: `New submission from ${applicationData.firstName}`,
-    attachments: [
-      {
-        filename: "filled-form.pdf",
-        content: Buffer.from(filledPdfBytes),
-      },
-    ],
+    subject: "Auto Loans Quick Submission",
+    html: getEmailHTML(`${firstName} ${lastName}`, `0${mobile}`),
   })
 
   return NextResponse.json({ success: true })

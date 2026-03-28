@@ -3,7 +3,7 @@
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react"
 import LoadingSpinner from "../components/loading-spinner"
 
-type ApplicationFormType = {
+export type ApplicationFormType = {
   income: IncomeOption
   firstName: string
   middleName: string
@@ -76,7 +76,7 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
         console.error("Error saving application data to storage:", error)
       }
     }
-  }, [applicationData])
+  }, [applicationData, applicationLoading.loading])
 
   const updateApplicationData = <K extends keyof ApplicationFormType>(field: K, value: ApplicationFormType[K]) => {
     setApplicationData((prev) => {
