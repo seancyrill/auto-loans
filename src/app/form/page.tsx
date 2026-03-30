@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import LoadingSpinner from "../components/loading-spinner"
 import { useApplication } from "../context/form-context"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
@@ -22,6 +23,10 @@ export default function Form() {
         <p>{applicationLoading.text ?? "Initializing..."}</p>
       </div>
     )
+  }
+
+  if (applicationLoading.loading) {
+    return <LoadingSpinner loadingText={applicationLoading.text ?? ""} />
   }
 
   return (
@@ -50,6 +55,13 @@ export default function Form() {
             onChange={(e) => updateApplicationData("middleName", e.target.value)}
             placeholder="Pangilinan"
             label="Middle Name"
+          />
+          <Input
+            value={applicationData.nameSuffix}
+            className="w-10"
+            onChange={(e) => updateApplicationData("nameSuffix", e.target.value)}
+            placeholder="II"
+            label="Suffix"
           />
         </div>
 

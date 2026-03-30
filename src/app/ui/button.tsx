@@ -43,28 +43,18 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
     leftIcon?: LucideIcon
     rightIcon?: LucideIcon
-    isLoading?: boolean
   }
 
 // 3. The Component
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, leftIcon: LeftIcon, rightIcon: RightIcon, isLoading, children, ...props }, ref) => {
+  ({ className, variant, size, leftIcon: LeftIcon, rightIcon: RightIcon, children, ...props }, ref) => {
     return (
-      <button
-        ref={ref}
-        className={cn(buttonVariants({ variant, size, className }))}
-        disabled={isLoading || props.disabled}
-        {...props}
-      >
-        {isLoading ? (
-          <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-        ) : (
-          LeftIcon && <LeftIcon className="mr-2 h-4 w-4" />
-        )}
+      <button ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props}>
+        {LeftIcon && <LeftIcon className="mr-2 h-4 w-4" />}
 
         {children}
 
-        {!isLoading && RightIcon && <RightIcon className="ml-2 h-4 w-4" />}
+        {RightIcon && <RightIcon className="ml-2 h-4 w-4" />}
       </button>
     )
   },

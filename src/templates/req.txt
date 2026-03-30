@@ -1,0 +1,23 @@
+Basic requirements:
+Original or/cr
+2 government issued ID
+Proof of billing electric or water bill
+Application form to be signed here at office
+Proof of TIN
+
+Proof of income
+If Business:
+DTI
+Mayors or barangay permit
+Proof of transaction (receipts or logbook)
+Bank statement (if any)
+
+If employed
+Latest 3 months payslip
+COE
+
+If remittance
+Proof of remittance 3 months.
+
+check languages, add stripe etc
+readd dmp

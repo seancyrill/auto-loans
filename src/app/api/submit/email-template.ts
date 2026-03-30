@@ -30,7 +30,7 @@ export function getEmailHTML(name: string, phone: string) {
               <p style="margin:0 0 6px 0; font-size:11px; font-weight:600; letter-spacing:2px;
                          color:#6b7280; text-transform:uppercase;">Form Notification</p>
               <h1 style="margin:0; font-size:22px; font-weight:700; color:#1a1a2e; line-height:1.3;">
-                New Submission Received
+                New Applicant Received
               </h1>
             </td>
           </tr>

@@ -1,42 +1,67 @@
 "use client"
 
-import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react"
-import LoadingSpinner from "../components/loading-spinner"
-
-export type ApplicationFormType = {
-  income: IncomeOption
-  firstName: string
-  middleName: string
-  lastName: string
-  birthdDay: string
-  mobile: string
-  email: string
-}
-
-export const INCOME_OPTIONS = ["employed", "business", "remittance", "allotment", "own clinic"] as const
-export type IncomeOption = (typeof INCOME_OPTIONS)[number]
-
-type ApplicationLoadingType = {
-  loading: boolean
-  text?: string
-}
-
-type ApplicationContextType = {
-  applicationData: ApplicationFormType
-  updateApplicationData: <K extends keyof ApplicationFormType>(field: K, value: ApplicationFormType[K]) => void
-  resetApplication: (setInto?: ApplicationFormType) => void
-  applicationLoading: ApplicationLoadingType
-  setApplicationLoading: Dispatch<SetStateAction<ApplicationLoadingType>>
-}
+import { ReactNode, createContext, useContext, useEffect, useState } from "react"
+import { ApplicationContextType, ApplicationFormType, ApplicationLoadingType } from "./form-context-types"
 
 const initApplicationData: ApplicationFormType = {
-  income: "employed",
+  // Personal Information
   firstName: "",
   middleName: "",
   lastName: "",
-  birthdDay: "",
-  email: "",
+  nameSuffix: "",
+  civilStatus: "",
+  birthDate: "",
+  birthPlace: "",
+  gender: "",
+  presentAddress: "",
+  addressPresYears: "",
+  addressPresMonths: "",
+  permanentAddress: "",
+  addressPermYears: "",
+  addressPermMonths: "",
+  provincialAddress: "",
+  addressProvYears: "",
+  addressProvMonths: "",
+  primaryPhone: "",
   mobile: "",
+  email: "",
+  citizenship: "",
+  citizenshipOther: "",
+  tin: "",
+  sssNumber: "",
+  gsisNumber: "",
+  schoolName: "",
+  schoolGradeLevel: "",
+  schoolYearGraduated: "",
+  houseOwnership: "",
+  houseRentMonthly: "",
+  houseMortgageMonthly: "",
+  houseOwnedBy: "",
+  dependents: [],
+
+  // Income Information
+  employerName: "",
+  businessName: "",
+  incomeNotApplicable: false,
+  monthlyIncome: "",
+  employmentYears: "",
+  employmentMonths: "",
+  employerBusinessAddress: "",
+  prcLicenseNumber: "",
+  businessTelNumber: "",
+  incomeSources: [],
+  natureOfWork: "",
+  natureOfWorkOther: "",
+
+  // How did you learn about GDFI
+  gdfiSources: [],
+  gdfiSourceSocialMediaOther: "",
+
+  // Borrower's Bank Accounts
+  bankAccounts: [],
+
+  // Borrower's Authorization to Verify Bank Details
+  authorizeBankDetails: [],
 }
 
 const ApplicationContext = createContext<ApplicationContextType | undefined>(undefined)
@@ -98,7 +123,6 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
         setApplicationLoading,
       }}
     >
-      {applicationLoading.loading && <LoadingSpinner loadingText={applicationLoading.text ?? ""} />}
       {children}
     </ApplicationContext.Provider>
   )
