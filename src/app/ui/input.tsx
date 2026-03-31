@@ -34,8 +34,8 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> &
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, variant, size, label, mobile, ...props }, ref) => {
     return (
-      <div className="text-sm">
-        {!!label?.length && <label>{label}</label>}
+      <div className="w-full text-sm">
+        {!!label?.length && <label className="text-nowrap">{label}</label>}
 
         <div className="flex gap-1">
           {mobile && <span className="grid place-content-center">+63</span>}

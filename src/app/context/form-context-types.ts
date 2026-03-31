@@ -34,9 +34,7 @@ export type ApplicationFormType = {
   provincialAddress: string
   addressProvYears: string
   addressProvMonths: string
-  primaryPhone: string
   mobile: string
-  email: string
   citizenship: Citizenship | ""
   citizenshipOther: string
   tin: string
@@ -64,10 +62,6 @@ export type ApplicationFormType = {
   incomeSources: IncomeSource[]
   natureOfWork: NatureOfWork | ""
   natureOfWorkOther: string
-
-  // How did you learn about GDFI
-  gdfiSources: GdfiSource[]
-  gdfiSourceSocialMediaOther: string
 
   // Borrower's Bank Accounts
   bankAccounts: BankAccountEntry[]
@@ -99,7 +93,7 @@ export type Gender = (typeof GENDER_OPTIONS)[number]
 export const CITIZENSHIP_OPTIONS = ["filipino", "others"] as const
 export type Citizenship = (typeof CITIZENSHIP_OPTIONS)[number]
 
-export const HOUSE_OWNERSHIP_OPTIONS = ["ownedNotMortgaged", "ownedMortgaged", "rented", "usedFree"] as const
+export const HOUSE_OWNERSHIP_OPTIONS = ["owned (Not Mortgaged)", "owned (Mortgaged)", "rented", "used Free"] as const
 export type HouseOwnership = (typeof HOUSE_OWNERSHIP_OPTIONS)[number]
 
 export const INCOME_SOURCE_OPTIONS = [
@@ -109,45 +103,33 @@ export const INCOME_SOURCE_OPTIONS = [
   "commissions",
   "business",
   "interestIncome",
-  "saleOfAssets",
+  "sale Of Assets",
 ] as const
 export type IncomeSource = (typeof INCOME_SOURCE_OPTIONS)[number]
 
 export const ACCOUNT_TYPE_OPTIONS = ["savings", "current"] as const
 export type AccountType = (typeof ACCOUNT_TYPE_OPTIONS)[number]
 
-export const GDFI_SOURCE_OPTIONS = [
-  "walkInClient",
-  "gdfiWebsite",
-  "gdfiEmployee",
-  "loanConsultant",
-  "billboardOutdoorAds",
-  "eventsSponshorships",
-  "televisionRadioPrint",
-  "socialMedia",
-] as const
-export type GdfiSource = (typeof GDFI_SOURCE_OPTIONS)[number]
-
 export const NATURE_OF_WORK_OPTIONS = [
-  "agricultureAnimalFarming",
-  "foodServicesFoodProcessing",
-  "realEstateLeasing",
-  "bpoKpo",
-  "governmentService",
+  "agriculture / Animal Farming",
+  "food Services / Food Processing",
+  "real Estate Leasing",
+  "BPO",
+  "government Service",
   "tourism",
-  "casinoGamingClub",
-  "itSoftware",
+  "casino / Gaming Club",
+  "IT / Software",
   "transportation",
   "construction",
-  "lawAccountingAuditingFirm",
-  "wholesaleRetailTrade",
-  "financeInsuranceSecurities",
+  "law / Accounting / Auditing Firm",
+  "wholesale / Retail Trade",
+  "finance / Insurance / Securities",
   "manufacturing",
   "utilities",
-  "forexMoneyChangerRemittance",
-  "maritimeShipping",
+  "forex / Money Changer / Remittance Agent",
+  "maritime / Shipping",
   "foundation",
-  "medicalHealthServices",
+  "medical Health Services",
   "others",
 ] as const
 export type NatureOfWork = (typeof NATURE_OF_WORK_OPTIONS)[number]

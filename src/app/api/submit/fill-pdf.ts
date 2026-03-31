@@ -1,8 +1,25 @@
 import { ApplicationFormType } from "@/app/context/form-context-types"
-import { PDFFont, PDFPage, rgb, RGB } from "pdf-lib"
+import fs from "fs"
+import path from "path"
+import { PDFDocument, PDFFont, PDFPage, rgb, RGB, StandardFonts } from "pdf-lib"
 
 const BLACK = rgb(0, 0, 0)
 const PDF_HEIGHT = 1008
+
+export async function fillGdfiApplication(data: ApplicationFormType): Promise<Uint8Array> {
+  const pdfPath = path.join(process.cwd(), "src/templates/gdfi-application.pdf")
+  const templateBytes = fs.readFileSync(pdfPath)
+
+  const pdfDoc = await PDFDocument.load(templateBytes)
+  const pages = pdfDoc.getPages()
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
+
+  fillPage1(pages[0], data, font)
+  fillPage2(pages[1], data, font)
+  fillPage3(pages[2], data, font)
+
+  return pdfDoc.save()
+}
 
 /**
  * Converts structure-extracted "top" coordinate (y=0 at top)
@@ -18,7 +35,7 @@ function draw(page: PDFPage, text: string, x: number, top: number, font: PDFFont
 }
 
 function checkMark(page: PDFPage, x: number, top: number, font: PDFFont) {
-  draw(page, "✓", x, top, font, 7)
+  draw(page, "X", x, top, font, 7)
 }
 
 export function fillPage1(page: PDFPage, data: ApplicationFormType, font: PDFFont) {
@@ -68,8 +85,7 @@ export function fillPage1(page: PDFPage, data: ApplicationFormType, font: PDFFon
   draw(page, data.addressProvMonths, 463, 443, font, 8)
 
   // Contact Details — top≈459–464
-  // Primary Phone at x≈140, Mobile at x≈240, Email at x≈370
-  draw(page, data.primaryPhone, 140, 465, font, 8)
+  // Mobile at x≈240, Email at x≈370
   draw(page, data.mobile, 252, 465, font, 8)
   // draw(page, data.email,        370, 465, font, 8)
 
@@ -97,18 +113,18 @@ export function fillPage1(page: PDFPage, data: ApplicationFormType, font: PDFFon
 
   // House Ownership — checkboxes at top≈560–581
   // Owned (Not mortgaged) at x≈148, Rented at x≈274, Owned (Mortgaged) at x≈148 row2, Used Free at x≈148 row3
-  if (data.houseOwnership === "ownedNotMortgaged") checkMark(page, 148, 560, font)
+  if (data.houseOwnership === "owned (Not Mortgaged)") checkMark(page, 148, 560, font)
   if (data.houseOwnership === "rented") {
     checkMark(page, 274, 560, font)
     draw(page, data.houseRentMonthly, 421, 560, font, 8)
     draw(page, data.houseOwnedBy, 368, 592, font, 8)
   }
-  if (data.houseOwnership === "ownedMortgaged") {
+  if (data.houseOwnership === "owned (Mortgaged)") {
     checkMark(page, 148, 571, font)
     draw(page, data.houseMortgageMonthly, 359, 571, font, 8)
     draw(page, data.houseOwnedBy, 385, 603, font, 8)
   }
-  if (data.houseOwnership === "usedFree") {
+  if (data.houseOwnership === "used Free") {
     checkMark(page, 148, 581, font)
     draw(page, data.houseOwnedBy, 381, 614, font, 8)
   }
@@ -156,7 +172,7 @@ export function fillPage1(page: PDFPage, data: ApplicationFormType, font: PDFFon
   if (data.incomeSources.includes("commissions")) checkMark(page, 408, 815, font)
   if (data.incomeSources.includes("business")) checkMark(page, 148, 827, font)
   if (data.incomeSources.includes("interestIncome")) checkMark(page, 227, 827, font)
-  if (data.incomeSources.includes("saleOfAssets")) checkMark(page, 317, 827, font)
+  if (data.incomeSources.includes("sale Of Assets")) checkMark(page, 317, 827, font)
 }
 
 /**
@@ -198,12 +214,12 @@ export function fillPage2(page: PDFPage, data: ApplicationFormType, font: PDFFon
 
   natureOfWorkLeftCol.forEach(([value, top]) => {
     if (data.natureOfWork === value) {
-      page.drawText("✓", { x: 148, y: y(top), size: 7, font, color: BLACK })
+      page.drawText("X", { x: 148, y: y(top), size: 7, font, color: BLACK })
     }
   })
   natureOfWorkRightCol.forEach(([value, top]) => {
     if (data.natureOfWork === value) {
-      page.drawText("✓", { x: 345, y: y(top), size: 7, font, color: BLACK })
+      page.drawText("X", { x: 345, y: y(top), size: 7, font, color: BLACK })
     }
   })
   if (data.natureOfWork === "others" && data.natureOfWorkOther) {

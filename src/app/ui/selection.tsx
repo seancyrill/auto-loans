@@ -113,7 +113,7 @@ const SelectionMenu = React.forwardRef<HTMLDivElement, SelectionMenuProps>(
                 )}
               >
                 <RadioDot checked={checked} />
-                <span className={cn("flex flex-col gap-0.5 text-left", columns > 1 && "min-w-0")}>
+                <span className={cn("flex flex-col gap-0.5 text-left capitalize", columns > 1 && "min-w-0")}>
                   <span className="leading-snug font-medium">{option.label}</span>
                   {option.description && (
                     <span className={cn("text-xs leading-snug text-gray-400", checked && "text-secondary/70")}>

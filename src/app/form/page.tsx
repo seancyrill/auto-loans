@@ -37,13 +37,6 @@ export default function Form() {
       >
         <div className="flex gap-1.5">
           <Input
-            value={applicationData.lastName}
-            required
-            onChange={(e) => updateApplicationData("lastName", e.target.value)}
-            placeholder="Dela Cruz"
-            label="Last Name"
-          />
-          <Input
             value={applicationData.firstName}
             required
             onChange={(e) => updateApplicationData("firstName", e.target.value)}
@@ -55,6 +48,13 @@ export default function Form() {
             onChange={(e) => updateApplicationData("middleName", e.target.value)}
             placeholder="Pangilinan"
             label="Middle Name"
+          />
+          <Input
+            value={applicationData.lastName}
+            required
+            onChange={(e) => updateApplicationData("lastName", e.target.value)}
+            placeholder="Dela Cruz"
+            label="Last Name"
           />
           <Input
             value={applicationData.nameSuffix}

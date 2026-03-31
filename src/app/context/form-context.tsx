@@ -9,9 +9,9 @@ const initApplicationData: ApplicationFormType = {
   middleName: "",
   lastName: "",
   nameSuffix: "",
-  civilStatus: "",
+  civilStatus: "single",
   birthDate: "",
-  birthPlace: "",
+  birthPlace: "Cabanatuan",
   gender: "",
   presentAddress: "",
   addressPresYears: "",
@@ -22,10 +22,8 @@ const initApplicationData: ApplicationFormType = {
   provincialAddress: "",
   addressProvYears: "",
   addressProvMonths: "",
-  primaryPhone: "",
   mobile: "",
-  email: "",
-  citizenship: "",
+  citizenship: "filipino",
   citizenshipOther: "",
   tin: "",
   sssNumber: "",
@@ -52,10 +50,6 @@ const initApplicationData: ApplicationFormType = {
   incomeSources: [],
   natureOfWork: "",
   natureOfWorkOther: "",
-
-  // How did you learn about GDFI
-  gdfiSources: [],
-  gdfiSourceSocialMediaOther: "",
 
   // Borrower's Bank Accounts
   bankAccounts: [],

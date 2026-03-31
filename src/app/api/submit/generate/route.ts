@@ -1,8 +1,6 @@
-import fs from "fs"
 import { NextRequest, NextResponse } from "next/server"
 import nodemailer from "nodemailer"
-import path from "path"
-import { fillPdf } from "../fill-pdf"
+import { fillGdfiApplication } from "../fill-pdf"
 
 export async function POST(req: NextRequest) {
   const GMAIL_USER = process.env.GMAIL_USER
@@ -14,10 +12,8 @@ export async function POST(req: NextRequest) {
 
   const { applicationData, lender } = await req.json()
 
-  // Load the PDF template sitting next to this route.ts
-  const pdfPath = path.join(process.cwd(), "src/templates/gdfi-application.pdf")
-  const templateBytes = fs.readFileSync(pdfPath)
-  const filledPdfBytes = await fillPdf(templateBytes, applicationData)
+  // Write on pdf
+  const filledPdf = await fillGdfiApplication(applicationData)
 
   // setup mailer
   const transporter = nodemailer.createTransport({
@@ -39,7 +35,7 @@ export async function POST(req: NextRequest) {
     attachments: [
       {
         filename: "filled-form.pdf",
-        content: Buffer.from(filledPdfBytes),
+        content: Buffer.from(filledPdf),
       },
     ],
   })
