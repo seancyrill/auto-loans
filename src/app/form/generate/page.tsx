@@ -13,17 +13,21 @@ export default function GenerateForm() {
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
 
-    const res = await fetch("/api/submit/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ applicationData, lender: "gdfi" }),
-    })
-
-    const data = await res.json()
-    if (data.success) {
-      alert("Submitted successfully!")
-      resetApplication()
+    if (!isLastStep) {
+      return goNext(applicationData)
     }
+
+    // const res = await fetch("/api/submit/generate", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ applicationData, lender: "gdfi" }),
+    // })
+
+    // const data = await res.json()
+    // if (data.success) {
+    alert("Submitted successfully!")
+    // resetApplication()
+    // }
   }
 
   if (applicationLoading.loading) {
@@ -43,20 +47,16 @@ export default function GenerateForm() {
       {stepError && <p className="text-error">{stepError}</p>}
 
       {/* Navigation */}
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between">
         {hasPrev && (
-          <Button onClick={goPrev} variant={"subtle"}>
+          <Button type="button" onClick={goPrev} variant={"subtle"}>
             Back
           </Button>
         )}
 
-        {isLastStep ? (
-          <Button className="mt-4" type="submit" disabled={!!applicationLoading.loading}>
-            Submit
-          </Button>
-        ) : (
-          <Button onClick={() => goNext(applicationData)}>Next</Button>
-        )}
+        <Button type="submit" disabled={!!applicationLoading.loading}>
+          {isLastStep ? "Submit" : "Next"}
+        </Button>
       </div>
     </form>
   )

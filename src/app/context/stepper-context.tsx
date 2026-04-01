@@ -1,7 +1,17 @@
 "use client"
 
 import { createContext, ReactNode, useCallback, useContext, useState } from "react"
-import LoanOptions from "../form/generate/steps/loan-options"
+import AddressInformation from "../form/generate/steps/address-info"
+import BusinessInfo from "../form/generate/steps/business-info"
+import CommissionsInfo from "../form/generate/steps/commissions-info"
+import IncomeInfo from "../form/generate/steps/income-info"
+import InterestIncomeInfo from "../form/generate/steps/interest-income-info"
+import PensionInfo from "../form/generate/steps/pension-info"
+import PersonalInformation from "../form/generate/steps/personal-information"
+import RemittanceInfo from "../form/generate/steps/remittance-info"
+import SaleOfAssetsInfo from "../form/generate/steps/sale-of-assets-info"
+import WorkInfo from "../form/generate/steps/work-info"
+import { useApplication } from "./form-context"
 import { useStatus } from "./status-provider"
 
 export type StepConfig = {
@@ -10,15 +20,6 @@ export type StepConfig = {
   description?: string
   validate?: (formData: Record<string, unknown>) => boolean
 }
-
-export const STEPS: StepConfig[] = [
-  {
-    component: LoanOptions,
-    title: "Personal Information",
-    description: "Tell us a bit about yourself.",
-    validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
-  },
-]
 
 interface StepperContextValue {
   steps: StepConfig[]
@@ -50,7 +51,81 @@ interface StepperProviderProps {
   steps?: StepConfig[]
 }
 
-export function StepperProvider({ children, steps = STEPS }: StepperProviderProps) {
+export function StepperProvider({ children }: StepperProviderProps) {
+  const { applicationData } = useApplication()
+  const steps: StepConfig[] = [
+    {
+      component: PersonalInformation,
+      title: "Personal Information",
+      description: "Tell us about yourself.",
+      // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
+    },
+    {
+      component: AddressInformation,
+      title: "Address",
+    },
+    {
+      component: IncomeInfo,
+      title: "Income Information",
+    },
+    ...(applicationData.incomeSources.includes("employment")
+      ? [
+          {
+            component: WorkInfo,
+            title: "Employment Information",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("business")
+      ? [
+          {
+            component: BusinessInfo,
+            title: "Business Information",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("remittance")
+      ? [
+          {
+            component: RemittanceInfo,
+            title: "Remittance",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("pension")
+      ? [
+          {
+            component: PensionInfo,
+            title: "Pension",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("commissions")
+      ? [
+          {
+            component: CommissionsInfo,
+            title: "Commissions",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("interest Income")
+      ? [
+          {
+            component: InterestIncomeInfo,
+            title: "Interest Income",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("sale Of Assets")
+      ? [
+          {
+            component: SaleOfAssetsInfo,
+            title: "Sale of Assets",
+          },
+        ]
+      : []),
+  ]
+
   const { showStatus } = useStatus()
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
@@ -81,6 +156,7 @@ export function StepperProvider({ children, steps = STEPS }: StepperProviderProp
 
       if (hasNext) {
         setCurrentStepIndex((i) => i + 1)
+        window.scrollTo({ top: 0 })
       }
 
       return true
@@ -92,6 +168,7 @@ export function StepperProvider({ children, steps = STEPS }: StepperProviderProp
     setStepError(null)
     if (hasPrev) {
       setCurrentStepIndex((i) => i - 1)
+      window.scrollTo({ top: 0 })
     }
   }, [hasPrev])
 

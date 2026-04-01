@@ -17,7 +17,7 @@ const inputVariants = cva(
         default: "border-off focus-visible:ring-secondary",
         ghost: "border-transparent bg-gray-50 focus-visible:bg-white",
       },
-      size: {
+      sizeVariant: {
         default: "h-10",
         sm: "h-8 px-2 text-xs",
         lg: "h-12 px-4 text-base",
@@ -25,20 +25,21 @@ const inputVariants = cva(
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
+      sizeVariant: "default",
     },
   },
 )
 
-export type DateInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "size"> &
+export type DateInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> &
   VariantProps<typeof inputVariants> & {
     label?: string
     value?: string
+    sizeVariant?: string
     onChange?: (e: { target: { value: string } }) => void
   }
 
 const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
-  ({ className, variant, size, label, value, onChange, ...props }, ref) => {
+  ({ className, variant, sizeVariant, label, value, onChange, ...props }, ref) => {
     const parseDate = (str?: string) => {
       if (!str) return null
       const d = new Date(str) // "Jan 15, 2024" is natively parseable by Date
@@ -54,7 +55,7 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
     }
 
     return (
-      <div className="text-sm">
+      <div className="w-full">
         {!!label?.length && <label>{label}</label>}
         <div className="flex gap-1">
           <DatePicker
@@ -67,7 +68,9 @@ const DateInput = React.forwardRef<HTMLInputElement, DateInputProps>(
             dropdownMode="select"
             disabled={props.disabled}
             required={props.required}
-            customInput={<input ref={ref} className={cn(inputVariants({ variant, size, className }))} {...props} />}
+            customInput={
+              <input ref={ref} className={cn(inputVariants({ variant, sizeVariant, className }))} {...props} />
+            }
           />
         </div>
       </div>

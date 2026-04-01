@@ -57,6 +57,10 @@ body {
   @apply z-50;
 }
 
+.react-datepicker-wrapper {
+  @apply w-full;
+}
+
 /* Calendar container */
 .react-datepicker {
   @apply overflow-hidden rounded-xl border border-gray-200 font-sans text-sm shadow-lg;

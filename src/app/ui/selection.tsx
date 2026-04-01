@@ -34,7 +34,7 @@ const selectionItemVariants = cva(
       },
       layout: {
         list: "w-full",
-        grid: "flex-col items-start",
+        grid: "flex-row items-center",
       },
     },
     defaultVariants: {
@@ -82,7 +82,7 @@ const SelectionMenu = React.forwardRef<HTMLDivElement, SelectionMenuProps>(
     const resolvedLayout = columns > 1 ? "grid" : "list"
 
     return (
-      <div ref={ref} className={cn("text-sm", className)} role="radiogroup" aria-label={label} {...props}>
+      <div ref={ref} className={cn("w-full", className)} role="radiogroup" aria-label={label} {...props}>
         {!!label?.length && <label className="mb-2 block text-sm text-gray-700">{label}</label>}
         <div className={gridClass}>
           {options.map((option) => {
@@ -113,7 +113,7 @@ const SelectionMenu = React.forwardRef<HTMLDivElement, SelectionMenuProps>(
                 )}
               >
                 <RadioDot checked={checked} />
-                <span className={cn("flex flex-col gap-0.5 text-left capitalize", columns > 1 && "min-w-0")}>
+                <span className={cn("flex min-w-0 flex-col gap-0.5 text-left capitalize", columns > 1)}>
                   <span className="leading-snug font-medium">{option.label}</span>
                   {option.description && (
                     <span className={cn("text-xs leading-snug text-gray-400", checked && "text-secondary/70")}>
@@ -193,7 +193,7 @@ const SelectionMenuMultiple = React.forwardRef<HTMLDivElement, SelectionMenuMult
     }
 
     return (
-      <div ref={ref} className={cn("text-sm", className)} role="group" aria-label={label} {...props}>
+      <div ref={ref} className={cn("w-full", className)} role="group" aria-label={label} {...props}>
         {!!label?.length && <label className="mb-2 block text-sm text-gray-700">{label}</label>}
         <div className={gridClass}>
           {options.map((option) => {
@@ -224,7 +224,7 @@ const SelectionMenuMultiple = React.forwardRef<HTMLDivElement, SelectionMenuMult
                 )}
               >
                 <CheckDot checked={checked} />
-                <span className={cn("flex flex-col gap-0.5 text-left", columns > 1 && "min-w-0")}>
+                <span className={cn("flex min-w-0 flex-col gap-0.5 text-left", columns > 1)}>
                   <span className="leading-snug font-medium capitalize">{option.label}</span>
                   {option.description && (
                     <span

@@ -5,9 +5,5 @@ export default function GenerateLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return (
-    <div>
-      <StepperProvider>{children}</StepperProvider>
-    </div>
-  )
+  return <StepperProvider>{children}</StepperProvider>
 }

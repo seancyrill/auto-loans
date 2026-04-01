@@ -1,24 +1,13 @@
 "use client"
 import { useApplication } from "@/app/context/form-context"
-import {
-  Citizenship,
-  CITIZENSHIP_OPTIONS,
-  CIVIL_STATUS_OPTIONS,
-  CivilStatus,
-  Gender,
-  GENDER_OPTIONS,
-  HOUSE_OWNERSHIP_OPTIONS,
-  HouseOwnership,
-} from "@/app/context/form-context-types"
+import { HOUSE_OWNERSHIP_OPTIONS, HouseOwnership } from "@/app/context/form-context-types"
 import { Checkbox } from "@/app/ui/checkbox"
-import { DateInput } from "@/app/ui/date-input"
 import { Input } from "@/app/ui/input"
 import { SelectionMenu } from "@/app/ui/selection"
-import { formatPhone } from "@/app/utils/format-number"
 import { ChangeEvent, useState } from "react"
 import { StepContainer } from "./components/step-container"
 
-export default function LoanOptions() {
+export default function AddressInformation() {
   const { applicationData, updateApplicationData } = useApplication()
 
   const [sameAsPresent, setSameAsPresent] = useState(true)
@@ -47,63 +36,6 @@ export default function LoanOptions() {
 
   return (
     <StepContainer>
-      {/* Full Name */}
-      <div className="flex w-full gap-1">
-        <Input
-          value={applicationData.firstName}
-          onChange={(e) => updateApplicationData("firstName", e.target.value)}
-          required
-          placeholder="Juan"
-          label="First Name"
-        />
-        <Input
-          value={applicationData.middleName}
-          onChange={(e) => updateApplicationData("middleName", e.target.value)}
-          placeholder="Santos"
-          label="Middle Name"
-        />
-        <Input
-          value={applicationData.lastName}
-          onChange={(e) => updateApplicationData("lastName", e.target.value)}
-          required
-          placeholder="Dela Cruz"
-          label="Last Name"
-        />
-        <Input
-          value={applicationData.nameSuffix}
-          onChange={(e) => updateApplicationData("nameSuffix", e.target.value)}
-          placeholder="Jr."
-          label="Suffix"
-        />
-      </div>
-
-      {/* Birth & Gender */}
-      <DateInput
-        value={applicationData.birthDate}
-        onChange={(e) => updateApplicationData("birthDate", e.target.value)}
-        placeholder="MM/DD/YYYY"
-        label="Date of Birth"
-      />
-      <Input
-        value={applicationData.birthPlace}
-        onChange={(e) => updateApplicationData("birthPlace", e.target.value)}
-        placeholder="Cabanatuan"
-        label="Place of Birth"
-      />
-      <SelectionMenu
-        label="Gender"
-        value={applicationData.gender}
-        onChange={(val) => updateApplicationData("gender", val as Gender)}
-        options={GENDER_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
-      />
-      <SelectionMenu
-        label="Civil Status"
-        value={applicationData.civilStatus}
-        onChange={(val) => updateApplicationData("civilStatus", val as CivilStatus)}
-        options={CIVIL_STATUS_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
-      />
-
-      {/* Present Address */}
       <div className="flex w-full gap-1">
         <Input
           value={applicationData.presentAddress}
@@ -129,13 +61,7 @@ export default function LoanOptions() {
         </div>
       </div>
 
-      {/* Permanent Address */}
       <div className="flex w-full flex-col gap-1">
-        <div className="flex flex-col">
-          <label className="text-sm">Permanent Address</label>
-          <Checkbox checked={sameAsPresent} onChange={handleToggleSameAsPresent} size={"lg"} label="Same as present" />
-        </div>
-
         {!sameAsPresent && (
           <div className="flex w-full gap-1">
             <Input
@@ -162,71 +88,12 @@ export default function LoanOptions() {
             </div>
           </div>
         )}
+
+        <div className="flex flex-col" onClick={handleToggleSameAsPresent}>
+          {sameAsPresent && <label className="text-sm">Permanent Address</label>}
+          <Checkbox button checked={sameAsPresent} size={"lg"} label="Same as present" />
+        </div>
       </div>
-
-      <Input
-        value={formatPhone(applicationData.mobile)}
-        onChange={(e) => {
-          const value = e.target.value.replace(/\s/g, "")
-          if (value === "" || /^\d+$/.test(value) || value.length > 12) {
-            updateApplicationData("mobile", value)
-          }
-        }}
-        required
-        maxLength={12}
-        minLength={12}
-        placeholder="9XX XXX XXXX"
-        label="Mobile Number"
-        mobile
-      />
-
-      {/* Citizenship */}
-      <SelectionMenu
-        label="Citizenship"
-        value={applicationData.citizenship}
-        onChange={(val) => updateApplicationData("citizenship", val as Citizenship)}
-        options={CITIZENSHIP_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
-      />
-      {applicationData.citizenship === "others" && (
-        <Input
-          value={applicationData.citizenshipOther}
-          onChange={(e) => updateApplicationData("citizenshipOther", e.target.value)}
-          placeholder="e.g. American"
-          label="Please specify citizenship"
-        />
-      )}
-
-      {/* TIN / SSS / GSIS */}
-      <Input value={applicationData.tin} onChange={(e) => updateApplicationData("tin", e.target.value)} label="TIN" />
-      <Input
-        value={applicationData.sssNumber}
-        onChange={(e) => updateApplicationData("sssNumber", e.target.value)}
-        label="SSS Number"
-      />
-      <Input
-        value={applicationData.gsisNumber}
-        onChange={(e) => updateApplicationData("gsisNumber", e.target.value)}
-        label="GSIS Number"
-      />
-
-      {/* School Last Attended */}
-      <Input
-        value={applicationData.schoolName}
-        onChange={(e) => updateApplicationData("schoolName", e.target.value)}
-        label="School Name"
-      />
-      <Input
-        value={applicationData.schoolGradeLevel}
-        onChange={(e) => updateApplicationData("schoolGradeLevel", e.target.value)}
-        placeholder="Bachelor of Science"
-        label="Grade / Level / College Course"
-      />
-      <Input
-        value={applicationData.schoolYearGraduated}
-        onChange={(e) => updateApplicationData("schoolYearGraduated", e.target.value)}
-        placeholder="2020"
-        label="Year Graduated / Last Year of Stay"
-      />
 
       {/* House Ownership */}
       <SelectionMenu

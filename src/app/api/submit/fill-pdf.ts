@@ -12,7 +12,7 @@ export async function fillGdfiApplication(data: ApplicationFormType): Promise<Ui
 
   const pdfDoc = await PDFDocument.load(templateBytes)
   const pages = pdfDoc.getPages()
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
+  const font = await pdfDoc.embedFont(StandardFonts.Courier)
 
   fillPage1(pages[0], data, font)
   fillPage2(pages[1], data, font)

@@ -53,14 +53,20 @@ export type ApplicationFormType = {
   employerName: string
   businessName: string
   incomeNotApplicable: boolean
-  monthlyIncome: string
+  employmentIncome: string
+  remittanceIncome: string
+  pensionIncome: string
+  commissionsIncome: string
+  businessIncome: string
+  interestIncome: string
+  saleOfAssetsIncome: string
   employmentYears: string
   employmentMonths: string
   employerBusinessAddress: string
   prcLicenseNumber: string
   businessTelNumber: string
-  incomeSources: IncomeSource[]
-  natureOfWork: NatureOfWork | ""
+  incomeSources: IncomeSourceType[]
+  natureOfWork: NatureOfWork[]
   natureOfWorkOther: string
 
   // Borrower's Bank Accounts
@@ -84,7 +90,7 @@ export const LOAN_OPTIONS = [
 ] as const
 export type LoanOption = (typeof INCOME_OPTIONS)[number]
 
-export const CIVIL_STATUS_OPTIONS = ["single", "annulled", "separated", "married", "commonLaw"] as const
+export const CIVIL_STATUS_OPTIONS = ["single", "annulled", "separated", "married", "common Law"] as const
 export type CivilStatus = (typeof CIVIL_STATUS_OPTIONS)[number]
 
 export const GENDER_OPTIONS = ["male", "female"] as const
@@ -102,10 +108,10 @@ export const INCOME_SOURCE_OPTIONS = [
   "pension",
   "commissions",
   "business",
-  "interestIncome",
+  "interest Income",
   "sale Of Assets",
 ] as const
-export type IncomeSource = (typeof INCOME_SOURCE_OPTIONS)[number]
+export type IncomeSourceType = (typeof INCOME_SOURCE_OPTIONS)[number]
 
 export const ACCOUNT_TYPE_OPTIONS = ["savings", "current"] as const
 export type AccountType = (typeof ACCOUNT_TYPE_OPTIONS)[number]

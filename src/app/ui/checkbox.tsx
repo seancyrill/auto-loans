@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { clsx, type ClassValue } from "clsx"
+import { Check } from "lucide-react"
 import React from "react"
 import { twMerge } from "tailwind-merge"
 
@@ -15,7 +16,7 @@ const sizeOptions = {
 }
 
 const checkboxVariants = cva(
-  "peer shrink-0 rounded border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer appearance-none checked:bg-secondary checked:border-secondary",
+  "peer shrink-0 rounded border transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none checked:bg-secondary checked:border-secondary",
   {
     variants: {
       variant: {
@@ -43,14 +44,21 @@ const checkmarkVariants = cva("pointer-events-none absolute inset-0 hidden peer-
 export type CheckboxProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> &
   VariantProps<typeof checkboxVariants> & {
     label?: string
+    button?: boolean
   }
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ className, variant, size, label, id, ...props }, ref) => {
+  ({ className, variant, size, label, id, button, ...props }, ref) => {
     const checkboxId = id ?? label?.toLowerCase().replace(/\s+/g, "-")
 
     return (
-      <div className="flex items-center gap-2 text-sm">
+      <div
+        className={cn(
+          "flex cursor-pointer items-center gap-2 text-sm",
+          button ? "border-off checked:border-secondary rounded-md border px-4 py-2" : "",
+        )}
+        id={checkboxId}
+      >
         <div className={cn("relative flex shrink-0 items-center", sizeOptions)}>
           <input
             type="checkbox"
@@ -59,26 +67,9 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             className={cn(checkboxVariants({ variant, size, className }))}
             {...props}
           />
-          <svg
-            className={cn(checkmarkVariants({ size }))}
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M3 8L6.5 11.5L13 5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Check className={cn(checkmarkVariants({ size }))} />
         </div>
-        {!!label?.length && (
-          <label htmlFor={checkboxId} className="cursor-pointer text-gray-700 select-none">
-            {label}
-          </label>
-        )}
+        {!!label?.length && <label className="pointer-events-none text-gray-700 select-none">{label}</label>}
       </div>
     )
   },
