@@ -1,5 +1,5 @@
 import { useApplication } from "@/app/context/form-context"
-import { Input } from "@/app/ui/input"
+import { Input, InputAmount } from "@/app/ui/input"
 import { StepContainer } from "./components/step-container"
 
 export default function WorkInfo() {
@@ -7,34 +7,38 @@ export default function WorkInfo() {
 
   return (
     <StepContainer>
-      <Input
-        value={applicationData.employerName}
-        onChange={(e) => updateApplicationData("employerName", e.target.value)}
-        placeholder="ACME Corporation"
-        label="Employer Name"
-      />
-      <Input
-        value={applicationData.employmentYears}
-        onChange={(e) => updateApplicationData("employmentYears", e.target.value)}
-        placeholder="0"
-        label="Years of Employment / Business"
-      />
-      <Input
-        value={applicationData.employmentMonths}
-        onChange={(e) => updateApplicationData("employmentMonths", e.target.value)}
-        placeholder="0"
-        label="Months of Employment / Business"
-      />
+      <div className="flex w-full gap-1">
+        <Input
+          value={applicationData.employerName}
+          onChange={(e) => updateApplicationData("employerName", e.target.value)}
+          placeholder="ACME Corporation"
+          label="Employer Name"
+        />
+        <div className="flex max-w-22 gap-1">
+          <Input
+            value={applicationData.employmentYears}
+            onChange={(e) => updateApplicationData("employmentYears", e.target.value)}
+            placeholder="0"
+            label="for Yrs"
+          />
+          <Input
+            value={applicationData.employmentMonths}
+            onChange={(e) => updateApplicationData("employmentMonths", e.target.value)}
+            placeholder="0"
+            label="& Mos"
+          />
+        </div>
+      </div>
       <Input
         value={applicationData.employerBusinessAddress}
         onChange={(e) => updateApplicationData("employerBusinessAddress", e.target.value)}
         placeholder="456 Business Ave, Makati"
         label="Employer / Business Address"
       />
-      <Input
+      <InputAmount
+        currency="PHP"
         value={applicationData.employmentIncome}
-        onChange={(e) => updateApplicationData("employmentIncome", e.target.value)}
-        placeholder="25000"
+        onChange={(e) => updateApplicationData("employmentIncome", e)}
         label="Monthly Salary"
       />
     </StepContainer>

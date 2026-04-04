@@ -1,5 +1,5 @@
 import { useApplication } from "@/app/context/form-context"
-import { Input } from "@/app/ui/input"
+import { InputAmount } from "@/app/ui/input"
 import { StepContainer } from "./components/step-container"
 
 export default function CommissionsInfo() {
@@ -7,10 +7,10 @@ export default function CommissionsInfo() {
 
   return (
     <StepContainer>
-      <Input
+      <InputAmount
+        currency="PHP"
         value={applicationData.commissionsIncome}
-        onChange={(e) => updateApplicationData("commissionsIncome", e.target.value)}
-        placeholder="25000"
+        onChange={(e) => updateApplicationData("commissionsIncome", e)}
         label="Monthly Commissions Income"
       />
     </StepContainer>

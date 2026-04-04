@@ -57,11 +57,56 @@ const initApplicationData: ApplicationFormType = {
   natureOfWork: [],
   natureOfWorkOther: "",
 
+  // coborrower
+
+  coFirstName: "",
+  coMiddleName: "",
+  coLastName: "",
+  coNameSuffix: "",
+  coBirthDate: "",
+  coBirthPlace: "",
+  coGender: "",
+  coPresentAddress: "",
+  coAddressPresYears: "",
+  coAddressPresMonths: "",
+  coPermanentAddress: "",
+  coAddressPermYears: "",
+  coAddressPermMonths: "",
+  coProvincialAddress: "",
+  coAddressProvYears: "",
+  coAddressProvMonths: "",
+  coMobile: "",
+  coEmail: "",
+  coCitizenship: "",
+  coCitizenshipOther: "",
+  coTin: "",
+  coSssNumber: "",
+  coGsisNumber: "",
+  coSchoolName: "",
+  coSchoolGradeLevel: "",
+  coSchoolYearGraduated: "",
+  coHouseOwnership: "",
+  coHouseRentMonthly: "",
+  coHouseMortgageMonthly: "",
+  coHouseOwnedBy: "",
+  coEmployerName: "",
+  coBusinessName: "",
+  coIncomeNotApplicable: false,
+  coMonthlyIncome: "",
+  coEmploymentYears: "",
+  coEmploymentMonths: "",
+  coEmployerBusinessAddress: "",
+  coBusinessTelNumber: "",
+
   // Borrower's Bank Accounts
   bankAccounts: [],
 
   // Borrower's Authorization to Verify Bank Details
   authorizeBankDetails: [],
+
+  motorVehicle: null,
+  characterReferences: [],
+  tradeReferences: [],
 }
 
 const ApplicationContext = createContext<ApplicationContextType | undefined>(undefined)

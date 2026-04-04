@@ -48,4 +48,40 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
 Input.displayName = "Input"
 
-export { Input, inputVariants }
+type Currency = "USD" | "PHP"
+
+const CURRENCY_SYMBOL: Record<Currency, string> = {
+  USD: "$",
+  PHP: "₱",
+}
+
+export type InputAmountProps = Omit<InputProps, "value" | "onChange" | "type"> & {
+  value: string
+  onChange: (raw: string) => void
+  currency?: Currency
+}
+
+const InputAmount = React.forwardRef<HTMLInputElement, InputAmountProps>(
+  ({ value, onChange, currency, ...props }, ref) => {
+    const symbol = currency ? CURRENCY_SYMBOL[currency] : ""
+
+    const format = (val: string) => {
+      if (!val) return ""
+      const parts = val.split(".")
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      return symbol ? `${symbol}${parts.join(".")}` : parts.join(".")
+    }
+
+    const strip = (val: string) => val.replace(/[$₱,]/g, "")
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const raw = strip(e.target.value)
+      if (/^\d*\.?\d*$/.test(raw)) onChange(raw)
+    }
+
+    return <Input {...props} ref={ref} inputMode="decimal" value={format(value)} onChange={handleChange} />
+  },
+)
+InputAmount.displayName = "InputAmount"
+
+export { Input, InputAmount, inputVariants }

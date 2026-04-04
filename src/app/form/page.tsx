@@ -5,7 +5,7 @@ import LoadingSpinner from "../components/loading-spinner"
 import { useApplication } from "../context/form-context"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
-import { formatPhone } from "../utils/format-number"
+import { formatPhone } from "../utils/format-phone"
 import { SubmitModal } from "./components/submit-options"
 
 export default function Form() {

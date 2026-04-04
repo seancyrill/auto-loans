@@ -1,3 +1,5 @@
+"use client"
+
 import { useApplication } from "@/app/context/form-context"
 import {
   INCOME_SOURCE_OPTIONS,
@@ -63,7 +65,6 @@ export default function IncomeInfo() {
       <Input
         value={applicationData.prcLicenseNumber}
         onChange={(e) => updateApplicationData("prcLicenseNumber", e.target.value)}
-        placeholder="XXXXXXX"
         label="PRC License No. (if applicable)"
       />
     </StepContainer>

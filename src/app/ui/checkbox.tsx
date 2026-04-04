@@ -52,12 +52,12 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     const checkboxId = id ?? label?.toLowerCase().replace(/\s+/g, "-")
 
     return (
-      <div
+      <label
+        htmlFor={checkboxId}
         className={cn(
           "flex cursor-pointer items-center gap-2 text-sm",
           button ? "border-off checked:border-secondary rounded-md border px-4 py-2" : "",
         )}
-        id={checkboxId}
       >
         <div className={cn("relative flex shrink-0 items-center", sizeOptions)}>
           <input
@@ -65,12 +65,13 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             id={checkboxId}
             ref={ref}
             className={cn(checkboxVariants({ variant, size, className }))}
+            onChange={props.onChange}
             {...props}
           />
           <Check className={cn(checkmarkVariants({ size }))} />
         </div>
-        {!!label?.length && <label className="pointer-events-none text-gray-700 select-none">{label}</label>}
-      </div>
+        {!!label?.length && <span className="pointer-events-none text-gray-700 select-none">{label}</span>}
+      </label>
     )
   },
 )

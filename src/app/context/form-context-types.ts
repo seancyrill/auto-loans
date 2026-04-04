@@ -69,6 +69,54 @@ export type ApplicationFormType = {
   natureOfWork: NatureOfWork[]
   natureOfWorkOther: string
 
+  coFirstName: string
+  coMiddleName: string
+  coLastName: string
+  coNameSuffix: string
+  coBirthDate: string
+  coBirthPlace: string
+  coGender: Gender | ""
+  coPresentAddress: string
+  coAddressPresYears: string
+  coAddressPresMonths: string
+  coPermanentAddress: string
+  coAddressPermYears: string
+  coAddressPermMonths: string
+  coProvincialAddress: string
+  coAddressProvYears: string
+  coAddressProvMonths: string
+  coMobile: string
+  coEmail: string
+  coCitizenship: Citizenship | ""
+  coCitizenshipOther: string
+  coTin: string
+  coSssNumber: string
+  coGsisNumber: string
+  coSchoolName: string
+  coSchoolGradeLevel: string
+  coSchoolYearGraduated: string
+  coHouseOwnership: HouseOwnership | ""
+  coHouseRentMonthly: string
+  coHouseMortgageMonthly: string
+  coHouseOwnedBy: string
+  coEmployerName: string
+  coBusinessName: string
+  coIncomeNotApplicable: boolean
+  coMonthlyIncome: string
+  coEmploymentYears: string
+  coEmploymentMonths: string
+  coEmployerBusinessAddress: string
+  coBusinessTelNumber: string
+
+  // Motor Vehicle (Page 2)
+  motorVehicle: MotorVehicle | null
+
+  // Character References — 3 rows on the form
+  characterReferences: CharacterReference[]
+
+  // Trade References — 3 rows on the form
+  tradeReferences: TradeReference[]
+
   // Borrower's Bank Accounts
   bankAccounts: BankAccountEntry[]
 
@@ -161,4 +209,25 @@ export type AuthorizeBankEntry = {
   bankBranch: string
   accountNumber: string
   accountType: AccountType | ""
+}
+
+export type MotorVehicle = {
+  year: string
+  makeModel: string
+  color: string
+  plateNumber: string
+  mileageKm: string
+  placeOfRegistration: string
+}
+
+export type CharacterReference = {
+  name: string
+  address: string
+  contactNumber: string
+}
+
+export type TradeReference = {
+  businessName: string
+  address: string
+  contactNumber: string
 }

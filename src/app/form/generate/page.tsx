@@ -54,7 +54,7 @@ export default function GenerateForm() {
           </Button>
         )}
 
-        <Button type="submit" disabled={!!applicationLoading.loading}>
+        <Button type="submit" disabled={!!applicationLoading.loading} variant={isLastStep ? "yellow" : "default"}>
           {isLastStep ? "Submit" : "Next"}
         </Button>
       </div>

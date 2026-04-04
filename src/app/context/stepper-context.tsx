@@ -3,6 +3,9 @@
 import { createContext, ReactNode, useCallback, useContext, useState } from "react"
 import AddressInformation from "../form/generate/steps/address-info"
 import BusinessInfo from "../form/generate/steps/business-info"
+import CoborrowerAddressInformation from "../form/generate/steps/coborrower-address-info"
+import CoborrowerIncomeInfo from "../form/generate/steps/coborrower-income-info"
+import CoborrowerInformation from "../form/generate/steps/coborrower-info"
 import CommissionsInfo from "../form/generate/steps/commissions-info"
 import IncomeInfo from "../form/generate/steps/income-info"
 import InterestIncomeInfo from "../form/generate/steps/interest-income-info"
@@ -124,6 +127,18 @@ export function StepperProvider({ children }: StepperProviderProps) {
           },
         ]
       : []),
+    {
+      component: CoborrowerInformation,
+      title: "Coborrower",
+    },
+    {
+      component: CoborrowerAddressInformation,
+      title: "Coborrower Address",
+    },
+    {
+      component: CoborrowerIncomeInfo,
+      title: "Coborrower Income",
+    },
   ]
 
   const { showStatus } = useStatus()

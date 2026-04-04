@@ -1,5 +1,5 @@
 import { useApplication } from "@/app/context/form-context"
-import { Input } from "@/app/ui/input"
+import { Input, InputAmount } from "@/app/ui/input"
 import { StepContainer } from "./components/step-container"
 
 export default function BusinessInfo() {
@@ -17,13 +17,12 @@ export default function BusinessInfo() {
       <Input
         value={applicationData.businessTelNumber}
         onChange={(e) => updateApplicationData("businessTelNumber", e.target.value)}
-        placeholder="02 XXXX XXXX"
         label="Business Tel. No."
       />
-      <Input
+      <InputAmount
+        currency="PHP"
         value={applicationData.businessIncome}
-        onChange={(e) => updateApplicationData("businessIncome", e.target.value)}
-        placeholder="25000"
+        onChange={(e) => updateApplicationData("businessIncome", e)}
         label="Monthly Business Income"
       />
     </StepContainer>
