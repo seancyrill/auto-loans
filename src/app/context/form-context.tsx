@@ -1,118 +1,19 @@
 "use client"
 
 import { ReactNode, createContext, useContext, useEffect, useState } from "react"
-import { ApplicationContextType, ApplicationFormType, ApplicationLoadingType } from "./form-context-types"
-
-const initApplicationData: ApplicationFormType = {
-  // Personal Information
-  firstName: "",
-  middleName: "",
-  lastName: "",
-  nameSuffix: "",
-  civilStatus: "single",
-  birthDate: "",
-  birthPlace: "Cabanatuan",
-  gender: "",
-  presentAddress: "",
-  addressPresYears: "",
-  addressPresMonths: "",
-  permanentAddress: "",
-  addressPermYears: "",
-  addressPermMonths: "",
-  provincialAddress: "",
-  addressProvYears: "",
-  addressProvMonths: "",
-  mobile: "",
-  citizenship: "filipino",
-  citizenshipOther: "",
-  tin: "",
-  sssNumber: "",
-  gsisNumber: "",
-  schoolName: "",
-  schoolGradeLevel: "",
-  schoolYearGraduated: "",
-  houseOwnership: "",
-  houseRentMonthly: "",
-  houseMortgageMonthly: "",
-  houseOwnedBy: "",
-  dependents: [],
-
-  // Income Information
-  employerName: "",
-  businessName: "",
-  incomeNotApplicable: false,
-  businessIncome: "",
-  employmentIncome: "",
-  remittanceIncome: "",
-  pensionIncome: "",
-  commissionsIncome: "",
-  interestIncome: "",
-  saleOfAssetsIncome: "",
-  employmentYears: "",
-  employmentMonths: "",
-  employerBusinessAddress: "",
-  prcLicenseNumber: "",
-  businessTelNumber: "",
-  incomeSources: [],
-  natureOfWork: [],
-  natureOfWorkOther: "",
-
-  // coborrower
-
-  coFirstName: "",
-  coMiddleName: "",
-  coLastName: "",
-  coNameSuffix: "",
-  coBirthDate: "",
-  coBirthPlace: "",
-  coGender: "",
-  coPresentAddress: "",
-  coAddressPresYears: "",
-  coAddressPresMonths: "",
-  coPermanentAddress: "",
-  coAddressPermYears: "",
-  coAddressPermMonths: "",
-  coProvincialAddress: "",
-  coAddressProvYears: "",
-  coAddressProvMonths: "",
-  coMobile: "",
-  coEmail: "",
-  coCitizenship: "",
-  coCitizenshipOther: "",
-  coTin: "",
-  coSssNumber: "",
-  coGsisNumber: "",
-  coSchoolName: "",
-  coSchoolGradeLevel: "",
-  coSchoolYearGraduated: "",
-  coHouseOwnership: "",
-  coHouseRentMonthly: "",
-  coHouseMortgageMonthly: "",
-  coHouseOwnedBy: "",
-  coEmployerName: "",
-  coBusinessName: "",
-  coIncomeNotApplicable: false,
-  coMonthlyIncome: "",
-  coEmploymentYears: "",
-  coEmploymentMonths: "",
-  coEmployerBusinessAddress: "",
-  coBusinessTelNumber: "",
-
-  // Borrower's Bank Accounts
-  bankAccounts: [],
-
-  // Borrower's Authorization to Verify Bank Details
-  authorizeBankDetails: [],
-
-  motorVehicle: null,
-  characterReferences: [],
-  tradeReferences: [],
-}
+import {
+  ApplicationContextType,
+  ApplicationFormType,
+  ApplicationLoadingType,
+  CoBorrowerType,
+  FormArrayFields,
+  initialApplicationData,
+} from "./form-context-types"
 
 const ApplicationContext = createContext<ApplicationContextType | undefined>(undefined)
 
 export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
-  const [applicationData, setApplicationData] = useState<ApplicationFormType>(initApplicationData)
+  const [applicationData, setApplicationData] = useState<ApplicationFormType>(initialApplicationData)
   const [applicationLoading, setApplicationLoading] = useState<ApplicationLoadingType>({ loading: true, text: "" })
 
   // Load from localStorage on mount
@@ -125,7 +26,7 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
         if (saved) {
           const parsed: { applicationData: ApplicationFormType } = JSON.parse(saved)
 
-          setApplicationData(parsed?.applicationData ?? initApplicationData)
+          setApplicationData(parsed?.applicationData ?? initialApplicationData)
         }
       } catch (error) {
         console.error("Error loading application data from storage:", error)
@@ -148,14 +49,47 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [applicationData, applicationLoading.loading])
 
+  // works for all flat fields
   const updateApplicationData = <K extends keyof ApplicationFormType>(field: K, value: ApplicationFormType[K]) => {
+    setApplicationData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  // For co-borrower fields
+  const updateCoBorrower = <K extends keyof CoBorrowerType>(field: K, value: CoBorrowerType[K]) => {
+    setApplicationData((prev) => ({
+      ...prev,
+      coBorrower: { ...prev.coBorrower, [field]: value },
+    }))
+  }
+
+  const updateArrayItem = <K extends FormArrayFields>(
+    field: K,
+    index: number,
+    value: Partial<ApplicationFormType[K][number]>,
+  ) => {
     setApplicationData((prev) => {
-      return { ...prev, [field]: value }
+      const updated = [...prev[field]] as Record<string, unknown>[]
+      updated[index] = { ...updated[index], ...value }
+      return { ...prev, [field]: updated }
     })
   }
 
+  const addArrayItem = <K extends FormArrayFields>(field: K, item: ApplicationFormType[K][number]) => {
+    setApplicationData((prev) => ({
+      ...prev,
+      [field]: [...prev[field], item],
+    }))
+  }
+
+  const removeArrayItem = <K extends FormArrayFields>(field: K, index: number) => {
+    setApplicationData((prev) => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index),
+    }))
+  }
+
   const resetApplication = (setInto?: ApplicationFormType) => {
-    setApplicationData(setInto ?? initApplicationData)
+    setApplicationData(setInto ?? initialApplicationData)
   }
 
   return (
@@ -163,7 +97,11 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
       value={{
         applicationData,
         updateApplicationData,
+        updateCoBorrower,
+        addArrayItem,
+        removeArrayItem,
         resetApplication,
+        updateArrayItem,
         applicationLoading,
         setApplicationLoading,
       }}

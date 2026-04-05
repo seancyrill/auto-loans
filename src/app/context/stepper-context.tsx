@@ -2,6 +2,7 @@
 
 import { createContext, ReactNode, useCallback, useContext, useState } from "react"
 import AddressInformation from "../form/generate/steps/address-info"
+import BankAccounts from "../form/generate/steps/bank-accounts"
 import BusinessInfo from "../form/generate/steps/business-info"
 import CoborrowerAddressInformation from "../form/generate/steps/coborrower-address-info"
 import CoborrowerIncomeInfo from "../form/generate/steps/coborrower-income-info"
@@ -57,6 +58,11 @@ interface StepperProviderProps {
 export function StepperProvider({ children }: StepperProviderProps) {
   const { applicationData } = useApplication()
   const steps: StepConfig[] = [
+    {
+      component: BankAccounts,
+      title: "Bank Accounts",
+      // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
+    },
     {
       component: PersonalInformation,
       title: "Personal Information",

@@ -7,10 +7,12 @@ import { useState } from "react"
 import { StepContainer } from "./components/step-container"
 
 export default function CoborrowerIncomeInfo() {
-  const { updateApplicationData, applicationData } = useApplication()
+  const { updateCoBorrower, applicationData } = useApplication()
   const [incomeSource, setIncomeSource] = useState<IncomeOption>("employed")
   const INCOME_OPTIONS = ["employed", "business"] as const
   type IncomeOption = (typeof INCOME_OPTIONS)[number]
+
+  const co = applicationData.coBorrower
 
   return (
     <StepContainer>
@@ -21,77 +23,57 @@ export default function CoborrowerIncomeInfo() {
         onChange={(e) => setIncomeSource(e as IncomeOption)}
         options={INCOME_OPTIONS.map((src) => ({ label: src, value: src }))}
       />
-
       <div className="flex w-full gap-1">
         {incomeSource === "employed" ? (
-          <>
-            <Input
-              value={applicationData.coEmployerName}
-              onChange={(e) => updateApplicationData("coEmployerName", e.target.value)}
-              placeholder="Employer Name"
-              label="Name of Employer"
-            />
-          </>
+          <Input
+            value={co.employerName}
+            onChange={(e) => updateCoBorrower("employerName", e.target.value)}
+            placeholder="Employer Name"
+            label="Name of Employer"
+          />
         ) : (
-          <>
-            <Input
-              value={applicationData.coBusinessName}
-              onChange={(e) => updateApplicationData("coBusinessName", e.target.value)}
-              placeholder="Business Name"
-              label="Name of Business"
-            />
-          </>
+          <Input
+            value={co.businessName}
+            onChange={(e) => updateCoBorrower("businessName", e.target.value)}
+            placeholder="Business Name"
+            label="Name of Business"
+          />
         )}
         <div className="flex max-w-22 gap-1">
           <Input
-            value={applicationData.coEmploymentYears}
-            onChange={(e) => updateApplicationData("coEmploymentYears", e.target.value)}
+            value={co.employmentYears}
+            onChange={(e) => updateCoBorrower("employmentYears", e.target.value)}
             placeholder="0"
             label="for Yrs"
           />
           <Input
-            value={applicationData.coEmploymentMonths}
-            onChange={(e) => updateApplicationData("coEmploymentMonths", e.target.value)}
+            value={co.employmentMonths}
+            onChange={(e) => updateCoBorrower("employmentMonths", e.target.value)}
             placeholder="0"
             label="& Mos"
           />
         </div>
       </div>
-
       <Input
-        value={applicationData.coEmployerBusinessAddress}
-        onChange={(e) => updateApplicationData("coEmployerBusinessAddress", e.target.value)}
+        value={co.employerBusinessAddress}
+        onChange={(e) => updateCoBorrower("employerBusinessAddress", e.target.value)}
         placeholder={incomeSource === "employed" ? "Employer Address" : "Business Address"}
         label={incomeSource === "employed" ? "Employer Address" : "Business Address"}
       />
-
       <InputAmount
         currency="PHP"
-        value={applicationData.coMonthlyIncome}
-        onChange={(e) => updateApplicationData("coMonthlyIncome", e)}
+        value={co.monthlyIncome}
+        onChange={(e) => updateCoBorrower("monthlyIncome", e)}
         label="Monthly Income"
       />
       <Input
-        value={applicationData.coBusinessTelNumber}
-        onChange={(e) => updateApplicationData("coBusinessTelNumber", e.target.value)}
+        value={co.businessTelNumber}
+        onChange={(e) => updateCoBorrower("businessTelNumber", e.target.value)}
         label="Business Tel. No."
       />
-
-      <Input
-        value={applicationData.coTin}
-        onChange={(e) => updateApplicationData("coTin", e.target.value)}
-        label="TIN"
-      />
-      <Input
-        value={applicationData.coSssNumber}
-        onChange={(e) => updateApplicationData("coSssNumber", e.target.value)}
-        label="SSS No."
-      />
-      <Input
-        value={applicationData.coGsisNumber}
-        onChange={(e) => updateApplicationData("coGsisNumber", e.target.value)}
-        label="GSIS No."
-      />
+      <Input value={co.tin} onChange={(e) => updateCoBorrower("tin", e.target.value)} label="TIN" />
+      <Input value={co.sssNumber} onChange={(e) => updateCoBorrower("sssNumber", e.target.value)} label="SSS No." />
+      <Input value={co.gsisNumber} onChange={(e) => updateCoBorrower("gsisNumber", e.target.value)} label="GSIS No." />
     </StepContainer>
   )
 }

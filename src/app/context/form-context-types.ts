@@ -6,6 +6,14 @@ export type ApplicationContextType = {
   resetApplication: (setInto?: ApplicationFormType) => void
   applicationLoading: ApplicationLoadingType
   setApplicationLoading: Dispatch<SetStateAction<ApplicationLoadingType>>
+  updateCoBorrower: <K extends keyof CoBorrowerType>(field: K, value: CoBorrowerType[K]) => void
+  addArrayItem: <K extends FormArrayFields>(field: K, item: ApplicationFormType[K][number]) => void
+  removeArrayItem: <K extends FormArrayFields>(field: K, index: number) => void
+  updateArrayItem: <K extends FormArrayFields>(
+    field: K,
+    index: number,
+    value: Partial<ApplicationFormType[K][number]>,
+  ) => void
 }
 
 export type ApplicationLoadingType = {
@@ -69,58 +77,12 @@ export type ApplicationFormType = {
   natureOfWork: NatureOfWork[]
   natureOfWorkOther: string
 
-  coFirstName: string
-  coMiddleName: string
-  coLastName: string
-  coNameSuffix: string
-  coBirthDate: string
-  coBirthPlace: string
-  coGender: Gender | ""
-  coPresentAddress: string
-  coAddressPresYears: string
-  coAddressPresMonths: string
-  coPermanentAddress: string
-  coAddressPermYears: string
-  coAddressPermMonths: string
-  coProvincialAddress: string
-  coAddressProvYears: string
-  coAddressProvMonths: string
-  coMobile: string
-  coEmail: string
-  coCitizenship: Citizenship | ""
-  coCitizenshipOther: string
-  coTin: string
-  coSssNumber: string
-  coGsisNumber: string
-  coSchoolName: string
-  coSchoolGradeLevel: string
-  coSchoolYearGraduated: string
-  coHouseOwnership: HouseOwnership | ""
-  coHouseRentMonthly: string
-  coHouseMortgageMonthly: string
-  coHouseOwnedBy: string
-  coEmployerName: string
-  coBusinessName: string
-  coIncomeNotApplicable: boolean
-  coMonthlyIncome: string
-  coEmploymentYears: string
-  coEmploymentMonths: string
-  coEmployerBusinessAddress: string
-  coBusinessTelNumber: string
+  coBorrower: CoBorrowerType
 
-  // Motor Vehicle (Page 2)
   motorVehicle: MotorVehicle | null
-
-  // Character References — 3 rows on the form
   characterReferences: CharacterReference[]
-
-  // Trade References — 3 rows on the form
   tradeReferences: TradeReference[]
-
-  // Borrower's Bank Accounts
   bankAccounts: BankAccountEntry[]
-
-  // Borrower's Authorization to Verify Bank Details
   authorizeBankDetails: AuthorizeBankEntry[]
 }
 
@@ -230,4 +192,157 @@ export type TradeReference = {
   businessName: string
   address: string
   contactNumber: string
+}
+
+export type CoBorrowerType = {
+  firstName: string
+  middleName: string
+  lastName: string
+  nameSuffix: string
+  birthDate: string
+  birthPlace: string
+  gender: Gender | ""
+  presentAddress: string
+  addressPresYears: string
+  addressPresMonths: string
+  permanentAddress: string
+  addressPermYears: string
+  addressPermMonths: string
+  provincialAddress: string
+  addressProvYears: string
+  addressProvMonths: string
+  mobile: string
+  email: string
+  citizenship: Citizenship | ""
+  citizenshipOther: string
+  tin: string
+  sssNumber: string
+  gsisNumber: string
+  schoolName: string
+  schoolGradeLevel: string
+  schoolYearGraduated: string
+  houseOwnership: HouseOwnership | ""
+  houseRentMonthly: string
+  houseMortgageMonthly: string
+  houseOwnedBy: string
+  // income
+  employerName: string
+  businessName: string
+  incomeNotApplicable: boolean
+  monthlyIncome: string
+  employmentYears: string
+  employmentMonths: string
+  employerBusinessAddress: string
+  businessTelNumber: string
+}
+
+/**
+ * Resolves to: "characterReferences" | "tradeReferences" | "bankAccounts" | "authorizeBankDetails" | "dependents"
+ */
+export type FormArrayFields = {
+  [K in keyof ApplicationFormType]: ApplicationFormType[K] extends unknown[] ? K : never
+}[keyof ApplicationFormType]
+
+const initialCoBorrower: CoBorrowerType = {
+  firstName: "",
+  middleName: "",
+  lastName: "",
+  nameSuffix: "",
+  birthDate: "",
+  birthPlace: "",
+  gender: "",
+  presentAddress: "",
+  addressPresYears: "",
+  addressPresMonths: "",
+  permanentAddress: "",
+  addressPermYears: "",
+  addressPermMonths: "",
+  provincialAddress: "",
+  addressProvYears: "",
+  addressProvMonths: "",
+  mobile: "",
+  email: "",
+  citizenship: "",
+  citizenshipOther: "",
+  tin: "",
+  sssNumber: "",
+  gsisNumber: "",
+  schoolName: "",
+  schoolGradeLevel: "",
+  schoolYearGraduated: "",
+  houseOwnership: "",
+  houseRentMonthly: "",
+  houseMortgageMonthly: "",
+  houseOwnedBy: "",
+  employerName: "",
+  businessName: "",
+  incomeNotApplicable: false,
+  monthlyIncome: "",
+  employmentYears: "",
+  employmentMonths: "",
+  employerBusinessAddress: "",
+  businessTelNumber: "",
+}
+
+export const initialApplicationData: ApplicationFormType = {
+  // Personal Information
+  firstName: "",
+  middleName: "",
+  lastName: "",
+  nameSuffix: "",
+  civilStatus: "",
+  birthDate: "",
+  birthPlace: "",
+  gender: "",
+  presentAddress: "",
+  addressPresYears: "",
+  addressPresMonths: "",
+  permanentAddress: "",
+  addressPermYears: "",
+  addressPermMonths: "",
+  provincialAddress: "",
+  addressProvYears: "",
+  addressProvMonths: "",
+  mobile: "",
+  citizenship: "",
+  citizenshipOther: "",
+  tin: "",
+  sssNumber: "",
+  gsisNumber: "",
+  schoolName: "",
+  schoolGradeLevel: "",
+  schoolYearGraduated: "",
+  houseOwnership: "",
+  houseRentMonthly: "",
+  houseMortgageMonthly: "",
+  houseOwnedBy: "",
+  dependents: [],
+  // Income Information
+  employerName: "",
+  businessName: "",
+  incomeNotApplicable: false,
+  employmentIncome: "",
+  remittanceIncome: "",
+  pensionIncome: "",
+  commissionsIncome: "",
+  businessIncome: "",
+  interestIncome: "",
+  saleOfAssetsIncome: "",
+  employmentYears: "",
+  employmentMonths: "",
+  employerBusinessAddress: "",
+  prcLicenseNumber: "",
+  businessTelNumber: "",
+  incomeSources: [],
+  natureOfWork: [],
+  natureOfWorkOther: "",
+  // Co-Borrower
+  coBorrower: initialCoBorrower,
+  // Motor Vehicle
+  motorVehicle: null,
+  // Arrays
+  characterReferences: [],
+  tradeReferences: [],
+  bankAccounts: [],
+  authorizeBankDetails: [],
 }
