@@ -16,6 +16,15 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
   const [applicationData, setApplicationData] = useState<ApplicationFormType>(initialApplicationData)
   const [applicationLoading, setApplicationLoading] = useState<ApplicationLoadingType>({ loading: true, text: "" })
 
+  const fullName = `${applicationData.firstName}${
+    applicationData.middleName
+      ? ` ${applicationData.middleName
+          .split(" ")
+          .map((mn) => `${mn[0]}.`)
+          .join("")}`
+      : ""
+  } ${applicationData.lastName}`
+
   // Load from localStorage on mount
   useEffect(() => {
     const loadFromStorage = () => {
@@ -68,7 +77,7 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
     value: Partial<ApplicationFormType[K][number]>,
   ) => {
     setApplicationData((prev) => {
-      const updated = [...prev[field]] as Record<string, unknown>[]
+      const updated = [...(prev[field] ?? [])] as Record<string, unknown>[]
       updated[index] = { ...updated[index], ...value }
       return { ...prev, [field]: updated }
     })
@@ -95,6 +104,7 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
   return (
     <ApplicationContext.Provider
       value={{
+        fullName,
         applicationData,
         updateApplicationData,
         updateCoBorrower,

@@ -10,6 +10,7 @@ import CoborrowerInformation from "../form/generate/steps/coborrower-info"
 import CommissionsInfo from "../form/generate/steps/commissions-info"
 import IncomeInfo from "../form/generate/steps/income-info"
 import InterestIncomeInfo from "../form/generate/steps/interest-income-info"
+import MotorVehicle from "../form/generate/steps/motor-vehicle"
 import PensionInfo from "../form/generate/steps/pension-info"
 import PersonalInformation from "../form/generate/steps/personal-information"
 import RemittanceInfo from "../form/generate/steps/remittance-info"
@@ -58,11 +59,6 @@ interface StepperProviderProps {
 export function StepperProvider({ children }: StepperProviderProps) {
   const { applicationData } = useApplication()
   const steps: StepConfig[] = [
-    {
-      component: BankAccounts,
-      title: "Bank Accounts",
-      // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
-    },
     {
       component: PersonalInformation,
       title: "Personal Information",
@@ -133,6 +129,19 @@ export function StepperProvider({ children }: StepperProviderProps) {
           },
         ]
       : []),
+    ...(applicationData.motorVehicle !== null
+      ? [
+          {
+            component: MotorVehicle,
+            title: "Owned Vehicle Information",
+          },
+        ]
+      : []),
+    {
+      component: BankAccounts,
+      title: "Bank Accounts",
+      // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
+    },
     {
       component: CoborrowerInformation,
       title: "Coborrower",

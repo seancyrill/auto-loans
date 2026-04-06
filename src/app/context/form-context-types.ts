@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react"
 
 export type ApplicationContextType = {
+  fullName: string
   applicationData: ApplicationFormType
   updateApplicationData: <K extends keyof ApplicationFormType>(field: K, value: ApplicationFormType[K]) => void
   resetApplication: (setInto?: ApplicationFormType) => void

@@ -1,164 +1,66 @@
 "use client"
 import { useApplication } from "@/app/context/form-context"
+import { AccountType } from "@/app/context/form-context-types"
+import { Button } from "@/app/ui/button"
 import { Input } from "@/app/ui/input"
-import { SelectionMenu } from "@/app/ui/selection"
+import { Plus } from "lucide-react"
+import { FocusEvent, useState } from "react"
 import { StepContainer } from "./components/step-container"
 
 export default function BankAccounts() {
-  const { applicationData, updateApplicationData } = useApplication()
+  const { applicationData, updateArrayItem, fullName } = useApplication()
+  const accountRefs = applicationData.bankAccounts ?? []
+
+  const initRows = applicationData.bankAccounts?.length ? applicationData.bankAccounts.map((_, i) => i) : [0]
+  const [rows, setRows] = useState(initRows)
+
+  const addRow = () => {
+    setRows((prev) => [...prev, prev.length])
+  }
+
+  const autoFillEmptyName = (e: FocusEvent<HTMLInputElement, Element>, i: number) => {
+    if (e.target.value === "") {
+      updateArrayItem("bankAccounts", i, { accountName: fullName })
+    }
+  }
 
   return (
     <StepContainer>
-      {/* Toggle motor vehicle section on/off */}
-      <SelectionMenu
-        label="Do you own a motor vehicle? (not used as collateral)"
-        value={applicationData.motorVehicle ? "yes" : "no"}
-        onChange={(val) =>
-          updateApplicationData(
-            "motorVehicle",
-            val === "yes"
-              ? {
-                  year: "",
-                  makeModel: "",
-                  color: "",
-                  plateNumber: "",
-                  mileageKm: "",
-                  placeOfRegistration: "",
-                }
-              : null,
-          )
-        }
-        options={[
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ]}
-      />
-
-      {applicationData.motorVehicle && (
-        <>
+      {rows.map((i) => (
+        <div key={`char-ref-${i}`} className={`border-off flex w-full flex-col rounded-lg border p-4`}>
+          <h3 className="text-center font-bold">{i + 1}</h3>
           <Input
-            value={applicationData.motorVehicle.year}
-            onChange={(e) =>
-              updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, year: e.target.value })
-            }
-            placeholder="2020"
-            label="Year"
+            value={accountRefs[i]?.accountName ?? ""}
+            onChange={(e) => updateArrayItem("bankAccounts", i, { accountName: e.target.value })}
+            placeholder={fullName}
+            label={"Account Name"}
+            onFocus={(e) => autoFillEmptyName(e, i)}
           />
           <Input
-            value={applicationData.motorVehicle.makeModel}
-            onChange={(e) =>
-              updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, makeModel: e.target.value })
-            }
-            placeholder="Toyota Vios"
-            label="Make / Model"
+            value={accountRefs[i]?.accountNumber ?? ""}
+            onChange={(e) => updateArrayItem("bankAccounts", i, { accountNumber: e.target.value })}
+            label={"Account Number"}
           />
-          <Input
-            value={applicationData.motorVehicle.color}
-            onChange={(e) =>
-              updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, color: e.target.value })
-            }
-            placeholder="White"
-            label="Color"
-          />
-          <Input
-            value={applicationData.motorVehicle.plateNumber}
-            onChange={(e) =>
-              updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, plateNumber: e.target.value })
-            }
-            placeholder="ABC 1234"
-            label="Plate No."
-          />
-          <Input
-            value={applicationData.motorVehicle.mileageKm}
-            onChange={(e) =>
-              updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, mileageKm: e.target.value })
-            }
-            placeholder="50000"
-            label="Mileage (Kms)"
-          />
-          <Input
-            value={applicationData.motorVehicle.placeOfRegistration}
-            onChange={(e) =>
-              updateApplicationData("motorVehicle", {
-                ...applicationData.motorVehicle!,
-                placeOfRegistration: e.target.value,
-              })
-            }
-            placeholder="Quezon City"
-            label="Place of Registration"
-          />
-        </>
-      )}
-
-      {/* {[0, 1, 2].map((i) => (
-        <>
-          <Input
-            value={applicationData.characterReferences?.[i]?.name ?? ""}
-            onChange={(e) => {
-              const updated = [...applicationData.characterReferences]
-              updated[i] = { ...updated[i], name: e.target.value }
-              updateApplicationData("characterReferences", updated)
-            }}
-            placeholder="Full Name"
-            label={`Character Reference ${i + 1} — Name`}
-          />
-          <Input
-            value={applicationData.characterReferences?.[i]?.address ?? ""}
-            onChange={(e) => {
-              const updated = [...applicationData.characterReferences]
-              updated[i] = { ...updated[i], address: e.target.value }
-              updateApplicationData("characterReferences", updated)
-            }}
-            placeholder="Address"
-            label={`Character Reference ${i + 1} — Address`}
-          />
-          <Input
-            value={applicationData.characterReferences?.[i]?.contactNumber ?? ""}
-            onChange={(e) => {
-              const updated = [...applicationData.characterReferences]
-              updated[i] = { ...updated[i], contactNumber: e.target.value }
-              updateApplicationData("characterReferences", updated)
-            }}
-            placeholder="09XX XXX XXXX"
-            label={`Character Reference ${i + 1} — Contact Number`}
-          />
-        </>
+          <div className="flex gap-1">
+            <Input
+              value={accountRefs[i]?.accountType ?? ""}
+              onChange={(e) => updateArrayItem("bankAccounts", i, { accountType: e.target.value as AccountType })}
+              label={"Account Type"}
+              placeholder="Savings"
+            />
+            <Input
+              value={accountRefs[i]?.bankBranch ?? ""}
+              onChange={(e) => updateArrayItem("bankAccounts", i, { bankBranch: e.target.value })}
+              label={"Bank Branch"}
+              placeholder="BDO Sangitan"
+            />
+          </div>
+        </div>
       ))}
-
-      {[0, 1, 2].map((i) => (
-        <>
-          <Input
-            value={applicationData.tradeReferences[i]?.businessName ?? ""}
-            onChange={(e) => {
-              const updated = [...applicationData.tradeReferences]
-              updated[i] = { ...updated[i], businessName: e.target.value }
-              updateApplicationData("tradeReferences", updated)
-            }}
-            placeholder="Business Name"
-            label={`Trade Reference ${i + 1} — Name / Business Name`}
-          />
-          <Input
-            value={applicationData.tradeReferences[i]?.address ?? ""}
-            onChange={(e) => {
-              const updated = [...applicationData.tradeReferences]
-              updated[i] = { ...updated[i], address: e.target.value }
-              updateApplicationData("tradeReferences", updated)
-            }}
-            placeholder="Address"
-            label={`Trade Reference ${i + 1} — Address`}
-          />
-          <Input
-            value={applicationData.tradeReferences[i]?.contactNumber ?? ""}
-            onChange={(e) => {
-              const updated = [...applicationData.tradeReferences]
-              updated[i] = { ...updated[i], contactNumber: e.target.value }
-              updateApplicationData("tradeReferences", updated)
-            }}
-            placeholder="09XX XXX XXXX"
-            label={`Trade Reference ${i + 1} — Contact Number`}
-          />
-        </>
-      ))} */}
+      <Button variant={"ghost"} onClick={addRow} type="button" className={`${rows.length >= 3 ? "hidden" : ""}`}>
+        <Plus />
+        Add More
+      </Button>
     </StepContainer>
   )
 }
