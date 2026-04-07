@@ -129,6 +129,7 @@ export default function PersonalInformation() {
         value={applicationData.schoolName}
         onChange={(e) => updateApplicationData("schoolName", e.target.value)}
         label="School Name"
+        placeholder="NEUST"
       />
       <Input
         value={applicationData.schoolGradeLevel}

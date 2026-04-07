@@ -8,29 +8,23 @@ import { ChangeEvent, useState } from "react"
 import { StepContainer } from "./components/step-container"
 
 export default function CoborrowerAddressInformation() {
-  const { applicationData, updateApplicationData } = useApplication()
+  const { applicationData, updateCoBorrower } = useApplication()
+  const co = applicationData.coBorrower
 
   const [sameAsPresent, setSameAsPresent] = useState(true)
+
   const handleToggleSameAsPresent = () => {
     const nextValue = !sameAsPresent
-
     setSameAsPresent(nextValue)
-
-    if (nextValue) {
-      updateApplicationData("coPermanentAddress", applicationData.coPresentAddress)
-    } else {
-      updateApplicationData("coPermanentAddress", "")
-    }
+    updateCoBorrower("permanentAddress", nextValue ? co.presentAddress : "")
   }
 
-  const handleEditPresentAddress = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
+  const handleEditPresentAddress = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value
-
-    updateApplicationData("coPresentAddress", val)
-    updateApplicationData("coProvincialAddress", val)
-
+    updateCoBorrower("presentAddress", val)
+    updateCoBorrower("provincialAddress", val)
     if (sameAsPresent) {
-      updateApplicationData("coPermanentAddress", val)
+      updateCoBorrower("permanentAddress", val)
     }
   }
 
@@ -38,22 +32,22 @@ export default function CoborrowerAddressInformation() {
     <StepContainer>
       <div className="flex w-full gap-1">
         <Input
-          value={applicationData.coPresentAddress}
+          value={co.presentAddress}
           onChange={handleEditPresentAddress}
           placeholder="123 Main St, Quezon City"
           label="Present Address"
         />
         <div className="grid max-w-22 grid-cols-2 gap-1">
           <Input
-            value={applicationData.coAddressPresYears}
-            onChange={(e) => updateApplicationData("coAddressPresYears", e.target.value)}
+            value={co.addressPresYears}
+            onChange={(e) => updateCoBorrower("addressPresYears", e.target.value)}
             placeholder="0"
             label="for Yrs"
             className="w-full"
           />
           <Input
-            value={applicationData.coAddressPresMonths}
-            onChange={(e) => updateApplicationData("coAddressPresMonths", e.target.value)}
+            value={co.addressPresMonths}
+            onChange={(e) => updateCoBorrower("addressPresMonths", e.target.value)}
             placeholder="0"
             label="& Mos"
             className="w-full"
@@ -65,22 +59,22 @@ export default function CoborrowerAddressInformation() {
         {!sameAsPresent && (
           <div className="flex w-full gap-1">
             <Input
-              value={applicationData.coPermanentAddress}
-              onChange={(e) => updateApplicationData("coPermanentAddress", e.target.value)}
+              value={co.permanentAddress}
+              onChange={(e) => updateCoBorrower("permanentAddress", e.target.value)}
               placeholder="123 Main St, Quezon City"
               label="Permanent Address"
             />
             <div className="grid max-w-22 grid-cols-2 gap-1">
               <Input
-                value={applicationData.coAddressPermYears}
-                onChange={(e) => updateApplicationData("coAddressPermYears", e.target.value)}
+                value={co.addressPermYears}
+                onChange={(e) => updateCoBorrower("addressPermYears", e.target.value)}
                 placeholder="0"
                 className="w-full"
                 label="for Yrs"
               />
               <Input
-                value={applicationData.coAddressPermMonths}
-                onChange={(e) => updateApplicationData("coAddressPermMonths", e.target.value)}
+                value={co.addressPermMonths}
+                onChange={(e) => updateCoBorrower("addressPermMonths", e.target.value)}
                 placeholder="0"
                 className="w-full"
                 label="& Mos"
@@ -103,46 +97,46 @@ export default function CoborrowerAddressInformation() {
 
       <SelectionMenu
         label="House Ownership"
-        value={applicationData.coHouseOwnership}
-        onChange={(val) => updateApplicationData("coHouseOwnership", val as HouseOwnership)}
+        value={co.houseOwnership}
+        onChange={(val) => updateCoBorrower("houseOwnership", val as HouseOwnership)}
         options={HOUSE_OWNERSHIP_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
       />
-      {applicationData.coHouseOwnership === "rented" && (
+      {co.houseOwnership === "rented" && (
         <>
           <InputAmount
             currency="PHP"
-            value={applicationData.coHouseRentMonthly}
-            onChange={(e) => updateApplicationData("coHouseRentMonthly", e)}
+            value={co.houseRentMonthly}
+            onChange={(e) => updateCoBorrower("houseRentMonthly", e)}
             label="Monthly Rent"
           />
           <Input
-            value={applicationData.coHouseOwnedBy}
-            onChange={(e) => updateApplicationData("coHouseOwnedBy", e.target.value)}
+            value={co.houseOwnedBy}
+            onChange={(e) => updateCoBorrower("houseOwnedBy", e.target.value)}
             placeholder="Individual / Bank / Company"
             label="Rented From"
           />
         </>
       )}
-      {applicationData.coHouseOwnership === "owned (Mortgaged)" && (
+      {co.houseOwnership === "owned (Mortgaged)" && (
         <>
           <InputAmount
             currency="PHP"
-            value={applicationData.coHouseMortgageMonthly}
-            onChange={(e) => updateApplicationData("coHouseMortgageMonthly", e)}
+            value={co.houseMortgageMonthly}
+            onChange={(e) => updateCoBorrower("houseMortgageMonthly", e)}
             label="Monthly Mortgage"
           />
           <Input
-            value={applicationData.coHouseOwnedBy}
-            onChange={(e) => updateApplicationData("coHouseOwnedBy", e.target.value)}
+            value={co.houseOwnedBy}
+            onChange={(e) => updateCoBorrower("houseOwnedBy", e.target.value)}
             placeholder="Individual / Bank / Company"
             label="Mortgaged From"
           />
         </>
       )}
-      {applicationData.coHouseOwnership === "used Free" && (
+      {co.houseOwnership === "used Free" && (
         <Input
-          value={applicationData.coHouseOwnedBy}
-          onChange={(e) => updateApplicationData("coHouseOwnedBy", e.target.value)}
+          value={co.houseOwnedBy}
+          onChange={(e) => updateCoBorrower("houseOwnedBy", e.target.value)}
           placeholder="Individual / Bank / Company"
           label="Owned By"
         />

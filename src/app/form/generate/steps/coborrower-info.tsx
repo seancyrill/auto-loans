@@ -9,7 +9,8 @@ import { useEffect, useRef } from "react"
 import { StepContainer } from "./components/step-container"
 
 export default function CoborrowerInformation() {
-  const { applicationData, updateApplicationData } = useApplication()
+  const { applicationData, updateCoBorrower } = useApplication()
+  const co = applicationData.coBorrower
 
   const otherRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
@@ -22,27 +23,27 @@ export default function CoborrowerInformation() {
     <StepContainer>
       <div className="flex w-full gap-1">
         <Input
-          value={applicationData.coFirstName}
-          onChange={(e) => updateApplicationData("coFirstName", e.target.value)}
+          value={co.firstName}
+          onChange={(e) => updateCoBorrower("firstName", e.target.value)}
           placeholder="Maria"
           label="First Name"
         />
         <Input
-          value={applicationData.coMiddleName}
-          onChange={(e) => updateApplicationData("coMiddleName", e.target.value)}
+          value={co.middleName}
+          onChange={(e) => updateCoBorrower("middleName", e.target.value)}
           placeholder="Santos"
           label="Middle Name"
         />
         <Input
-          value={applicationData.coLastName}
-          onChange={(e) => updateApplicationData("coLastName", e.target.value)}
+          value={co.lastName}
+          onChange={(e) => updateCoBorrower("lastName", e.target.value)}
           placeholder="Dela Cruz"
           label="Last Name"
         />
         <span className="w-10">
           <Input
-            value={applicationData.coNameSuffix}
-            onChange={(e) => updateApplicationData("coNameSuffix", e.target.value)}
+            value={co.nameSuffix}
+            onChange={(e) => updateCoBorrower("nameSuffix", e.target.value)}
             placeholder="Jr."
             label="Suffix"
           />
@@ -50,31 +51,31 @@ export default function CoborrowerInformation() {
       </div>
 
       <DateInput
-        value={applicationData.coBirthDate}
-        onChange={(e) => updateApplicationData("coBirthDate", e.target.value)}
+        value={co.birthDate}
+        onChange={(e) => updateCoBorrower("birthDate", e.target.value)}
         placeholder="MM/DD/YYYY"
         label="Date of Birth"
       />
       <Input
-        value={applicationData.coBirthPlace}
-        onChange={(e) => updateApplicationData("coBirthPlace", e.target.value)}
+        value={co.birthPlace}
+        onChange={(e) => updateCoBorrower("birthPlace", e.target.value)}
         placeholder="Cabanatuan"
         label="Place of Birth"
       />
       <SelectionMenu
         label="Gender"
         columns={2}
-        value={applicationData.coGender}
-        onChange={(val) => updateApplicationData("coGender", val as Gender)}
+        value={co.gender}
+        onChange={(val) => updateCoBorrower("gender", val as Gender)}
         options={GENDER_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
       />
 
       <Input
-        value={formatPhone(applicationData.coMobile)}
+        value={formatPhone(co.mobile)}
         onChange={(e) => {
           const value = e.target.value.replace(/\s/g, "")
           if (value === "" || /^\d+$/.test(value) || value.length > 12) {
-            updateApplicationData("coMobile", value)
+            updateCoBorrower("mobile", value)
           }
         }}
         maxLength={12}
@@ -87,15 +88,15 @@ export default function CoborrowerInformation() {
         <SelectionMenu
           label="Citizenship"
           columns={2}
-          value={applicationData.coCitizenship}
-          onChange={(val) => updateApplicationData("coCitizenship", val as Citizenship)}
+          value={co.citizenship}
+          onChange={(val) => updateCoBorrower("citizenship", val as Citizenship)}
           options={CITIZENSHIP_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
         />
-        {applicationData.coCitizenship === "others" && (
+        {co.citizenship === "others" && (
           <span className="bg-negative rounded-tl-4xl rounded-b-2xl px-1 pb-0.5">
             <Input
-              value={applicationData.coCitizenshipOther}
-              onChange={(e) => updateApplicationData("coCitizenshipOther", e.target.value)}
+              value={co.citizenshipOther}
+              onChange={(e) => updateCoBorrower("citizenshipOther", e.target.value)}
               placeholder="e.g. American"
               sizeVariant="sm"
               label="Please specify citizenship"
@@ -107,19 +108,19 @@ export default function CoborrowerInformation() {
       </div>
 
       <Input
-        value={applicationData.coSchoolName}
-        onChange={(e) => updateApplicationData("coSchoolName", e.target.value)}
+        value={co.schoolName}
+        onChange={(e) => updateCoBorrower("schoolName", e.target.value)}
         label="School Name"
       />
       <Input
-        value={applicationData.coSchoolGradeLevel}
-        onChange={(e) => updateApplicationData("coSchoolGradeLevel", e.target.value)}
+        value={co.schoolGradeLevel}
+        onChange={(e) => updateCoBorrower("schoolGradeLevel", e.target.value)}
         placeholder="Bachelor of Science"
         label="Grade / Level / College Course"
       />
       <Input
-        value={applicationData.coSchoolYearGraduated}
-        onChange={(e) => updateApplicationData("coSchoolYearGraduated", e.target.value)}
+        value={co.schoolYearGraduated}
+        onChange={(e) => updateCoBorrower("schoolYearGraduated", e.target.value)}
         placeholder="2020"
         label="Year Graduated / Last Year of Stay"
       />

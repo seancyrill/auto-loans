@@ -1,21 +1,8 @@
 "use client"
 
 import { createContext, ReactNode, useCallback, useContext, useState } from "react"
-import AddressInformation from "../form/generate/steps/address-info"
-import BankAccounts from "../form/generate/steps/bank-accounts"
-import BusinessInfo from "../form/generate/steps/business-info"
-import CoborrowerAddressInformation from "../form/generate/steps/coborrower-address-info"
-import CoborrowerIncomeInfo from "../form/generate/steps/coborrower-income-info"
-import CoborrowerInformation from "../form/generate/steps/coborrower-info"
-import CommissionsInfo from "../form/generate/steps/commissions-info"
-import IncomeInfo from "../form/generate/steps/income-info"
-import InterestIncomeInfo from "../form/generate/steps/interest-income-info"
-import MotorVehicle from "../form/generate/steps/motor-vehicle"
-import PensionInfo from "../form/generate/steps/pension-info"
 import PersonalInformation from "../form/generate/steps/personal-information"
-import RemittanceInfo from "../form/generate/steps/remittance-info"
-import SaleOfAssetsInfo from "../form/generate/steps/sale-of-assets-info"
-import WorkInfo from "../form/generate/steps/work-info"
+import ReviewStep from "../form/generate/steps/review-application"
 import { useApplication } from "./form-context"
 import { useStatus } from "./status-provider"
 
@@ -66,94 +53,107 @@ export function StepperProvider({ children }: StepperProviderProps) {
       // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
     },
     {
-      component: AddressInformation,
-      title: "Address",
+      component: ReviewStep,
+      title: "Review",
     },
-    {
-      component: IncomeInfo,
-      title: "Income Information",
-    },
-    ...(applicationData.incomeSources.includes("employment")
-      ? [
-          {
-            component: WorkInfo,
-            title: "Employment Information",
-          },
-        ]
-      : []),
-    ...(applicationData.incomeSources.includes("business")
-      ? [
-          {
-            component: BusinessInfo,
-            title: "Business Information",
-          },
-        ]
-      : []),
-    ...(applicationData.incomeSources.includes("remittance")
-      ? [
-          {
-            component: RemittanceInfo,
-            title: "Remittance",
-          },
-        ]
-      : []),
-    ...(applicationData.incomeSources.includes("pension")
-      ? [
-          {
-            component: PensionInfo,
-            title: "Pension",
-          },
-        ]
-      : []),
-    ...(applicationData.incomeSources.includes("commissions")
-      ? [
-          {
-            component: CommissionsInfo,
-            title: "Commissions",
-          },
-        ]
-      : []),
-    ...(applicationData.incomeSources.includes("interest Income")
-      ? [
-          {
-            component: InterestIncomeInfo,
-            title: "Interest Income",
-          },
-        ]
-      : []),
-    ...(applicationData.incomeSources.includes("sale Of Assets")
-      ? [
-          {
-            component: SaleOfAssetsInfo,
-            title: "Sale of Assets",
-          },
-        ]
-      : []),
-    ...(applicationData.motorVehicle !== null
-      ? [
-          {
-            component: MotorVehicle,
-            title: "Owned Vehicle Information",
-          },
-        ]
-      : []),
-    {
-      component: BankAccounts,
-      title: "Bank Accounts",
-      // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
-    },
-    {
-      component: CoborrowerInformation,
-      title: "Coborrower",
-    },
-    {
-      component: CoborrowerAddressInformation,
-      title: "Coborrower Address",
-    },
-    {
-      component: CoborrowerIncomeInfo,
-      title: "Coborrower Income",
-    },
+    // {
+    //   component: AddressInformation,
+    //   title: "Address",
+    // },
+    // {
+    //   component: IncomeInfo,
+    //   title: "Income Information",
+    // },
+    // ...(applicationData.incomeSources.includes("employment")
+    //   ? [
+    //       {
+    //         component: WorkInfo,
+    //         title: "Employment Information",
+    //       },
+    //     ]
+    //   : []),
+    // ...(applicationData.incomeSources.includes("business")
+    //   ? [
+    //       {
+    //         component: BusinessInfo,
+    //         title: "Business Information",
+    //       },
+    //     ]
+    //   : []),
+    // ...(applicationData.incomeSources.includes("remittance")
+    //   ? [
+    //       {
+    //         component: RemittanceInfo,
+    //         title: "Remittance",
+    //       },
+    //     ]
+    //   : []),
+    // ...(applicationData.incomeSources.includes("pension")
+    //   ? [
+    //       {
+    //         component: PensionInfo,
+    //         title: "Pension",
+    //       },
+    //     ]
+    //   : []),
+    // ...(applicationData.incomeSources.includes("commissions")
+    //   ? [
+    //       {
+    //         component: CommissionsInfo,
+    //         title: "Commissions",
+    //       },
+    //     ]
+    //   : []),
+    // ...(applicationData.incomeSources.includes("interest Income")
+    //   ? [
+    //       {
+    //         component: InterestIncomeInfo,
+    //         title: "Interest Income",
+    //       },
+    //     ]
+    //   : []),
+    // ...(applicationData.incomeSources.includes("sale Of Assets")
+    //   ? [
+    //       {
+    //         component: SaleOfAssetsInfo,
+    //         title: "Sale of Assets",
+    //       },
+    //     ]
+    //   : []),
+    // ...(applicationData.motorVehicle !== null
+    //   ? [
+    //       {
+    //         component: MotorVehicle,
+    //         title: "Owned Vehicle Information",
+    //       },
+    //     ]
+    //   : []),
+    // {
+    //   component: BankAccounts,
+    //   title: "Bank Accounts",
+    // },
+    // {
+    //   component: CoborrowerInformation,
+    //   title: "Coborrower",
+    // },
+    // {
+    //   component: CoborrowerAddressInformation,
+    //   title: "Coborrower Address",
+    // },
+    // {
+    //   component: CoborrowerIncomeInfo,
+    //   title: "Coborrower Income",
+    // },
+    // {
+    //   component: CharacterReferences,
+    //   title: "Character References",
+    //   description: "Not living in the same household",
+    // },
+    // {
+    //   component: TradeReferences,
+    //   title: "Trade References",
+    //   description: "Clients or Suppliers",
+    // },
   ]
 
   const { showStatus } = useStatus()
