@@ -1,8 +1,8 @@
 "use client"
 
 import { createContext, ReactNode, useCallback, useContext, useState } from "react"
-import PersonalInformation from "../form/generate/steps/personal-information"
-import ReviewStep from "../form/generate/steps/review-application"
+import IncomeInfo from "../form/generate/steps/income-info"
+import WorkInfo from "../form/generate/steps/work-info"
 import { useApplication } from "./form-context"
 import { useStatus } from "./status-provider"
 
@@ -46,32 +46,28 @@ interface StepperProviderProps {
 export function StepperProvider({ children }: StepperProviderProps) {
   const { applicationData } = useApplication()
   const steps: StepConfig[] = [
-    {
-      component: PersonalInformation,
-      title: "Personal Information",
-      description: "Tell us about yourself.",
-      // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
-    },
-    {
-      component: ReviewStep,
-      title: "Review",
-    },
+    // {
+    //   component: PersonalInformation,
+    //   title: "Personal Information",
+    //   description: "Tell us about yourself.",
+    //   // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
+    // },
     // {
     //   component: AddressInformation,
     //   title: "Address",
     // },
-    // {
-    //   component: IncomeInfo,
-    //   title: "Income Information",
-    // },
-    // ...(applicationData.incomeSources.includes("employment")
-    //   ? [
-    //       {
-    //         component: WorkInfo,
-    //         title: "Employment Information",
-    //       },
-    //     ]
-    //   : []),
+    {
+      component: IncomeInfo,
+      title: "Income Information",
+    },
+    ...(applicationData.incomeSources.includes("employment")
+      ? [
+          {
+            component: WorkInfo,
+            title: "Employment Information",
+          },
+        ]
+      : []),
     // ...(applicationData.incomeSources.includes("business")
     //   ? [
     //       {

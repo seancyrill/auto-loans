@@ -18,14 +18,6 @@ export default function Form() {
   }
 
   if (applicationLoading.loading) {
-    return (
-      <div className="bg-primary fixed top-0 left-0 grid h-full w-full place-content-center">
-        <p>{applicationLoading.text ?? "Initializing..."}</p>
-      </div>
-    )
-  }
-
-  if (applicationLoading.loading) {
     return <LoadingSpinner loadingText={applicationLoading.text ?? ""} />
   }
 

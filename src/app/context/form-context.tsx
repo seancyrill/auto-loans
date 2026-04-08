@@ -13,8 +13,11 @@ import {
 const ApplicationContext = createContext<ApplicationContextType | undefined>(undefined)
 
 export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
+  console.log("context runnning")
+  const [mounted, setMounted] = useState(false)
   const [applicationData, setApplicationData] = useState<ApplicationFormType>(initialApplicationData)
   const [applicationLoading, setApplicationLoading] = useState<ApplicationLoadingType>({ loading: true, text: "" })
+  const [applicationImages, setApplicationImages] = useState<{ name: string; image: string }[]>([])
 
   const fullName = `${applicationData.firstName}${
     applicationData.middleName
@@ -25,8 +28,14 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
       : ""
   } ${applicationData.lastName}`
 
+  useEffect(() => {
+    setMounted(true)
+    console.log("mounted")
+  }, [])
+
   // Load from localStorage on mount
   useEffect(() => {
+    console.log("runs")
     const loadFromStorage = () => {
       try {
         setApplicationLoading({ loading: true, text: "Checking for unfinished application" })
@@ -40,12 +49,14 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
       } catch (error) {
         console.error("Error loading application data from storage:", error)
       } finally {
+        console.log("Loading done")
         setApplicationLoading({ loading: false, text: "" })
       }
     }
 
     loadFromStorage()
-  }, [])
+    console.log("done")
+  }, [mounted])
 
   // Save to localStorage whenever applicationData changes
   useEffect(() => {
@@ -97,8 +108,25 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
     }))
   }
 
+  const addImage = (name: string, image: string) => {
+    setApplicationImages((prev) => {
+      const exists = prev.findIndex((i) => i.name === name)
+      if (exists !== -1) {
+        const updated = [...prev]
+        updated[exists] = { name, image }
+        return updated
+      }
+      return [...prev, { name, image }]
+    })
+  }
+
+  const removeImage = (name: string) => {
+    setApplicationImages((prev) => prev.filter((i) => i.name !== name))
+  }
+
   const resetApplication = (setInto?: ApplicationFormType) => {
     setApplicationData(setInto ?? initialApplicationData)
+    setApplicationImages([])
   }
 
   return (
@@ -114,6 +142,9 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
         updateArrayItem,
         applicationLoading,
         setApplicationLoading,
+        applicationImages,
+        addImage,
+        removeImage,
       }}
     >
       {children}

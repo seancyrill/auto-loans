@@ -1,9 +1,10 @@
 import { useApplication } from "@/app/context/form-context"
+import { ImageField } from "@/app/ui/image-field"
 import { Input, InputAmount } from "@/app/ui/input"
 import { StepContainer } from "./components/step-container"
 
 export default function WorkInfo() {
-  const { updateApplicationData, applicationData } = useApplication()
+  const { updateApplicationData, applicationData, addImage, removeImage } = useApplication()
 
   return (
     <StepContainer>
@@ -40,6 +41,14 @@ export default function WorkInfo() {
         value={applicationData.employmentIncome}
         onChange={(e) => updateApplicationData("employmentIncome", e)}
         label="Monthly Salary"
+      />
+      <ImageField
+        name="Latest 3 months of Payslips"
+        label="Latest 3 months of Payslips"
+        onChange={(base64) => {
+          if (base64) addImage("Latest 3 months of Payslips", base64)
+          else removeImage("Latest 3 months of Payslips")
+        }}
       />
     </StepContainer>
   )

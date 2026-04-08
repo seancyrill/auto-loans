@@ -17,7 +17,4 @@ Latest 3 months payslip
 COE
 
 If remittance
-Proof of remittance 3 months.
-
-check languages, add stripe etc
-readd dmp
+Proof of remittance 3 months
