@@ -1,7 +1,7 @@
 "use client"
 import { cva } from "class-variance-authority"
 import { Upload } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { cn } from "../utils/cn"
 import { Button } from "./button"
 
@@ -30,10 +30,11 @@ type ImageFieldProps = {
   label: string
   onChange: (base64: string | null) => void
   labelClassName?: string
+  initialPreview?: string | null
 }
 
-export function ImageField({ name, label, onChange, labelClassName }: ImageFieldProps) {
-  const [preview, setPreview] = useState<string | null>(null)
+export function ImageField({ name, label, onChange, labelClassName, initialPreview = null }: ImageFieldProps) {
+  const [preview, setPreview] = useState<string | null>(initialPreview)
   const [isDragging, setIsDragging] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -128,10 +129,6 @@ export function ImageFieldMultiple({
   const [isDragging, setIsDragging] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    onChange(previews)
-  }, [onChange, previews])
-
   const handleFiles = (files: FileList | File[]) => {
     const remaining = limit - previews.length
     const toProcess = Array.from(files)
@@ -142,22 +139,18 @@ export function ImageFieldMultiple({
       const reader = new FileReader()
       reader.onload = (e) => {
         const result = e.target?.result as string
-        setPreviews((prev) => {
-          const updated = [...prev, result]
-
-          return updated
-        })
+        const updated = [...previews, result]
+        setPreviews(updated)
+        onChange(updated)
       }
       reader.readAsDataURL(file)
     })
   }
 
   const handleRemove = (index: number) => {
-    setPreviews((prev) => {
-      const updated = prev.filter((_, i) => i !== index)
-
-      return updated
-    })
+    const updated = previews.filter((_, i) => i !== index)
+    setPreviews(updated)
+    onChange(updated)
     if (inputRef.current) inputRef.current.value = ""
   }
 

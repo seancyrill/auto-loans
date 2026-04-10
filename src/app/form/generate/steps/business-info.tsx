@@ -1,9 +1,13 @@
 import { useApplication } from "@/app/context/form-context"
+import { ImageField } from "@/app/ui/image-field"
 import { Input, InputAmount } from "@/app/ui/input"
 import { StepContainer } from "./components/step-container"
 
 export default function BusinessInfo() {
-  const { updateApplicationData, applicationData } = useApplication()
+  const { updateApplicationData, applicationData, applicationImages, updateImages } = useApplication()
+
+  const dtiFieldName = "dti"
+  const dtiImg = applicationImages.find((img) => img.name === dtiFieldName)?.image ?? null
 
   return (
     <StepContainer>
@@ -24,6 +28,13 @@ export default function BusinessInfo() {
         value={applicationData.businessIncome}
         onChange={(e) => updateApplicationData("businessIncome", e)}
         label="Monthly Business Income"
+      />
+
+      <ImageField
+        label="Latest 3 months payslip"
+        name={dtiFieldName}
+        initialPreview={dtiImg}
+        onChange={(base64) => updateImages(dtiFieldName, base64 ? [base64] : [])}
       />
     </StepContainer>
   )

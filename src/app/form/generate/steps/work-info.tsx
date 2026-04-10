@@ -6,6 +6,8 @@ import { StepContainer } from "./components/step-container"
 export default function WorkInfo() {
   const { updateApplicationData, applicationData, applicationImages, updateImages } = useApplication()
 
+  const payslipFieldName = "payslip"
+
   return (
     <StepContainer>
       <div className="flex w-full gap-1">
@@ -44,11 +46,11 @@ export default function WorkInfo() {
       />
 
       <ImageFieldMultiple
-        name="pay-stubs"
-        label="Pay Stubs"
-        initialPreviews={applicationImages.filter((img) => img.name === "pay-stubs").map((img) => img.image)}
+        label="Latest 3 months payslip"
+        name={payslipFieldName}
+        initialPreviews={applicationImages.filter((img) => img.name === payslipFieldName).map((img) => img.image)}
         limit={3}
-        onChange={(base64s) => updateImages("pay-stubs", base64s)}
+        onChange={(base64s) => updateImages(payslipFieldName, base64s)}
       />
     </StepContainer>
   )

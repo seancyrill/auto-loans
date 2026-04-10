@@ -16,6 +16,7 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
   const [applicationData, setApplicationData] = useState<ApplicationFormType>(initialApplicationData)
   const [applicationLoading, setApplicationLoading] = useState<ApplicationLoadingType>({ loading: true, text: "" })
   const [applicationImages, setApplicationImages] = useState<{ name: string; image: string }[]>([])
+  console.log(applicationImages)
 
   const { firstName, middleName, lastName, nameSuffix } = applicationData
   const fullName = useMemo(
