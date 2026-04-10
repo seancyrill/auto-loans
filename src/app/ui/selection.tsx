@@ -1,13 +1,8 @@
 "use client"
 
 import { cva, type VariantProps } from "class-variance-authority"
-import { clsx, type ClassValue } from "clsx"
 import React from "react"
-import { twMerge } from "tailwind-merge"
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+import { cn } from "../utils/cn"
 
 const selectionItemVariants = cva(
   "relative flex cursor-pointer select-none items-center gap-3 rounded-md border px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50",

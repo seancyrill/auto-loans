@@ -1,17 +1,10 @@
 "use client"
 
 import { cva, type VariantProps } from "class-variance-authority"
-import { clsx, type ClassValue } from "clsx"
 import { LucideIcon } from "lucide-react"
 import React from "react"
-import { twMerge } from "tailwind-merge"
+import { cn } from "../utils/cn"
 
-// Helper for Tailwind class merging
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-
-// 1. Define Variants
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-md font-medium cursor-pointer transition-all duration-300 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-60 hover:brightness-90",
   {
@@ -38,14 +31,12 @@ const buttonVariants = cva(
   },
 )
 
-// 2. Define Props Interface for Autocomplete
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
     leftIcon?: LucideIcon
     rightIcon?: LucideIcon
   }
 
-// 3. The Component
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, leftIcon: LeftIcon, rightIcon: RightIcon, children, ...props }, ref) => {
     return (

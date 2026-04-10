@@ -1,11 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority"
-import { clsx, type ClassValue } from "clsx"
 import React from "react"
-import { twMerge } from "tailwind-merge"
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+import { cn } from "../utils/cn"
 
 const inputVariants = cva(
   "flex w-full rounded-md border bg-transparent px-3 py-2 text-sm bg-primary transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-off focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 user-invalid:border-error invalid:focus:border-none",

@@ -16,8 +16,7 @@ export type ApplicationContextType = {
     value: Partial<ApplicationFormType[K][number]>,
   ) => void
   applicationImages: { name: string; image: string }[]
-  addImage: (name: string, image: string) => void
-  removeImage: (name: string) => void
+  updateImages: (name: string, images: string[]) => void
 }
 
 export type ApplicationLoadingType = {

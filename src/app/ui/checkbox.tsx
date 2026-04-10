@@ -1,12 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority"
-import { clsx, type ClassValue } from "clsx"
 import { Check } from "lucide-react"
 import React from "react"
-import { twMerge } from "tailwind-merge"
-
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+import { cn } from "../utils/cn"
 
 const sizeOptions = {
   default: "h-4 w-4",
