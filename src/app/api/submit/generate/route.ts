@@ -51,12 +51,12 @@ export async function POST(req: NextRequest) {
 
   // send docs to processor
   await transporter.sendMail({
-    from: GMAIL_USER,
+    from: "SDG Financing",
     to: lenderEmail,
     subject: "New Form Submission",
     html: getEmailHTML(fullName, `0${mobile}`),
     attachments: [
-      // ...imageAttachments,
+      ...imageAttachments,
       {
         filename: "Application Form.pdf",
         content: Buffer.from(filledPdf),
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
 function lenderEmailFinder(lender: string) {
   switch (lender) {
     case "gdfi":
-      return "seancyrill@gmail.com"
+      return process.env.GDFI_EMAIL
 
     default:
       return "seancyrill@gmail.com"
