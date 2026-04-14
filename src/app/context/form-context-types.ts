@@ -24,9 +24,12 @@ export type ApplicationLoadingType = {
   text?: string
 }
 
+export type ApplicationImageType = { name: string; image: string }
+
 // --- Main Form Type ---
 
 export type ApplicationFormType = {
+  loanOption: LoanOption
   // Personal Information
   firstName: string
   middleName: string
@@ -101,7 +104,7 @@ export const LOAN_OPTIONS = [
   "Doctor's Loan",
   "Real Estate Loan",
 ] as const
-export type LoanOption = (typeof INCOME_OPTIONS)[number]
+export type LoanOption = (typeof LOAN_OPTIONS)[number]
 
 export const CIVIL_STATUS_OPTIONS = ["single", "annulled", "separated", "married", "common Law"] as const
 export type CivilStatus = (typeof CIVIL_STATUS_OPTIONS)[number]
@@ -288,6 +291,7 @@ const initialCoBorrower: CoBorrowerType = {
 }
 
 export const initialApplicationData: ApplicationFormType = {
+  loanOption: "Sangla ORCR",
   // Personal Information
   firstName: "",
   middleName: "",

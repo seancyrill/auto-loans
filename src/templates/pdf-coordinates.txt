@@ -1,0 +1,71 @@
+https://www.pdf-coordinates.com/
+
+Step 1: Assign the ID
+
+    Open the Elements tab.
+
+    Right-click the <span>0 x 0 @ (464, 718) pt</span> line.
+
+    Select Store as global variable. (It will show up in the console as temp1).
+
+    In the console, type this and hit Enter:
+
+    temp1.id = "my-coords";
+
+
+
+
+full function call:
+
+// Run this once to ensure your element has the ID
+// (Assuming you already 'Stored as global variable' to temp1)
+if (window.temp1) temp1.id = "my-coords";
+
+document.addEventListener('click', () => {
+    setTimeout(() => {
+        const spanText = document.getElementById('my-coords')?.innerText;
+        
+        if (spanText) {
+            // regex to find the numbers inside the parentheses
+            const match = spanText.match(/\((\d+),\s*(\d+)\)/);
+            
+            if (match) {
+                const x = match[1];
+                const y = match[2];
+                
+                // Formatting into your specific function template
+                const formattedString = `t(page, "YOUR_TEXT", ${x}, ${y}, font);`;
+                
+                navigator.clipboard.writeText(formattedString).then(() => {
+                    console.log("%c Copied to clipboard:", "color: #fbbf24; font-weight: bold;");
+                    console.log(formattedString);
+                });
+            }
+        }
+    }, 50);
+});
+
+
+"x, y" ony:
+
+document.addEventListener('click', () => {
+    // 50ms delay ensures the site's script updates the span before we read it
+    setTimeout(() => {
+        const spanText = document.getElementById('my-coords')?.innerText;
+        
+        if (spanText) {
+            // regex pulls the two numbers from inside the ( )
+            const match = spanText.match(/\((\d+),\s*(\d+)\)/);
+            
+            if (match) {
+                const x = match[1];
+                const y = match[2];
+                const coordString = `${x}, ${y}`;
+                
+                navigator.clipboard.writeText(coordString).then(() => {
+                    console.log(`%c Copied: ${coordString}`, "color: #00d1ff; font-weight: bold;");
+                });
+            }
+        }
+    }, 50);
+});

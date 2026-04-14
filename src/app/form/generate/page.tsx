@@ -7,7 +7,8 @@ import { Button } from "@/app/ui/button"
 
 export default function GenerateForm() {
   const { currentStep, stepError, goNext, goPrev, hasPrev, isLastStep } = useStepper()
-  const { applicationData, applicationLoading, resetApplication } = useApplication()
+  const { applicationData, applicationImages, applicationLoading, resetApplication, setApplicationLoading } =
+    useApplication()
   const StepComponent = currentStep.component
 
   const handleSubmit = async (e: React.SubmitEvent) => {
@@ -17,17 +18,20 @@ export default function GenerateForm() {
       return goNext(applicationData)
     }
 
-    // const res = await fetch("/api/submit/generate", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ applicationData, lender: "gdfi" }),
-    // })
+    setApplicationLoading({ loading: true, text: "Generating..." })
 
-    // const data = await res.json()
-    // if (data.success) {
-    alert("Submitted successfully!")
-    // resetApplication()
-    // }
+    const res = await fetch("/api/submit/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ applicationData, lender: "gdfi", applicationImages }),
+    })
+
+    const data = await res.json()
+    if (data.success) {
+      setApplicationLoading({ loading: false, text: "" })
+      alert("Submitted successfully!")
+      // resetApplication()
+    }
   }
 
   if (applicationLoading.loading) {

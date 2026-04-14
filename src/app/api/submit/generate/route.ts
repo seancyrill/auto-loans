@@ -1,5 +1,7 @@
+import { getFullName } from "@/app/utils/full-name"
 import { NextRequest, NextResponse } from "next/server"
 import nodemailer from "nodemailer"
+import { getEmailHTML } from "../email-template"
 import { fillGdfiApplication } from "../fill-pdf"
 import { parseImageAttachments } from "../parse-image-attachments"
 
@@ -11,10 +13,30 @@ export async function POST(req: NextRequest) {
     throw new Error("Submit Route Error: Cannot read env!")
   }
 
-  const { applicationData, lender, images } = await req.json()
+  const { applicationData, lender, applicationImages } = await req.json()
+
+  if (!applicationData) {
+    return NextResponse.json({ message: "Missing Application Data" }, { status: 400 })
+  }
+
+  if (!lender) {
+    return NextResponse.json({ message: "Missing Lender Data" }, { status: 400 })
+  }
+
+  const { firstName, middleName, lastName, nameSuffix, mobile } = applicationData
+
+  console.log({ firstName, lastName, mobile })
+  if (!firstName || !lastName || !mobile) {
+    return NextResponse.json({ message: "MIssing Client contact details" }, { status: 400 })
+  }
+
+  const fullName = getFullName({ firstName, middleName, lastName, nameSuffix })
 
   // Write on pdf
   const filledPdf = await fillGdfiApplication(applicationData)
+
+  // process images
+  const imageAttachments = await parseImageAttachments(applicationImages ?? [])
 
   // setup mailer
   const transporter = nodemailer.createTransport({
@@ -32,12 +54,12 @@ export async function POST(req: NextRequest) {
     from: GMAIL_USER,
     to: lenderEmail,
     subject: "New Form Submission",
-    text: `New submission from ${applicationData.firstName}`,
+    html: getEmailHTML(fullName, `0${mobile}`),
     attachments: [
+      // ...imageAttachments,
       {
-        filename: "filled-form.pdf",
+        filename: "Application Form.pdf",
         content: Buffer.from(filledPdf),
-        ...parseImageAttachments(images ?? []),
       },
     ],
   })

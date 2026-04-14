@@ -1,9 +1,11 @@
 "use client"
 
 import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react"
+import { getFullName } from "../utils/full-name"
 import {
   ApplicationContextType,
   ApplicationFormType,
+  ApplicationImageType,
   ApplicationLoadingType,
   CoBorrowerType,
   FormArrayFields,
@@ -15,21 +17,12 @@ const ApplicationContext = createContext<ApplicationContextType | undefined>(und
 export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
   const [applicationData, setApplicationData] = useState<ApplicationFormType>(initialApplicationData)
   const [applicationLoading, setApplicationLoading] = useState<ApplicationLoadingType>({ loading: true, text: "" })
-  const [applicationImages, setApplicationImages] = useState<{ name: string; image: string }[]>([])
-  console.log(applicationImages)
+  const [applicationImages, setApplicationImages] = useState<ApplicationImageType[]>([])
 
   const { firstName, middleName, lastName, nameSuffix } = applicationData
+
   const fullName = useMemo(
-    () =>
-      `${firstName}${
-        middleName
-          ? ` ${middleName
-              .split(" ")
-              .map((mn) => `${mn[0]}.`)
-              .join("")}`
-          : ""
-      } ${lastName}
-      ${nameSuffix ? ` ${nameSuffix.toUpperCase()}` : ""}`,
+    () => getFullName({ firstName, middleName, lastName, nameSuffix }),
     [firstName, middleName, lastName, nameSuffix],
   )
 
@@ -38,12 +31,17 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
     const loadFromStorage = () => {
       try {
         setApplicationLoading({ loading: true, text: "Checking for unfinished application" })
-        const saved = localStorage.getItem("aideoApplicationData")
 
-        if (saved) {
-          const parsed: { applicationData: ApplicationFormType } = JSON.parse(saved)
-
+        const savedForm = localStorage.getItem("formData")
+        if (savedForm) {
+          const parsed: { applicationData: ApplicationFormType } = JSON.parse(savedForm)
           setApplicationData(parsed?.applicationData ?? initialApplicationData)
+        }
+
+        const savedImages = localStorage.getItem("formImages")
+        if (savedImages) {
+          const parsed: { applicationImages: ApplicationImageType[] } = JSON.parse(savedImages)
+          setApplicationImages(parsed?.applicationImages ?? [])
         }
       } catch (error) {
         console.error("Error loading application data from storage:", error)
@@ -57,14 +55,15 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
 
   // Save to localStorage whenever applicationData changes
   useEffect(() => {
-    if (applicationData && !applicationLoading.loading) {
+    if ((applicationData || applicationImages) && !applicationLoading.loading) {
       try {
-        localStorage.setItem("aideoApplicationData", JSON.stringify({ applicationData }))
+        localStorage.setItem("formData", JSON.stringify({ applicationData }))
+        localStorage.setItem("formImages", JSON.stringify({ applicationImages }))
       } catch (error) {
         console.error("Error saving application data to storage:", error)
       }
     }
-  }, [applicationData, applicationLoading.loading])
+  }, [applicationData, applicationLoading.loading, applicationImages])
 
   // works for all flat fields
   const updateApplicationData = <K extends keyof ApplicationFormType>(field: K, value: ApplicationFormType[K]) => {

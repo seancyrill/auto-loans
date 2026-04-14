@@ -1,12 +1,10 @@
 import { useApplication } from "@/app/context/form-context"
-import { ImageFieldMultiple } from "@/app/ui/image-field"
+import { ImageField, ImageFieldMultiple } from "@/app/ui/image-field"
 import { Input, InputAmount } from "@/app/ui/input"
 import { StepContainer } from "./components/step-container"
 
 export default function WorkInfo() {
-  const { updateApplicationData, applicationData, applicationImages, updateImages } = useApplication()
-
-  const payslipFieldName = "payslip"
+  const { updateApplicationData, applicationData } = useApplication()
 
   return (
     <StepContainer>
@@ -45,13 +43,8 @@ export default function WorkInfo() {
         label="Monthly Salary"
       />
 
-      <ImageFieldMultiple
-        label="Latest 3 months payslip"
-        name={payslipFieldName}
-        initialPreviews={applicationImages.filter((img) => img.name === payslipFieldName).map((img) => img.image)}
-        limit={3}
-        onChange={(base64s) => updateImages(payslipFieldName, base64s)}
-      />
+      <ImageField label="COE / Proof of Employment" name="coe" />
+      <ImageFieldMultiple label="Latest 3 months payslip" name="payslip" limit={3} />
     </StepContainer>
   )
 }

@@ -14,7 +14,8 @@ interface MailAttachment {
 export async function parseImageAttachments(images: ImageInput[]): Promise<MailAttachment[]> {
   return Promise.all(
     images.map(async ({ name, image }) => {
-      const base64Data = image.split(",")[1]
+      const parts = image.split(",")
+      const base64Data = parts.length > 1 ? parts[1] : parts[0]
 
       const compressed = await sharp(Buffer.from(base64Data, "base64"))
         .resize({ width: 1080, withoutEnlargement: true })
@@ -22,7 +23,7 @@ export async function parseImageAttachments(images: ImageInput[]): Promise<MailA
         .toBuffer()
 
       return {
-        filename: `${name}.jpg`,
+        filename: `${name.replace(/\s+/g, "_")}.jpg`, // Clean filename
         content: compressed,
         contentType: "image/jpeg",
       }

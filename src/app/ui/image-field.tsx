@@ -2,11 +2,12 @@
 import { cva } from "class-variance-authority"
 import { Upload } from "lucide-react"
 import { useRef, useState } from "react"
+import { useApplication } from "../context/form-context"
 import { cn } from "../utils/cn"
 import { Button } from "./button"
 
 const dropzoneVariants = cva(
-  "flex flex-col items-center justify-center gap-2 w-full rounded-md border border-off bg-primary px-4 py-6 text-sm text-secondary transition-colors cursor-pointer hover:border-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary",
+  "flex flex-col items-center h-full max-h-32 justify-center gap-2 w-full rounded-md border border-off bg-primary text-sm text-secondary transition-colors cursor-pointer hover:border-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary",
   {
     variants: {
       isDragging: {
@@ -28,12 +29,14 @@ const dropzoneVariants = cva(
 type ImageFieldProps = {
   name: string
   label: string
-  onChange: (base64: string | null) => void
   labelClassName?: string
-  initialPreview?: string | null
 }
 
-export function ImageField({ name, label, onChange, labelClassName, initialPreview = null }: ImageFieldProps) {
+export function ImageField({ name, label, labelClassName }: ImageFieldProps) {
+  const { updateImages, applicationImages } = useApplication()
+  const onChange = (base64: string | null) => updateImages(name, base64 ? [base64] : [])
+  const initialPreview = applicationImages.find((img) => img.name === name)?.image ?? null
+
   const [preview, setPreview] = useState<string | null>(initialPreview)
   const [isDragging, setIsDragging] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -82,12 +85,12 @@ export function ImageField({ name, label, onChange, labelClassName, initialPrevi
         />
 
         {preview ? (
-          <img src={preview} alt={label} className="max-h-48 w-full rounded-sm object-contain" />
+          <img src={preview} alt={label} className="h-full w-full rounded-sm object-contain" />
         ) : (
-          <>
-            <Upload className="text-off" />
+          <div className="grid place-content-center gap-1 px-4 py-6">
+            <Upload className="text-off mx-auto" />
             <span className="text-off">Click or drag an image here</span>
-          </>
+          </div>
         )}
       </div>
 
@@ -111,20 +114,22 @@ export function ImageField({ name, label, onChange, labelClassName, initialPrevi
 type ImageFieldMultipleProps = {
   name: string
   label: string
-  onChange: (base64s: string[]) => void
+
   limit?: number
   labelClassName?: string
-  initialPreviews?: string[]
 }
 
 export function ImageFieldMultiple({
   name,
   label,
-  onChange,
+
   limit = 5,
   labelClassName,
-  initialPreviews = [],
 }: ImageFieldMultipleProps) {
+  const { updateImages, applicationImages } = useApplication()
+  const onChange = (base64s: string[]) => updateImages(name, base64s)
+  const initialPreviews = applicationImages.filter((img) => img.name === name).map((img) => img.image)
+
   const [previews, setPreviews] = useState<string[]>(initialPreviews)
   const [isDragging, setIsDragging] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -189,14 +194,15 @@ export function ImageFieldMultiple({
               if (e.target.files) handleFiles(e.target.files)
             }}
           />
-          <Upload className="text-off" />
-
-          <span className="text-off">
-            Click or drag images here{" "}
-            <span className="text-xs">
-              ({previews.length}/{limit})
+          <div className="grid place-content-center gap-1 px-4 py-6">
+            <Upload className="text-off mx-auto" />
+            <span className="text-off">
+              Click or drag images here{" "}
+              <span className="text-xs">
+                ({previews.length}/{limit})
+              </span>
             </span>
-          </span>
+          </div>
         </div>
       )}
 
@@ -205,7 +211,7 @@ export function ImageFieldMultiple({
         <div className="mt-2 grid grid-cols-3 gap-2">
           {previews.map((src, i) => (
             <div key={i} className="relative">
-              <img src={src} alt={`${label} ${i + 1}`} className="h-24 w-full rounded-sm object-cover" />
+              <img src={src} alt={`${label} ${i + 1}`} className="h-full w-full rounded-sm object-contain" />
               <Button
                 type="button"
                 onClick={() => handleRemove(i)}

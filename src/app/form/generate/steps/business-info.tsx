@@ -1,13 +1,10 @@
 import { useApplication } from "@/app/context/form-context"
-import { ImageField } from "@/app/ui/image-field"
+import { ImageField, ImageFieldMultiple } from "@/app/ui/image-field"
 import { Input, InputAmount } from "@/app/ui/input"
 import { StepContainer } from "./components/step-container"
 
 export default function BusinessInfo() {
-  const { updateApplicationData, applicationData, applicationImages, updateImages } = useApplication()
-
-  const dtiFieldName = "dti"
-  const dtiImg = applicationImages.find((img) => img.name === dtiFieldName)?.image ?? null
+  const { updateApplicationData, applicationData } = useApplication()
 
   return (
     <StepContainer>
@@ -30,12 +27,10 @@ export default function BusinessInfo() {
         label="Monthly Business Income"
       />
 
-      <ImageField
-        label="Latest 3 months payslip"
-        name={dtiFieldName}
-        initialPreview={dtiImg}
-        onChange={(base64) => updateImages(dtiFieldName, base64 ? [base64] : [])}
-      />
+      <ImageField label="DTI Permit" name="dti" />
+      <ImageField label="Mayor's/Barangay Permit" name="myr-bgry-permit" />
+      <ImageFieldMultiple label="Proof of Transaction/s (Reciept / Logbook)" name="business-proof" limit={3} />
+      <ImageField label="Bank Statement" name="bank-statement" />
     </StepContainer>
   )
 }

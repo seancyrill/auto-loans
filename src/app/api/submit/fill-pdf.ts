@@ -1,10 +1,10 @@
-import { ApplicationFormType } from "@/app/context/form-context-types"
+import { ApplicationFormType, NatureOfWork } from "@/app/context/form-context-types"
 import fs from "fs"
 import path from "path"
-import { PDFDocument, PDFFont, PDFPage, rgb, RGB, StandardFonts } from "pdf-lib"
+import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from "pdf-lib"
 
 const BLACK = rgb(0, 0, 0)
-const PDF_HEIGHT = 1008
+const FONT_SIZE = 10
 
 export async function fillGdfiApplication(data: ApplicationFormType): Promise<Uint8Array> {
   const pdfPath = path.join(process.cwd(), "src/templates/gdfi-application.pdf")
@@ -21,260 +21,323 @@ export async function fillGdfiApplication(data: ApplicationFormType): Promise<Ui
   return pdfDoc.save()
 }
 
-/**
- * Converts structure-extracted "top" coordinate (y=0 at top)
- * to pdf-lib y coordinate (y=0 at bottom).
- */
-function y(top: number, offsetDown = 0): number {
-  return PDF_HEIGHT - top - offsetDown
-}
-
-function draw(page: PDFPage, text: string, x: number, top: number, font: PDFFont, size = 8, color: RGB = BLACK) {
+function t(page: PDFPage, text: string, x: number, y: number, font: PDFFont, size = FONT_SIZE) {
   if (!text) return
-  page.drawText(text, { x, y: y(top), size, font, color })
+  page.drawText(text, { x, y, size, font, color: BLACK })
 }
 
-function checkMark(page: PDFPage, x: number, top: number, font: PDFFont) {
-  draw(page, "X", x, top, font, 7)
+function check(page: PDFPage, x: number, y: number, font: PDFFont) {
+  page.drawText("X", { x: x + 3, y: y + 2, size: 7, font, color: BLACK })
 }
 
 export function fillPage1(page: PDFPage, data: ApplicationFormType, font: PDFFont) {
-  // ─── DATE (top-right) ───────────────────────────────────────────────────
-  // Label ends at x=530.6, top=94.4
-  draw(page, new Date().toLocaleDateString("en-US"), 540, 94.4, font, 8)
+  // ─── DATE (top-right) ─────────────────────────────────────────────────────
+  t(page, new Date().toLocaleDateString("en-US"), 533, 913, font)
+  t(page, data.loanOption, 143, 886, font)
+  t(page, "X", 483, 851, font)
+  t(page, "Sean Cyrill L. de Guzman", 437, 783, font)
 
-  // ─── BORROWER'S PERSONAL INFORMATION ────────────────────────────────────
-
-  // Full Name — "Last Name, First Name, Middle Name, Suffix"
-  // Entry area starts after the sub-label "(Last Name, First Name...)" at top≈306
-  // The row label "Full Name" is at top=324.2; entry row is ~320–342
+  // ─── FULL NAME ────────────────────────────────────────────────────────────
   const fullName = [data.lastName, data.firstName, data.middleName, data.nameSuffix].filter(Boolean).join(", ")
-  draw(page, fullName, 140, 322, font, 8)
+  t(page, fullName, 140, 680, font)
 
-  // Civil Status checkboxes — row top≈317–328
-  // Single x≈432, Annulled x≈487, Separated x≈540, Married x≈433 (row2), Common Law x≈491 (row2)
-  if (data.civilStatus === "single") checkMark(page, 432, 316, font)
-  if (data.civilStatus === "annulled") checkMark(page, 487, 316, font)
-  if (data.civilStatus === "separated") checkMark(page, 540, 316, font)
-  if (data.civilStatus === "married") checkMark(page, 433, 327, font)
-  if (data.civilStatus === "commonLaw") checkMark(page, 491, 327, font)
+  // ─── CIVIL STATUS checkboxes ──────────────────────────────────────────────
+  if (data.civilStatus === "single") check(page, 435, 683, font)
+  if (data.civilStatus === "annulled") check(page, 484, 683, font)
+  if (data.civilStatus === "separated") check(page, 537, 683, font)
+  if (data.civilStatus === "married") check(page, 435, 671, font)
+  if (data.civilStatus === "common Law") check(page, 485, 671, font)
 
-  // Date of Birth — top≈353.9, entry starts at x=140
-  draw(page, data.birthDate, 140, 354, font, 8)
+  // ─── DATE OF BIRTH / PLACE OF BIRTH / GENDER ──────────────────────────────
+  t(page, data.birthDate, 140, 634, font)
+  t(page, data.birthPlace, 287, 633, font)
+  t(page, data.gender === "male" ? "Male" : data.gender === "female" ? "Female" : "", 434, 634, font)
 
-  // Place of Birth — same row, after (City/Municipality) label at x≈285.9
-  draw(page, data.birthPlace, 286, 354, font, 8)
+  // ─── PRESENT ADDRESS + LENGTH OF STAY ─────────────────────────────────────
+  t(page, data.presentAddress, 140, 618, font)
+  t(page, data.addressPresYears, 437, 612, font)
+  t(page, data.addressPresMonths, 487, 613, font)
 
-  // Gender — same row, entry after label at x≈432
-  draw(page, data.gender === "male" ? "Male" : data.gender === "female" ? "Female" : "", 432, 354, font, 8)
+  // ─── PERMANENT ADDRESS + LENGTH OF STAY ───────────────────────────────────
+  t(page, data.permanentAddress, 140, 591, font)
+  t(page, data.addressPermYears, 437, 585, font)
+  t(page, data.addressPermMonths, 489, 587, font)
 
-  // Present Address — top≈386.4, entry from x=140 to x=430
-  draw(page, data.presentAddress, 140, 386, font, 8)
-  // Length of stay years/months — x≈432, top≈389
-  draw(page, data.addressPresYears, 432, 389, font, 8)
-  draw(page, data.addressPresMonths, 463, 389, font, 8)
+  // ─── PROVINCIAL ADDRESS + LENGTH OF STAY ──────────────────────────────────
+  t(page, data.provincialAddress, 140, 564, font)
+  t(page, data.addressProvYears, 439, 559, font)
+  t(page, data.addressProvMonths, 490, 559, font)
 
-  // Permanent Address — top≈413.3
-  draw(page, data.permanentAddress, 140, 413, font, 8)
-  draw(page, data.addressPermYears, 432, 415, font, 8)
-  draw(page, data.addressPermMonths, 463, 415, font, 8)
+  // ─── CONTACT DETAILS ──────────────────────────────────────────────────────
+  t(page, `0${data.mobile}`, 277, 534, font)
 
-  // Provincial Address — top≈440.1
-  draw(page, data.provincialAddress, 140, 440, font, 8)
-  draw(page, data.addressProvYears, 432, 443, font, 8)
-  draw(page, data.addressProvMonths, 463, 443, font, 8)
-
-  // Contact Details — top≈459–464
-  // Mobile at x≈240, Email at x≈370
-  draw(page, data.mobile, 252, 465, font, 8)
-  // draw(page, data.email,        370, 465, font, 8)
-
-  // Citizenship — checkboxes at top≈487.2
-  // Filipino checkbox at x≈142, Others at x≈216
-  if (data.citizenship === "filipino") checkMark(page, 142, 487, font)
-  if (data.citizenship === "others") checkMark(page, 216, 487, font)
-  if (data.citizenship === "others" && data.citizenshipOther) {
-    draw(page, data.citizenshipOther, 428, 487, font, 8)
+  // ─── CITIZENSHIP ──────────────────────────────────────────────────────────
+  if (data.citizenship === "filipino") check(page, 143, 516, font)
+  if (data.citizenship === "others") {
+    check(page, 212, 514, font)
+    t(page, data.citizenshipOther, 422, 516, font)
   }
 
-  // TIN / SSS / GSIS — top≈512.3
-  // TIN entry after x≈157, SSS after x≈272, GSIS after x≈382
-  draw(page, data.tin, 157, 512, font, 8)
-  draw(page, data.sssNumber, 272, 512, font, 8)
-  draw(page, data.gsisNumber, 382, 512, font, 8)
+  // ─── TIN / SSS / GSIS ─────────────────────────────────────────────────────
+  t(page, data.tin, 159, 492, font)
+  t(page, data.sssNumber, 271, 492, font)
+  t(page, data.gsisNumber, 381, 492, font)
 
-  // School Last Attended — top≈534–545
-  // School Name entry at x≈199, top≈534
-  draw(page, data.schoolName, 199, 534, font, 8)
-  // Grade/Level entry at x≈266, top≈545
-  draw(page, data.schoolGradeLevel, 266, 545, font, 8)
-  // Year Graduated entry at x≈497, top≈545
-  draw(page, data.schoolYearGraduated, 497, 545, font, 8)
+  // ─── SCHOOL LAST ATTENDED ─────────────────────────────────────────────────
+  // Line 1 — School Name: x=199, y=472
 
-  // House Ownership — checkboxes at top≈560–581
-  // Owned (Not mortgaged) at x≈148, Rented at x≈274, Owned (Mortgaged) at x≈148 row2, Used Free at x≈148 row3
-  if (data.houseOwnership === "owned (Not Mortgaged)") checkMark(page, 148, 560, font)
+  t(page, data.schoolName, 199, 472, font)
+  t(page, data.schoolGradeLevel, 267, 457, font)
+  t(page, data.schoolYearGraduated, 497, 457, font)
+
+  // ─── HOUSE OWNERSHIP ──────────────────────────────────────────────────────
+  if (data.houseOwnership === "owned (Not Mortgaged)") {
+    check(page, 144, 443, font)
+  }
   if (data.houseOwnership === "rented") {
-    checkMark(page, 274, 560, font)
-    draw(page, data.houseRentMonthly, 421, 560, font, 8)
-    draw(page, data.houseOwnedBy, 368, 592, font, 8)
+    check(page, 269, 441, font)
+    t(page, data.houseRentMonthly, 427, 440, font)
+    t(page, data.houseOwnedBy, 379, 409, font)
   }
   if (data.houseOwnership === "owned (Mortgaged)") {
-    checkMark(page, 148, 571, font)
-    draw(page, data.houseMortgageMonthly, 359, 571, font, 8)
-    draw(page, data.houseOwnedBy, 385, 603, font, 8)
+    check(page, 144, 430, font)
+    t(page, data.houseMortgageMonthly, 373, 430, font)
+    t(page, data.houseOwnedBy, 404, 398, font)
   }
   if (data.houseOwnership === "used Free") {
-    checkMark(page, 148, 581, font)
-    draw(page, data.houseOwnedBy, 381, 614, font, 8)
+    check(page, 143, 419, font)
+    t(page, data.houseOwnedBy, 389, 386, font)
   }
 
-  // Dependents — 3 rows starting at top≈652, each row ~16pts apart
-  const depRowTops = [655, 671, 687]
-  data.dependents.slice(0, 3).forEach((dep, i) => {
-    const rowTop = depRowTops[i]
-    draw(page, dep.name, 140, rowTop, font, 8)
-    draw(page, dep.age, 157, rowTop, font, 8)
-    draw(page, dep.schoolLastAttended, 200, rowTop, font, 8)
-    draw(page, dep.relationship, 479, rowTop, font, 8)
+  // ─── DEPENDENTS ───────────────────────────────────────────────────────────
+  const depRows = [344, 329, 313]
+  data.dependents.slice(0, 4).forEach((dep, i) => {
+    t(page, dep.name, 17, depRows[i], font)
+    t(page, dep.age, 139, depRows[i], font)
+    t(page, dep.schoolLastAttended, 202, depRows[i], font)
+    t(page, dep.relationship, 464, depRows[i], font)
   })
 
-  // ─── INCOME INFORMATION ─────────────────────────────────────────────────
-
-  // Name of Employer / Business — top≈713.6
-  if (data.incomeNotApplicable) {
-    checkMark(page, 473, 713, font)
-  } else {
-    draw(page, data.employerName, 217, 713, font, 8)
-    draw(page, data.businessName, 357, 713, font, 8)
+  // ─── INCOME INFORMATION ───────────────────────────────────────────────────
+  if (!data.incomeSources.includes("employment") && !data.incomeSources.includes("business")) {
+    check(page, 468, 288, font)
   }
 
-  // Monthly Income & Length of stay — top≈742
-  draw(page, data.monthlyIncome, 206, 742, font, 8)
-  draw(page, data.employmentYears, 487, 747, font, 8)
-  draw(page, data.employmentMonths, 520, 747, font, 8)
+  t(page, data.employerName, 140, 277, font)
+  t(page, data.businessName, 283, 276, font)
 
-  // Business Tel. No. — top≈760.8
-  draw(page, data.businessTelNumber, 543, 760, font, 8)
+  const totalIncome = [
+    data.employmentIncome,
+    data.remittanceIncome,
+    data.pensionIncome,
+    data.commissionsIncome,
+    data.businessIncome,
+    data.interestIncome,
+    data.saleOfAssetsIncome,
+  ].filter((val) => val && val.toString().trim() !== "")
 
-  // Employer / Business Address — top≈775–786
-  draw(page, data.employerBusinessAddress, 140, 781, font, 8)
+  t(page, totalIncome.join(" + "), 208, 255, font)
 
-  // PRC License No — top≈791.8, entry after x≈248
-  draw(page, data.prcLicenseNumber, 248, 791, font, 8)
+  t(page, data.employmentYears, 490, 253, font)
+  t(page, data.employmentMonths, 540, 253, font)
 
-  // Source of Income checkboxes — row1 top≈815, row2 top≈827
-  // Row 1: Employment x≈148, Remittance x≈228, Pension x≈301, Commissions x≈408
-  // Row 2: Business x≈148, Interest Income x≈227, Sale of Assets x≈317
-  if (data.incomeSources.includes("employment")) checkMark(page, 148, 815, font)
-  if (data.incomeSources.includes("remittance")) checkMark(page, 228, 815, font)
-  if (data.incomeSources.includes("pension")) checkMark(page, 301, 815, font)
-  if (data.incomeSources.includes("commissions")) checkMark(page, 408, 815, font)
-  if (data.incomeSources.includes("business")) checkMark(page, 148, 827, font)
-  if (data.incomeSources.includes("interestIncome")) checkMark(page, 227, 827, font)
-  if (data.incomeSources.includes("sale Of Assets")) checkMark(page, 317, 827, font)
+  t(page, data.businessTelNumber, 484, 220, font)
+
+  // Employer / Business Address — x=140, y=227
+  t(page, data.employerBusinessAddress, 142, 232, font)
+
+  // PRC License No. — x=248, y=216
+  t(page, data.prcLicenseNumber, 255, 209, font)
+
+  // ─── SOURCE OF INCOME checkboxes ──────────────────────────────────────────
+
+  // Row 2 (y=177): Business   x=145, Interest Income x=224, Sale of Assets  x=313
+  if (data.incomeSources.includes("employment")) check(page, 142, 188, font)
+  if (data.incomeSources.includes("remittance")) check(page, 220, 186, font)
+  if (data.incomeSources.includes("pension")) check(page, 295, 186, font)
+  if (data.incomeSources.includes("commissions")) check(page, 402, 186, font)
+  if (data.incomeSources.includes("business")) check(page, 144, 172, font)
+  if (data.incomeSources.includes("interest Income")) check(page, 220, 172, font)
+  if (data.incomeSources.includes("sale Of Assets")) check(page, 310, 174, font)
 }
 
-/**
- * Page 2 covers: Nature of Work, Character/Trade References (manual),
- * Spouse/Co-Borrower info, and Borrower's Bank Accounts.
- *
- * This function fills the fields derived from ApplicationFormType.
- * Character References and Trade References are left blank (filled manually).
- */
 export function fillPage2(page: PDFPage, data: ApplicationFormType, font: PDFFont) {
-  // ─── NATURE OF WORK checkboxes ───────────────────────────────────────────
-  // Checkboxes are in two columns. Left column top starts ~70, right column same row.
-  // Each row is ~11pts apart. Left col x≈148, Right col x≈345
-  // Row tops (approx): 70, 81, 92, 103, 114, 125, 136, 147, 158, 169, 180, 191
-  const natureOfWorkLeftCol: [string, number][] = [
-    ["agricultureAnimalFarming", 70],
-    ["foodServicesFoodProcessing", 81],
-    ["realEstateLeasing", 92],
-    ["bpoKpo", 103],
-    ["governmentService", 114],
-    ["tourism", 125],
-    ["casinoGamingClub", 136],
-    ["itSoftware", 147],
-    ["transportation", 158],
-    ["construction", 169],
-    ["lawAccountingAuditingFirm", 180],
-    ["wholesaleRetailTrade", 191],
+  const cb = data.coBorrower
+
+  // ─── NATURE OF WORK / BUSINESS ────────────────────────────────────────────
+  const natureLeftCol: [string, number][] = [
+    ["agriculture / Animal Farming", 936],
+    ["food Services / Food Processing", 924],
+    ["real Estate Leasing", 911],
+    ["BPO", 897],
+    ["government Service", 874],
+    ["tourism", 862],
+    ["casino / Gaming Club", 850],
+    ["IT / Software", 836],
+    ["transportation", 823],
+    ["construction", 812],
+    ["law / Accounting / Auditing Firm", 800],
+    ["wholesale / Retail Trade", 788],
   ]
-  const natureOfWorkRightCol: [string, number][] = [
-    ["financeInsuranceSecurities", 70],
-    ["manufacturing", 81],
-    ["utilities", 92],
-    ["forexMoneyChangerRemittance", 103],
-    ["maritimeShipping", 114],
-    ["foundation", 125],
-    ["medicalHealthServices", 136],
-    ["others", 147],
+  const natureRightCol: [string, number][] = [
+    ["finance / Insurance / Securities", 936],
+    ["manufacturing", 924],
+    ["utilities", 910],
+    ["forex / Money Changer / Remittance Agent", 898],
+    ["maritime / Shipping", 875],
+    ["foundation", 863],
+    ["medical Health Services", 851],
+    ["others", 839],
   ]
 
-  natureOfWorkLeftCol.forEach(([value, top]) => {
-    if (data.natureOfWork === value) {
-      page.drawText("X", { x: 148, y: y(top), size: 7, font, color: BLACK })
-    }
+  natureLeftCol.forEach(([value, y]) => {
+    if (data.natureOfWork.includes(value as NatureOfWork)) check(page, 146, y, font)
   })
-  natureOfWorkRightCol.forEach(([value, top]) => {
-    if (data.natureOfWork === value) {
-      page.drawText("X", { x: 345, y: y(top), size: 7, font, color: BLACK })
-    }
+  natureRightCol.forEach(([value, y]) => {
+    if (data.natureOfWork.includes(value as NatureOfWork)) check(page, 365, y, font)
   })
-  if (data.natureOfWork === "others" && data.natureOfWorkOther) {
-    draw(page, data.natureOfWorkOther, 395, 147, font, 8)
+  if (data.natureOfWork.includes("others") && data.natureOfWorkOther) {
+    t(page, data.natureOfWorkOther, 432, 839, font)
   }
 
-  // ─── BORROWER'S BANK ACCOUNTS ────────────────────────────────────────────
-  // Table header row tops: ~857–862 (column headers)
-  // Data rows start at top≈878, each row ~18pts apart
-  // Columns (x positions):
-  //   Bank/Branch:    x=19
-  //   Account Name:   x=140
-  //   Date Opened:    x=255
-  //   Account Type:   x=360
-  //   Account Number: x=466
-  const bankRowTops = [878, 896, 914, 932]
+  // ─── MOTOR VEHICLE ────────────────────────────────────────────────────────
+  if (data.motorVehicle) {
+    const mv = data.motorVehicle
+    t(page, mv.year, 163, 766, font)
+    t(page, mv.makeModel, 290, 766, font)
+    t(page, mv.color, 414, 766, font)
+    t(page, mv.plateNumber, 498, 766, font)
+    t(page, mv.mileageKm, 209, 751, font)
+    t(page, mv.placeOfRegistration, 360, 751, font)
+  }
 
-  data.bankAccounts.slice(0, 4).forEach((account, i) => {
-    const rowTop = bankRowTops[i]
-    draw(page, account.bankBranch, 19, rowTop, font, 7)
-    draw(page, account.accountName, 140, rowTop, font, 7)
-    draw(page, account.dateOpened, 255, rowTop, font, 7)
-    draw(page, account.accountType, 360, rowTop, font, 7)
-    draw(page, account.accountNumber, 466, rowTop, font, 7)
+  // ─── CHARACTER REFERENCES ─────────────────────────────────────────────────
+
+  // 3 data rows at y=730, 716, 701
+  const charRefRows = [696, 680, 665]
+  data.characterReferences.slice(0, 3).forEach((ref, i) => {
+    t(page, ref.name, 17, charRefRows[i], font)
+    t(page, ref.address, 137, charRefRows[i], font)
+    t(page, ref.contactNumber, 487, charRefRows[i], font)
+  })
+
+  // ─── TRADE REFERENCES ─────────────────────────────────────────────────────
+
+  // 3 data rows at y=671, 656, 641
+  const tradeRefRows = [620, 606, 590]
+  data.tradeReferences.slice(0, 3).forEach((ref, i) => {
+    t(page, ref.businessName, 17, tradeRefRows[i], font)
+    t(page, ref.address, 137, tradeRefRows[i], font)
+    t(page, ref.contactNumber, 487, tradeRefRows[i], font)
+  })
+
+  // ─── SPOUSE / CO-BORROWER INFORMATION ─────────────────────────────────────
+  // Column layout mirrors page 1 borrower section.
+
+  // Full Name — y=604
+  const coFullName = [cb.lastName, cb.firstName, cb.middleName, cb.nameSuffix].filter(Boolean).join(", ")
+  t(page, coFullName, 141, 554, font)
+
+  // Date & Place of Birth — y=581
+  t(page, cb.birthDate, 289, 530, font)
+  t(page, cb.birthPlace, 139, 530, font)
+  t(page, cb.gender === "male" ? "Male" : cb.gender === "female" ? "Female" : "", 489, 530, font)
+
+  // Present Address — y=563  |  year/month y=564
+  t(page, cb.presentAddress, 142, 507, font)
+  t(page, cb.addressPresYears, 491, 509, font)
+  t(page, cb.addressPresMonths, 540, 509, font)
+
+  // Permanent Address — y=540  |  year/month y=541
+  t(page, cb.permanentAddress, 137, 479, font)
+  t(page, cb.addressPermYears, 491, 482, font)
+  t(page, cb.addressPermMonths, 540, 481, font)
+
+  // Provincial Address — y=514  |  year/month y=515
+  t(page, cb.provincialAddress, 141, 454, font)
+  t(page, cb.addressProvYears, 489, 456, font)
+  t(page, cb.addressProvMonths, 540, 457, font)
+
+  // Mobile
+  if (cb.mobile) {
+    t(page, cb.mobile, 261, 424, font)
+  }
+
+  // Citizenship — y=463
+  if (cb.citizenship === "filipino") check(page, 144, 409, font)
+  if (cb.citizenship === "others") {
+    check(page, 218, 408, font)
+    t(page, cb.citizenshipOther, 409, 405, font)
+  }
+
+  // TIN / SSS / GSIS — y=434
+  t(page, cb.tin, 172, 384, font)
+  t(page, cb.sssNumber, 302, 385, font)
+  t(page, cb.gsisNumber, 434, 384, font)
+
+  // School Last Attended — line1 y=418, line2 y=384
+  t(page, cb.schoolName, 206, 364, font)
+  t(page, cb.schoolGradeLevel, 258, 351, font)
+  t(page, cb.schoolYearGraduated, 444, 352, font)
+
+  // House Ownership — mirrors page 1 house section, shifted +66.6pt
+  if (cb.houseOwnership === "owned (Not Mortgaged)") {
+    check(page, 142, 334, font)
+  }
+  if (cb.houseOwnership === "rented") {
+    check(page, 270, 332, font)
+    t(page, cb.houseRentMonthly, 428, 332, font)
+    t(page, cb.houseOwnedBy, 398, 301, font)
+  }
+  if (cb.houseOwnership === "owned (Mortgaged)") {
+    check(page, 142, 321, font)
+    t(page, cb.houseMortgageMonthly, 371, 321, font)
+    t(page, cb.houseOwnedBy, 393, 289, font)
+  }
+  if (cb.houseOwnership === "used Free") {
+    check(page, 142, 313, font)
+    t(page, cb.houseOwnedBy, 388, 278, font)
+  }
+
+  // Co-Borrower Employer / Business — y=361
+  t(page, cb.employerName, 142, 245, font)
+  t(page, cb.businessName, 271, 245, font)
+
+  // Monthly Income — x=206, y=333
+  t(page, cb.monthlyIncome, 210, 225, font)
+
+  t(page, cb.employmentYears, 489, 224, font)
+  t(page, cb.employmentMonths, 538, 224, font)
+
+  t(page, cb.businessTelNumber, 487, 190, font)
+
+  // Employer / Business Address — x=140, y=294
+  t(page, cb.employerBusinessAddress, 139, 185, font)
+
+  // ─── BORROWER'S BANK ACCOUNTS ─────────────────────────────────────────────
+  const bankRowY = [122, 108, 92, 78, 63]
+  data.bankAccounts.slice(0, 5).forEach((account, i) => {
+    const y = bankRowY[i]
+    t(page, account.bankBranch, 17, y, font, 7)
+    t(page, account.accountName, 137, y, font, 7)
+    t(page, account.dateOpened, 261, y, font, 7)
+    t(page, account.accountType, 357, y, font, 7)
+    t(page, account.accountNumber, 484, y, font, 7)
   })
 }
 
-/**
- * Page 3 covers: Borrower's Authorization to Verify Bank Details table,
- * Specimen Signatures (left blank), and the Undertaking section (pre-printed).
- *
- * Only the authorization bank table rows are filled from data.
- */
 export function fillPage3(page: PDFPage, data: ApplicationFormType, font: PDFFont) {
-  // ─── "To:" bank/branch line ─────────────────────────────────────────────
-  // The "To:" label is at top≈89 (approx), entry line at x≈40
-  // If there's only one bank, pre-fill the "To:" line with the first bank name
-  if (data.authorizeBankDetails.length > 0) {
-    draw(page, data.authorizeBankDetails[0].bankBranch, 40, 90, font, 8)
-  }
+  // ─── "To:" BANK / BRANCH LINE ─────────────────────────────────────────────
+  const toBankName = data.authorizeBankDetails[0]?.bankBranch || data.bankAccounts[0]?.bankBranch || ""
+  t(page, toBankName, 65, 911, font)
 
-  // ─── AUTHORIZATION TABLE ─────────────────────────────────────────────────
-  // Table header tops: ~197–207
-  // Data rows start at top≈222, each row ~18pts apart
-  // Columns (x positions):
-  //   Name of Bank/Branch: x=19   (spans to ~255)
-  //   Branch:              x=255  (spans to ~390)
-  //   Account Number:      x=390  (spans to ~465)
-  //   Account Type:        x=465  (spans to ~595)
-  const authRowTops = [222, 240, 258, 276]
+  // ─── AUTHORIZATION TABLE ──────────────────────────────────────────────────
+  const authRowY = [775, 755, 738]
 
-  data.authorizeBankDetails.slice(0, 4).forEach((entry, i) => {
-    const rowTop = authRowTops[i]
-    draw(page, entry.bankBranch, 19, rowTop, font, 7)
-    draw(page, entry.accountNumber, 390, rowTop, font, 7)
-    draw(page, entry.accountType, 465, rowTop, font, 7)
+  data.bankAccounts.slice(0, 3).forEach((entry, i) => {
+    const y = authRowY[i]
+    t(page, entry.bankBranch, 23, y, font, 7)
+    t(page, entry.accountNumber, 393, y, font, 7)
+    t(page, entry.accountType, 470, y, font, 7)
   })
 }
