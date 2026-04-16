@@ -1,13 +1,12 @@
 import { useApplication } from "@/app/context/form-context"
 import { ImageField, ImageFieldMultiple } from "@/app/ui/image-field"
 import { Input, InputAmount } from "@/app/ui/input"
-import { StepContainer } from "./components/step-container"
 
 export default function WorkInfo() {
   const { updateApplicationData, applicationData } = useApplication()
 
   return (
-    <StepContainer>
+    <>
       <div className="flex w-full gap-1">
         <Input
           value={applicationData.employerName}
@@ -45,6 +44,6 @@ export default function WorkInfo() {
 
       <ImageField label="COE / Proof of Employment" name="coe" />
       <ImageFieldMultiple label="Latest 3 months payslip" name="payslip" limit={3} />
-    </StepContainer>
+    </>
   )
 }

@@ -13,7 +13,7 @@ import { Input } from "@/app/ui/input"
 import { SelectionMenu } from "@/app/ui/selection"
 import { formatPhone } from "@/app/utils/format-phone"
 import { useEffect, useRef } from "react"
-import { StepContainer } from "./components/step-container"
+import NameFields from "../../components/name-fields"
 
 export default function PersonalInformation() {
   const { applicationData, updateApplicationData } = useApplication()
@@ -26,37 +26,24 @@ export default function PersonalInformation() {
   }, [applicationData.citizenship])
 
   return (
-    <StepContainer>
-      <div className="flex w-full gap-1">
-        <Input
-          value={applicationData.firstName}
-          onChange={(e) => updateApplicationData("firstName", e.target.value)}
-          required
-          placeholder="Juan"
-          label="First Name"
-        />
-        <Input
-          value={applicationData.middleName}
-          onChange={(e) => updateApplicationData("middleName", e.target.value)}
-          placeholder="Santos"
-          label="Middle Name"
-        />
-        <Input
-          value={applicationData.lastName}
-          onChange={(e) => updateApplicationData("lastName", e.target.value)}
-          required
-          placeholder="Dela Cruz"
-          label="Last Name"
-        />
-        <span className="w-10">
-          <Input
-            value={applicationData.nameSuffix}
-            onChange={(e) => updateApplicationData("nameSuffix", e.target.value)}
-            placeholder="Jr."
-            label="Suffix"
-          />
-        </span>
-      </div>
+    <>
+      <NameFields />
+
+      <Input
+        value={formatPhone(applicationData.mobile)}
+        onChange={(e) => {
+          const value = e.target.value.replace(/\s/g, "")
+          if (value === "" || /^\d+$/.test(value) || value.length > 12) {
+            updateApplicationData("mobile", value)
+          }
+        }}
+        required
+        maxLength={12}
+        minLength={12}
+        placeholder="9XX XXX XXXX"
+        label="Mobile Number"
+        mobile
+      />
 
       <DateInput
         value={applicationData.birthDate}
@@ -83,22 +70,6 @@ export default function PersonalInformation() {
         value={applicationData.civilStatus}
         onChange={(val) => updateApplicationData("civilStatus", val as CivilStatus)}
         options={CIVIL_STATUS_OPTIONS.map((opt) => ({ value: opt, label: opt }))}
-      />
-
-      <Input
-        value={formatPhone(applicationData.mobile)}
-        onChange={(e) => {
-          const value = e.target.value.replace(/\s/g, "")
-          if (value === "" || /^\d+$/.test(value) || value.length > 12) {
-            updateApplicationData("mobile", value)
-          }
-        }}
-        required
-        maxLength={12}
-        minLength={12}
-        placeholder="9XX XXX XXXX"
-        label="Mobile Number"
-        mobile
       />
 
       <div className="flex w-full flex-col">
@@ -143,6 +114,6 @@ export default function PersonalInformation() {
         placeholder="2020"
         label="Year Graduated / Last Year of Stay"
       />
-    </StepContainer>
+    </>
   )
 }

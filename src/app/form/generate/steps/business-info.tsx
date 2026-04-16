@@ -1,13 +1,12 @@
 import { useApplication } from "@/app/context/form-context"
 import { ImageField, ImageFieldMultiple } from "@/app/ui/image-field"
 import { Input, InputAmount } from "@/app/ui/input"
-import { StepContainer } from "./components/step-container"
 
 export default function BusinessInfo() {
   const { updateApplicationData, applicationData } = useApplication()
 
   return (
-    <StepContainer>
+    <>
       <Input
         value={applicationData.businessName}
         onChange={(e) => updateApplicationData("businessName", e.target.value)}
@@ -31,6 +30,6 @@ export default function BusinessInfo() {
       <ImageField label="Mayor's/Barangay Permit" name="myr-bgry-permit" />
       <ImageFieldMultiple label="Proof of Transaction/s (Reciept / Logbook)" name="business-proof" limit={3} />
       <ImageField label="Bank Statement" name="bank-statement" />
-    </StepContainer>
+    </>
   )
 }

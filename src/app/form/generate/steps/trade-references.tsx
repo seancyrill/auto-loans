@@ -5,7 +5,6 @@ import { Input } from "@/app/ui/input"
 import { formatPhone } from "@/app/utils/format-phone"
 import { Plus } from "lucide-react"
 import { useState } from "react"
-import { StepContainer } from "./components/step-container"
 
 export default function TradeReferences() {
   const { applicationData, updateArrayItem } = useApplication()
@@ -19,7 +18,7 @@ export default function TradeReferences() {
   }
 
   return (
-    <StepContainer className="gap-8">
+    <>
       {rows.map((i) => (
         <div key={`trade-ref-${i}`} className={`border-off flex w-full flex-col rounded-lg border p-4`}>
           <h3 className="text-center font-bold">{i + 1}</h3>
@@ -55,6 +54,6 @@ export default function TradeReferences() {
         <Plus />
         Add More
       </Button>
-    </StepContainer>
+    </>
   )
 }

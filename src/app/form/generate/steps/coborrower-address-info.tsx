@@ -5,7 +5,6 @@ import { Checkbox } from "@/app/ui/checkbox"
 import { Input, InputAmount } from "@/app/ui/input"
 import { SelectionMenu } from "@/app/ui/selection"
 import { ChangeEvent, useState } from "react"
-import { StepContainer } from "./components/step-container"
 
 export default function CoborrowerAddressInformation() {
   const { applicationData, updateCoBorrower } = useApplication()
@@ -29,7 +28,7 @@ export default function CoborrowerAddressInformation() {
   }
 
   return (
-    <StepContainer>
+    <>
       <div className="flex w-full gap-1">
         <Input
           value={co.presentAddress}
@@ -141,6 +140,6 @@ export default function CoborrowerAddressInformation() {
           label="Owned By"
         />
       )}
-    </StepContainer>
+    </>
   )
 }

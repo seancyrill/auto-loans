@@ -5,7 +5,6 @@ import { Button } from "@/app/ui/button"
 import { Input } from "@/app/ui/input"
 import { Plus } from "lucide-react"
 import { FocusEvent, useState } from "react"
-import { StepContainer } from "./components/step-container"
 
 export default function BankAccounts() {
   const { applicationData, updateArrayItem, fullName } = useApplication()
@@ -25,7 +24,7 @@ export default function BankAccounts() {
   }
 
   return (
-    <StepContainer>
+    <>
       {rows.map((i) => (
         <div key={`char-ref-${i}`} className={`border-off flex w-full flex-col rounded-lg border p-4`}>
           <h3 className="text-center font-bold">{i + 1}</h3>
@@ -61,6 +60,6 @@ export default function BankAccounts() {
         <Plus />
         Add More
       </Button>
-    </StepContainer>
+    </>
   )
 }

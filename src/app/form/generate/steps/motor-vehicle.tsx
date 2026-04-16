@@ -1,7 +1,6 @@
 "use client"
 import { useApplication } from "@/app/context/form-context"
 import { Input } from "@/app/ui/input"
-import { StepContainer } from "./components/step-container"
 
 export default function MotorVehicle() {
   const { applicationData, updateApplicationData } = useApplication()
@@ -11,7 +10,7 @@ export default function MotorVehicle() {
   }
 
   return (
-    <StepContainer>
+    <>
       <Input
         value={applicationData.motorVehicle.year}
         onChange={(e) =>
@@ -63,6 +62,6 @@ export default function MotorVehicle() {
         placeholder="Quezon City"
         label="Place of Registration"
       />
-    </StepContainer>
+    </>
   )
 }

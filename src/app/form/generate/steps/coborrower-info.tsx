@@ -6,7 +6,6 @@ import { Input } from "@/app/ui/input"
 import { SelectionMenu } from "@/app/ui/selection"
 import { formatPhone } from "@/app/utils/format-phone"
 import { useEffect, useRef } from "react"
-import { StepContainer } from "./components/step-container"
 
 export default function CoborrowerInformation() {
   const { applicationData, updateCoBorrower } = useApplication()
@@ -20,7 +19,7 @@ export default function CoborrowerInformation() {
   }, [applicationData.citizenship])
 
   return (
-    <StepContainer>
+    <>
       <div className="flex w-full gap-1">
         <Input
           value={co.firstName}
@@ -124,6 +123,6 @@ export default function CoborrowerInformation() {
         placeholder="2020"
         label="Year Graduated / Last Year of Stay"
       />
-    </StepContainer>
+    </>
   )
 }

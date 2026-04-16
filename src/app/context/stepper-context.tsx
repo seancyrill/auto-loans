@@ -42,8 +42,6 @@ interface StepperContextValue {
   goPrev: () => void
   goToStep: (index: number, force?: boolean) => void
   completedSteps: Set<number>
-  stepError: string | null
-  clearStepError: () => void
 }
 
 const StepperContext = createContext<StepperContextValue | null>(null)
@@ -65,36 +63,41 @@ export function StepperProvider({ children }: StepperProviderProps) {
   const { applicationData } = useApplication()
   const steps: StepConfig[] = [
     {
+      component: LoanOptions,
+      title: "Select Loan Type",
+      description: "Choose your preferred loan product",
+    },
+    {
       component: PersonalInformation,
       title: "Personal Information",
-      description: "Tell us about yourself.",
-      // validate: (formData) => Boolean(formData.firstName && formData.lastName && formData.email),
+      description: "Basic identity and contact details",
     },
     {
       component: Dependents,
       title: "Dependents",
+      description: "Not married or employed",
     },
     {
       component: AddressInformation,
       title: "Address",
-    },
-    {
-      component: LoanOptions,
-      title: "Select Loan Type",
+      description: "Your current place of residence",
     },
     {
       component: BasicRequirements,
       title: "Basic Requirements",
+      description: "Essential documents for verification",
     },
     {
       component: IncomeInfo,
       title: "Income Information",
+      description: "Overview of your monthly earnings",
     },
     ...(applicationData.incomeSources.includes("employment")
       ? [
           {
             component: WorkInfo,
             title: "Employment Information",
+            description: "Current job and employer details",
           },
         ]
       : []),
@@ -103,6 +106,7 @@ export function StepperProvider({ children }: StepperProviderProps) {
           {
             component: BusinessInfo,
             title: "Business Information",
+            description: "Details regarding your business operations",
           },
         ]
       : []),
@@ -111,6 +115,7 @@ export function StepperProvider({ children }: StepperProviderProps) {
           {
             component: RemittanceInfo,
             title: "Remittance",
+            description: "Funds received from family or abroad",
           },
         ]
       : []),
@@ -119,6 +124,7 @@ export function StepperProvider({ children }: StepperProviderProps) {
           {
             component: PensionInfo,
             title: "Pension",
+            description: "Regular retirement or social benefits",
           },
         ]
       : []),
@@ -127,6 +133,7 @@ export function StepperProvider({ children }: StepperProviderProps) {
           {
             component: CommissionsInfo,
             title: "Commissions",
+            description: "Performance-based or variable pay",
           },
         ]
       : []),
@@ -135,6 +142,7 @@ export function StepperProvider({ children }: StepperProviderProps) {
           {
             component: InterestIncomeInfo,
             title: "Interest Income",
+            description: "Earnings from investments or savings",
           },
         ]
       : []),
@@ -143,6 +151,7 @@ export function StepperProvider({ children }: StepperProviderProps) {
           {
             component: SaleOfAssetsInfo,
             title: "Sale of Assets",
+            description: "Proceeds from sold property or goods",
           },
         ]
       : []),
@@ -151,34 +160,39 @@ export function StepperProvider({ children }: StepperProviderProps) {
           {
             component: MotorVehicle,
             title: "Owned Vehicle Information",
+            description: "Details of vehicles in your name",
           },
         ]
       : []),
     {
       component: BankAccounts,
       title: "Bank Accounts",
+      description: "Your active banking relationships",
     },
     {
       component: CoborrowerInformation,
       title: "Coborrower",
+      description: "Basic details of your loan partner",
     },
     {
       component: CoborrowerAddressInformation,
       title: "Coborrower Address",
+      description: "Coborrower's current residence",
     },
     {
       component: CoborrowerIncomeInfo,
       title: "Coborrower Income",
+      description: "Earnings details of your coborrower",
     },
     {
       component: CharacterReferences,
       title: "Character References",
-      description: "Not living in the same household",
+      description: "Contacts not living in your household",
     },
     {
       component: TradeReferences,
       title: "Trade References",
-      description: "Clients or Suppliers",
+      description: "Business clients or major suppliers",
     },
   ]
 
@@ -186,14 +200,11 @@ export function StepperProvider({ children }: StepperProviderProps) {
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set())
-  const [stepError, setStepError] = useState<string | null>(null)
 
   const currentStep = steps[currentStepIndex]
   const hasNext = currentStepIndex < steps.length - 1
   const hasPrev = currentStepIndex > 0
   const isLastStep = currentStepIndex === steps.length - 1
-
-  const clearStepError = useCallback(() => setStepError(null), [])
 
   const goNext = useCallback(
     (formData: Record<string, unknown>): boolean => {
@@ -207,7 +218,6 @@ export function StepperProvider({ children }: StepperProviderProps) {
         return false
       }
 
-      setStepError(null)
       setCompletedSteps((prev) => new Set(prev).add(currentStepIndex))
 
       if (hasNext) {
@@ -221,7 +231,6 @@ export function StepperProvider({ children }: StepperProviderProps) {
   )
 
   const goPrev = useCallback(() => {
-    setStepError(null)
     if (hasPrev) {
       setCurrentStepIndex((i) => i - 1)
       window.scrollTo({ top: 0 })
@@ -235,7 +244,6 @@ export function StepperProvider({ children }: StepperProviderProps) {
       if (index < 0 || index >= steps.length) return
       if (!isVisitable) return
 
-      setStepError(null)
       setCurrentStepIndex(index)
     },
     [currentStepIndex, completedSteps, steps.length],
@@ -254,8 +262,6 @@ export function StepperProvider({ children }: StepperProviderProps) {
         goPrev,
         goToStep,
         completedSteps,
-        stepError,
-        clearStepError,
       }}
     >
       {children}

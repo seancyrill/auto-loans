@@ -5,7 +5,6 @@ import { Checkbox } from "@/app/ui/checkbox"
 import { Input, InputAmount } from "@/app/ui/input"
 import { SelectionMenu } from "@/app/ui/selection"
 import { ChangeEvent, useState } from "react"
-import { StepContainer } from "./components/step-container"
 
 export default function AddressInformation() {
   const { applicationData, updateApplicationData } = useApplication()
@@ -35,7 +34,7 @@ export default function AddressInformation() {
   }
 
   return (
-    <StepContainer>
+    <>
       <div className="flex w-full gap-1">
         <Input
           value={applicationData.presentAddress}
@@ -148,6 +147,6 @@ export default function AddressInformation() {
           label="Owned By"
         />
       )}
-    </StepContainer>
+    </>
   )
 }

@@ -1,16 +1,12 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Plus_Jakarta_Sans } from "next/font/google"
+import Nav from "./components/nav"
 import { ApplicationProvider } from "./context/form-context"
 import { StatusProvider } from "./context/status-provider"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const myFont = Plus_Jakarta_Sans({
+  variable: "--font-primary",
   subsets: ["latin"],
 })
 
@@ -25,10 +21,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} min-h-full antialiased`}>
-      <body className="flex min-h-full flex-col">
+    <html lang="en" className={`${myFont.className} min-h-full antialiased`}>
+      <body className="flex min-h-screen flex-col">
         <StatusProvider>
-          <ApplicationProvider>{children}</ApplicationProvider>
+          <ApplicationProvider>
+            <Nav />
+            {children}
+          </ApplicationProvider>
         </StatusProvider>
       </body>
     </html>

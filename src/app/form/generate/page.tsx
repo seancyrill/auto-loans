@@ -4,9 +4,10 @@ import LoadingSpinner from "@/app/components/loading-spinner"
 import { useApplication } from "@/app/context/form-context"
 import { useStepper } from "@/app/context/stepper-context"
 import { Button } from "@/app/ui/button"
+import ProgressBar from "../components/progress-bar"
 
 export default function GenerateForm() {
-  const { currentStep, stepError, goNext, goPrev, hasPrev, isLastStep } = useStepper()
+  const { currentStep, goNext, goPrev, hasPrev, isLastStep } = useStepper()
   const { applicationData, applicationImages, applicationLoading, resetApplication, setApplicationLoading } =
     useApplication()
   const StepComponent = currentStep.component
@@ -18,20 +19,20 @@ export default function GenerateForm() {
       return goNext(applicationData)
     }
 
-    setApplicationLoading({ loading: true, text: "Generating..." })
+    setApplicationLoading({ loading: true, text: "Submitting" })
 
-    const res = await fetch("/api/submit/generate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ applicationData, lender: "gdfi", applicationImages }),
-    })
+    // const res = await fetch("/api/submit/generate", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ applicationData, lender: "gdfi", applicationImages }),
+    // })
 
-    const data = await res.json()
-    if (data.success) {
-      setApplicationLoading({ loading: false, text: "" })
-      alert("Submitted successfully!")
-      // resetApplication()
-    }
+    // const data = await res.json()
+    // if (data.success) {
+    //   setApplicationLoading({ loading: false, text: "" })
+    //   alert("Submitted successfully!")
+    //   // resetApplication()
+    // }
   }
 
   if (applicationLoading.loading) {
@@ -39,28 +40,39 @@ export default function GenerateForm() {
   }
 
   return (
-    <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col items-center gap-8">
-      <div className="flex flex-col items-center gap-2">
-        <h1 className="text-3xl font-bold">{currentStep.title}</h1>
-        <h2 className="text-xl">{currentStep.description}</h2>
+    <form onSubmit={(e) => handleSubmit(e)} className="relative flex flex-1 flex-col items-center overflow-clip">
+      <div className="bg-primary sticky top-0 z-10 w-full pt-17">
+        <ProgressBar />
+        <div className="border-off flex w-full flex-col items-center border-b pt-1 pb-3 shadow-sm sm:gap-2 sm:p-6">
+          <h1 className="text-xl font-bold sm:text-3xl">{currentStep.title}</h1>
+          <h2 className="text-lg sm:text-xl">{currentStep.description}</h2>
+        </div>
       </div>
 
-      <StepComponent />
-
-      {/* Error from failed validation */}
-      {stepError && <p className="text-error">{stepError}</p>}
+      <div className="flex w-full max-w-120 flex-1 flex-col items-center justify-between gap-4 overflow-scroll p-4 pt-6 pb-18.5">
+        <StepComponent />
+        <div className="text-secondary/50 text-center text-xs">
+          <p>You can always skip a field</p>
+          <p>Your progress is saved on your device, come back anytime</p>
+        </div>
+      </div>
 
       {/* Navigation */}
-      <div className="flex items-center justify-between">
-        {hasPrev && (
-          <Button type="button" onClick={goPrev} variant={"subtle"}>
+      <div className="border-off/50 bg-primary fixed bottom-0 left-0 flex w-full flex-col items-center justify-center border-t p-2 sm:p-4">
+        <div className={`flex w-full max-w-120 items-center gap-4 px-4 ${hasPrev ? "justify-between" : "justify-end"}`}>
+          <Button type="button" onClick={goPrev} variant={"subtle"} className={hasPrev ? "" : "hidden"}>
             Back
           </Button>
-        )}
 
-        <Button type="submit" disabled={!!applicationLoading.loading} variant={isLastStep ? "yellow" : "default"}>
-          {isLastStep ? "Submit" : "Next"}
-        </Button>
+          <Button
+            type="submit"
+            disabled={!!applicationLoading.loading}
+            variant={isLastStep ? "yellow" : "default"}
+            className="w-full"
+          >
+            {isLastStep ? "Submit" : "Next"}
+          </Button>
+        </div>
       </div>
     </form>
   )

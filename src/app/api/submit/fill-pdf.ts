@@ -150,8 +150,6 @@ export function fillPage1(page: PDFPage, data: ApplicationFormType, font: PDFFon
   t(page, data.prcLicenseNumber, 255, 209, font)
 
   // ─── SOURCE OF INCOME checkboxes ──────────────────────────────────────────
-
-  // Row 2 (y=177): Business   x=145, Interest Income x=224, Sale of Assets  x=313
   if (data.incomeSources.includes("employment")) check(page, 142, 188, font)
   if (data.incomeSources.includes("remittance")) check(page, 220, 186, font)
   if (data.incomeSources.includes("pension")) check(page, 295, 186, font)
@@ -218,21 +216,18 @@ export function fillPage2(page: PDFPage, data: ApplicationFormType, font: PDFFon
   data.characterReferences.slice(0, 3).forEach((ref, i) => {
     t(page, ref.name, 17, charRefRows[i], font)
     t(page, ref.address, 137, charRefRows[i], font)
-    t(page, ref.contactNumber, 487, charRefRows[i], font)
+    t(page, ref.contactNumber ? `0${ref.contactNumber}` : "", 487, charRefRows[i], font)
   })
 
   // ─── TRADE REFERENCES ─────────────────────────────────────────────────────
-
-  // 3 data rows at y=671, 656, 641
   const tradeRefRows = [620, 606, 590]
   data.tradeReferences.slice(0, 3).forEach((ref, i) => {
     t(page, ref.businessName, 17, tradeRefRows[i], font)
     t(page, ref.address, 137, tradeRefRows[i], font)
-    t(page, ref.contactNumber, 487, tradeRefRows[i], font)
+    t(page, ref.contactNumber ? `0${ref.contactNumber}` : "", 487, tradeRefRows[i], font)
   })
 
   // ─── SPOUSE / CO-BORROWER INFORMATION ─────────────────────────────────────
-  // Column layout mirrors page 1 borrower section.
 
   // Full Name — y=604
   const coFullName = [cb.lastName, cb.firstName, cb.middleName, cb.nameSuffix].filter(Boolean).join(", ")
@@ -260,7 +255,7 @@ export function fillPage2(page: PDFPage, data: ApplicationFormType, font: PDFFon
 
   // Mobile
   if (cb.mobile) {
-    t(page, cb.mobile, 261, 424, font)
+    t(page, `0${cb.mobile}`, 261, 424, font)
   }
 
   // Citizenship — y=463

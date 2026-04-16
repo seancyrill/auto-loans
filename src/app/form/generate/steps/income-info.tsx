@@ -9,13 +9,12 @@ import {
 } from "@/app/context/form-context-types"
 import { Input } from "@/app/ui/input"
 import { SelectionMenu, SelectionMenuMultiple } from "@/app/ui/selection"
-import { StepContainer } from "./components/step-container"
 
 export default function IncomeInfo() {
   const { updateApplicationData, applicationData } = useApplication()
 
   return (
-    <StepContainer>
+    <>
       <SelectionMenuMultiple
         label="Source of Income / Funds"
         columns={2}
@@ -93,6 +92,6 @@ export default function IncomeInfo() {
           { value: "no", label: "No" },
         ]}
       />
-    </StepContainer>
+    </>
   )
 }

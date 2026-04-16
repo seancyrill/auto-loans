@@ -6,6 +6,7 @@ import { useApplication } from "../context/form-context"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { formatPhone } from "../utils/format-phone"
+import NameFields from "./components/name-fields"
 import { SubmitModal } from "./components/submit-options"
 
 export default function Form() {
@@ -22,60 +23,36 @@ export default function Form() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-2">
+    <div className="bg-off flex flex-1 flex-col items-center justify-center p-2">
       <form
-        className="border-off flex max-w-md flex-col gap-1.5 rounded-md border p-4"
+        className="border-off bg-primary flex max-w-120 flex-col gap-6 rounded-xl border p-8 shadow-md"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <div className="flex gap-1.5">
+        <div>
+          <h1 className="text-xl font-bold">Apply for a loan</h1>
+          <h3 className="">{`First things first, let's get this out of the way.`}</h3>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <NameFields />
           <Input
-            value={applicationData.firstName}
+            value={formatPhone(applicationData.mobile)}
             required
-            onChange={(e) => updateApplicationData("firstName", e.target.value)}
-            placeholder="Juan"
-            label="First Name"
-          />
-          <Input
-            value={applicationData.middleName}
-            onChange={(e) => updateApplicationData("middleName", e.target.value)}
-            placeholder="Pangilinan"
-            label="Middle Name"
-          />
-          <Input
-            value={applicationData.lastName}
-            required
-            onChange={(e) => updateApplicationData("lastName", e.target.value)}
-            placeholder="Dela Cruz"
-            label="Last Name"
-          />
-          <Input
-            value={applicationData.nameSuffix}
-            className="w-10"
-            onChange={(e) => updateApplicationData("nameSuffix", e.target.value)}
-            placeholder="II"
-            label="Suffix"
+            onChange={(e) => {
+              const value = e.target.value.replace(/\s/g, "")
+              if (value === "" || /^\d+$/.test(value) || value.length > 12) {
+                updateApplicationData("mobile", value)
+              }
+            }}
+            maxLength={12}
+            minLength={12}
+            placeholder="9XX XXX XXXX"
+            label="Mobile Number"
+            mobile
           />
         </div>
 
-        <Input
-          value={formatPhone(applicationData.mobile)}
-          required
-          onChange={(e) => {
-            const value = e.target.value.replace(/\s/g, "")
-            if (value === "" || /^\d+$/.test(value) || value.length > 12) {
-              updateApplicationData("mobile", value)
-            }
-          }}
-          maxLength={12}
-          minLength={12}
-          placeholder="9XX XXX XXXX"
-          label="Mobile Number"
-          mobile
-        />
-
-        <Button className="mt-4" disabled={applicationLoading.loading}>
-          Submit
-        </Button>
+        <Button disabled={applicationLoading.loading}>Next</Button>
       </form>
       <SubmitModal open={open} onClose={() => setOpen(false)} />
     </div>

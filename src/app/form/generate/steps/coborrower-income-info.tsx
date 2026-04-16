@@ -4,7 +4,6 @@ import { useApplication } from "@/app/context/form-context"
 import { Input, InputAmount } from "@/app/ui/input"
 import { SelectionMenu } from "@/app/ui/selection"
 import { useState } from "react"
-import { StepContainer } from "./components/step-container"
 
 export default function CoborrowerIncomeInfo() {
   const { updateCoBorrower, applicationData } = useApplication()
@@ -15,7 +14,7 @@ export default function CoborrowerIncomeInfo() {
   const co = applicationData.coBorrower
 
   return (
-    <StepContainer>
+    <>
       <SelectionMenu
         label="Income Source"
         columns={2}
@@ -74,6 +73,6 @@ export default function CoborrowerIncomeInfo() {
       <Input value={co.tin} onChange={(e) => updateCoBorrower("tin", e.target.value)} label="TIN" />
       <Input value={co.sssNumber} onChange={(e) => updateCoBorrower("sssNumber", e.target.value)} label="SSS No." />
       <Input value={co.gsisNumber} onChange={(e) => updateCoBorrower("gsisNumber", e.target.value)} label="GSIS No." />
-    </StepContainer>
+    </>
   )
 }

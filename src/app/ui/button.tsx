@@ -18,10 +18,10 @@ const buttonVariants = cva(
         red: "text-primary bg-error",
       },
       size: {
-        default: "h-10 px-4 py-2 text-base",
-        xs: "h-7 px-2 text-xs",
-        sm: "h-9 px-3 text-sm",
-        lg: "h-11 px-5 text-lg",
+        default: "h-10 px-6 py-2 text-base",
+        xs: "h-7 px-4 text-xs",
+        sm: "h-9 px-5 text-sm",
+        lg: "h-11 px-7 text-lg",
       },
     },
     defaultVariants: {
