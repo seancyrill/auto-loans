@@ -1,7 +1,9 @@
 "use client"
 
 import { ArrowRight } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { useState } from "react"
+import { useInView } from "../utils/in-view"
 
 const steps = [
   {
@@ -17,7 +19,7 @@ const steps = [
     description:
       "You can skip any field anytime, but the forms you'll be answering is specifically designed to help you boost approval. The fields will be used to fill up necessary documents so don't have to do it yourself. You can leave and come back anytime, your form is always saved on you device so take your time.",
     detail:
-      "You data will only exist in your device, and forwarded to our partner lenders. eg. Global Dominion. But you can always skip sensitive fields if it makes you feel safer.",
+      "Your data will only exist in your device, and forwarded to our partner lenders. eg. Global Dominion. But you can always skip sensitive fields if it makes you feel safer.",
   },
   {
     number: "03",
@@ -41,26 +43,6 @@ const steps = [
     detail: "Average approval decision: under 24 hours.",
   },
 ]
-
-function useInView(threshold = 0.2) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [inView, setInView] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setInView(true)
-      },
-      { threshold },
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [threshold])
-
-  return { ref, inView }
-}
 
 export default function HowItWorks() {
   const { ref: sectionRef, inView } = useInView(0.1)
@@ -187,13 +169,13 @@ export default function HowItWorks() {
             <p className="text-secondary mb-1 font-sans text-lg font-semibold tracking-tight">Ready to get started?</p>
             <p className="text-secondary/40 font-sans text-sm">The whole process takes less than 15 minutes.</p>
           </div>
-          <a
-            href="/apply"
+          <Link
+            href="/form"
             className="group bg-secondary text-primary hover:bg-accent hover:text-secondary flex shrink-0 flex-nowrap items-center gap-3 px-8 py-4 font-sans text-xs font-semibold tracking-widest uppercase no-underline transition-colors duration-200"
           >
             Start your application
             <ArrowRight size={16} />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

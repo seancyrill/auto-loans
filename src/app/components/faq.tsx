@@ -1,33 +1,29 @@
 "use client"
 
 import { ArrowRight } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
+import { useInView } from "../utils/in-view"
 
 const faqs = [
   {
     question: "How long does the application process take?",
     answer:
-      "Most applications are completed in under 10 minutes. Once submitted, our team reviews your documents and typically returns a decision within 24 hours — often sooner.",
-  },
-  {
-    question: "Will applying affect my credit score?",
-    answer:
-      "No. Your initial application only involves a soft credit inquiry, which has no impact on your credit score. A hard inquiry is only performed after you formally accept a loan offer.",
+      "Most applications are completed in under 15 minutes. Once submitted, our team reviews your documents and typically returns a decision within 24 hours — often sooner.",
   },
   {
     question: "What documents do I need to prepare?",
     answer:
-      "You'll need a valid government-issued ID, proof of income (payslip or ITR), and a recent utility bill for address verification. Additional documents may be requested depending on loan type.",
+      "You'll need 2 valid government-issued ID, income proof (this would vary depending on the income sources you have selected), and a recent utility bill for address verification. Additional documents may be requested depending on loan type.",
   },
   {
     question: "How are my documents kept secure?",
     answer:
-      "All uploaded files are encrypted in transit and at rest using AES-256 encryption. We are fully compliant with BSP data privacy regulations, and your information is never sold or shared with third parties.",
+      "All your data and documents are only saved on your device, just so you can continue your application anytime. Then sent to our partner lenders. eg. Global Dominion. But you can always skip sensitive fields if it makes you feel safer. This website is only a pass through system to make the process easier for both you and our Loan Consultants.",
   },
   {
     question: "What loan amounts can I apply for?",
     answer:
-      "Loan amounts range from ₱10,000 to ₱2,000,000 depending on loan type, your credit profile, and income verification. You'll see your personalized range during the application.",
+      "Loan amounts range from ₱100,000 to ₱2,000,000 depending on loan type, your credit profile, and income verification. You'll see your personalized range during the application.",
   },
   {
     question: "When will I receive the funds after approval?",
@@ -35,34 +31,11 @@ const faqs = [
       "Funds are disbursed to your nominated bank account within one business day of approval and signing. In many cases, transfers are completed the same afternoon.",
   },
   {
-    question: "Can I apply if I'm self-employed?",
+    question: "Can I apply if I'm unemployed?",
     answer:
-      "Yes. Self-employed applicants can use their ITR, audited financial statements, or bank statements from the past 3 months as proof of income.",
-  },
-  {
-    question: "What happens if my application is declined?",
-    answer:
-      "You'll receive a clear explanation of the reason. You're welcome to reapply after 30 days or address the noted issue. Our team is also available to guide you through alternative options.",
+      "Yes. As long as you have any source of income and proofs, we will find a way for you to get a great approval rate.",
   },
 ]
-
-function useInView(threshold = 0.1) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [inView, setInView] = useState(false)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setInView(true)
-      },
-      { threshold },
-    )
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [threshold])
-  return { ref, inView }
-}
 
 export default function FAQ() {
   const { ref, inView } = useInView()

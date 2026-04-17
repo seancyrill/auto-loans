@@ -11,8 +11,9 @@ const myFont = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "AutoLoans",
-  description: "Generate forms",
+  title: "Auto Loans",
+  description:
+    "Generate your documents, or get Loan Consultants to guide you, and get approved — entirely online. Minimize branch visits and back-and-forth calls. Just a smooth, transparent process built around you.",
 }
 
 export default function RootLayout({

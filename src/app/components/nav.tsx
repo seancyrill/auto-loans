@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 const links = [
@@ -9,6 +10,7 @@ const links = [
 ]
 
 export default function Nav() {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -50,20 +52,23 @@ export default function Nav() {
                 <a
                   href={link.href}
                   className="hover:text-accent after:bg-accent relative px-4 py-2 font-sans text-xs tracking-widest uppercase no-underline transition-colors duration-200 after:absolute after:right-0 after:bottom-[-3px] after:left-0 after:h-px after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
+                  target="_blank"
                 >
                   {link.label}
                 </a>
               </li>
             ))}
-            <li>
-              <Link
-                href={"/form"}
-                target="_blank"
-                className="bg-accent hover:bg-secondary hover:text-accent px-5 py-2.5 font-sans text-xs font-semibold tracking-widest uppercase no-underline transition-colors duration-200"
-              >
-                Apply now
-              </Link>
-            </li>
+            {!pathname.startsWith("/form") && (
+              <li>
+                <Link
+                  href={"/form"}
+                  target="_blank"
+                  className="bg-accent hover:bg-secondary hover:text-accent px-5 py-2.5 font-sans text-xs font-semibold tracking-widest uppercase no-underline transition-colors duration-200"
+                >
+                  Apply now
+                </Link>
+              </li>
+            )}
           </ul>
 
           {/* Hamburger */}
@@ -113,13 +118,15 @@ export default function Nav() {
             </li>
           ))}
         </ul>
-        <Link
-          href="/start"
-          onClick={() => setOpen(false)}
-          className="bg-accent hover:bg-secondary mt-6 block py-4 text-center font-sans text-xs font-semibold tracking-[0.15em] uppercase no-underline transition-colors duration-200"
-        >
-          Apply Now
-        </Link>
+        {!pathname.startsWith("/form") && (
+          <Link
+            href="/start"
+            onClick={() => setOpen(false)}
+            className="bg-accent hover:bg-secondary mt-6 block py-4 text-center font-sans text-xs font-semibold tracking-[0.15em] uppercase no-underline transition-colors duration-200"
+          >
+            Apply Now
+          </Link>
+        )}
       </aside>
     </>
   )
