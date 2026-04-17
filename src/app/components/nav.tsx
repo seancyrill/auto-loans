@@ -3,7 +3,10 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-const links = [{ label: "FAQ", href: "/faq" }]
+const links = [
+  { label: "How it Works", href: "/#howitworks" },
+  { label: "FAQ", href: "/#faq" },
+]
 
 export default function Nav() {
   const [open, setOpen] = useState(false)
@@ -44,13 +47,12 @@ export default function Nav() {
           <ul className="m-0 hidden list-none items-center gap-10 p-0 md:flex">
             {links.map((link) => (
               <li key={link.label}>
-                <Link
+                <a
                   href={link.href}
                   className="hover:text-accent after:bg-accent relative px-4 py-2 font-sans text-xs tracking-widest uppercase no-underline transition-colors duration-200 after:absolute after:right-0 after:bottom-[-3px] after:left-0 after:h-px after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-                  target="_blank"
                 >
                   {link.label}
-                </Link>
+                </a>
               </li>
             ))}
             <li>
