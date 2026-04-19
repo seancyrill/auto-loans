@@ -5,6 +5,7 @@ import { useStatus } from "@/app/context/status-provider"
 import { Button } from "@/app/ui/button"
 import { ArrowRight, Check, FileInput, Send } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 
 type SubmitModalProps = {
@@ -13,8 +14,9 @@ type SubmitModalProps = {
 }
 
 export function SubmitModal({ open, onClose }: SubmitModalProps) {
+  const router = useRouter()
   const { resetApplication, applicationData, setApplicationLoading } = useApplication()
-  const { showStatus } = useStatus()
+  const { showStatus, clearStatus } = useStatus()
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export function SubmitModal({ open, onClose }: SubmitModalProps) {
     }
   }, [open])
 
-  // Let the native ESC key trigger onClose
+  // ESC key trigger onClose
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
@@ -48,7 +50,7 @@ export function SubmitModal({ open, onClose }: SubmitModalProps) {
   }
 
   const quickSubmit = async () => {
-    setApplicationLoading({ loading: true })
+    setApplicationLoading({ loading: true, text: "Submitting" })
 
     const res = await fetch("/api/submit/quick", {
       method: "POST",
@@ -56,17 +58,28 @@ export function SubmitModal({ open, onClose }: SubmitModalProps) {
       body: JSON.stringify({ applicationData, lender: "gdfi" }),
     })
 
+    setApplicationLoading({ loading: false, text: "" })
+
     const data = await res.json()
     if (data.success) {
-      // success message
-      resetApplication()
-    } else {
-      // error message
-    }
+      onClose()
+      setApplicationLoading({ loading: false, text: "" })
 
-    setApplicationLoading({ loading: false })
-    showStatus({ message: "Your application is successfully sent to our agents. Please wait for them to contact you." })
-    onClose()
+      showStatus({
+        message:
+          "Your application is successfully sent to your Loan Consultant. Please wait for them to contact and guide you.",
+        button: {
+          text: "OK",
+          function: () => {
+            router.push("/")
+            clearStatus()
+          },
+        },
+      })
+      // resetApplication()
+    } else {
+      console.error(data.error)
+    }
   }
 
   return (

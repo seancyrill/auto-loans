@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useInView } from "../utils/in-view"
+import StripeBG from "./bg/stripe"
 
 const steps = [
   {
@@ -54,19 +55,7 @@ export default function HowItWorks() {
       id="howitworks"
       className="bg-neutral relative min-h-screen overflow-hidden py-16 sm:py-32"
     >
-      {/* Background texture */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage: `repeating-linear-gradient(
-            -45deg,
-            var(--secondary) 0px,
-            var(--secondary) 1px,
-            transparent 1px,
-            transparent 40px
-          )`,
-        }}
-      />
+      <StripeBG />
 
       <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-8 px-8">
         {/* Section header */}

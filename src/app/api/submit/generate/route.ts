@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import nodemailer from "nodemailer"
 import { getEmailHTML } from "../email-template"
 import { fillGdfiApplication } from "../fill-pdf"
+import { lenderEmailFinder } from "../lender-emai-finder"
 import { parseImageAttachments } from "../parse-image-attachments"
 
 export async function POST(req: NextRequest) {
@@ -13,21 +14,21 @@ export async function POST(req: NextRequest) {
     throw new Error("Submit Route Error: Cannot read env!")
   }
 
-  const { applicationData, lender, applicationImages } = await req.json()
+  const { applicationData, applicationImages } = await req.json()
 
   if (!applicationData) {
     return NextResponse.json({ message: "Missing Application Data" }, { status: 400 })
   }
 
-  if (!lender) {
-    return NextResponse.json({ message: "Missing Lender Data" }, { status: 400 })
-  }
-
-  const { firstName, middleName, lastName, nameSuffix, mobile } = applicationData
+  const { firstName, middleName, lastName, nameSuffix, mobile, lender } = applicationData
 
   console.log({ firstName, lastName, mobile })
   if (!firstName || !lastName || !mobile) {
     return NextResponse.json({ message: "MIssing Client contact details" }, { status: 400 })
+  }
+
+  if (!lender) {
+    return NextResponse.json({ message: "Missing Lender Data" }, { status: 400 })
   }
 
   const fullName = getFullName({ firstName, middleName, lastName, nameSuffix })
@@ -65,14 +66,4 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json({ success: true })
-}
-
-function lenderEmailFinder(lender: string) {
-  switch (lender) {
-    case "gdfi":
-      return process.env.GDFI_EMAIL
-
-    default:
-      return "seancyrill@gmail.com"
-  }
 }

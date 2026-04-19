@@ -3,10 +3,12 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { buttonVariants } from "../ui/button"
 
 const links = [
-  { label: "How it Works", href: "/#howitworks" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "How it Works", href: "#howitworks" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#contact" },
 ]
 
 export default function Nav() {
@@ -30,29 +32,33 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 right-0 left-0 z-40 transition-all duration-300 ${
           scrolled
             ? "bg-secondary/90 border-accent/15 text-primary border-b shadow-lg shadow-black/20 backdrop-blur-xs"
             : "bg-primary text-negative border-b border-transparent"
         }`}
       >
         <nav className="h-s mx-auto flex h-17 max-w-7xl items-center justify-between px-8">
-          {/* Wordmark */}
-          <Link href="/" className="group flex items-center gap-2 no-underline">
-            <span className="bg-accent h-6 w-6 shrink-0 rotate-45 transition-transform duration-500 group-hover:rotate-[135deg]" />
+          {/* Logo */}
+          <a
+            href={pathname === "/" ? "#hero" : "/#hero"}
+            target={pathname.startsWith("/form") ? "_blank" : "_self"}
+            className="group flex items-center gap-2 no-underline"
+          >
+            <span className="bg-accent group-hover:bg-secondary h-6 w-6 shrink-0 rotate-45 transition-all duration-500 group-hover:rotate-[135deg]" />
             <span className="group-hover:text-accent font-sans text-xl font-semibold tracking-widest uppercase">
               Auto Loans
             </span>
-          </Link>
+          </a>
 
           {/* Desktop links */}
           <ul className="m-0 hidden list-none items-center gap-10 p-0 md:flex">
             {links.map((link) => (
               <li key={link.label}>
                 <a
-                  href={link.href}
-                  className="hover:text-accent after:bg-accent relative px-4 py-2 font-sans text-xs tracking-widest uppercase no-underline transition-colors duration-200 after:absolute after:right-0 after:bottom-[-3px] after:left-0 after:h-px after:origin-left after:scale-x-0 after:transition-transform after:duration-300 hover:after:scale-x-100"
-                  target="_blank"
+                  href={`${pathname === "/" ? "" : "/"}${link.href}`}
+                  target={pathname.startsWith("/form") ? "_blank" : "_self"}
+                  className={buttonVariants({ variant: "herolink", size: "herosm" })}
                 >
                   {link.label}
                 </a>
@@ -62,8 +68,8 @@ export default function Nav() {
               <li>
                 <Link
                   href={"/form"}
-                  target="_blank"
-                  className="bg-accent hover:bg-secondary hover:text-accent px-5 py-2.5 font-sans text-xs font-semibold tracking-widest uppercase no-underline transition-colors duration-200"
+                  target={pathname.startsWith("/form") ? "_blank" : "_self"}
+                  className={buttonVariants({ variant: "hero2", size: "herosm" })}
                 >
                   Apply now
                 </Link>
@@ -109,7 +115,8 @@ export default function Nav() {
           {links.map((link) => (
             <li key={link.label}>
               <Link
-                href={link.href}
+                href={`${pathname === "/" ? "" : "/"}${link.href}`}
+                target={pathname.startsWith("/form") ? "_blank" : "_self"}
                 onClick={() => setOpen(false)}
                 className="hover:text-accent border-secondary/5 block border-b py-3 font-sans text-3xl font-medium tracking-tight no-underline transition-colors duration-200"
               >
@@ -120,9 +127,9 @@ export default function Nav() {
         </ul>
         {!pathname.startsWith("/form") && (
           <Link
-            href="/start"
+            href="/form"
             onClick={() => setOpen(false)}
-            className="bg-accent hover:bg-secondary mt-6 block py-4 text-center font-sans text-xs font-semibold tracking-[0.15em] uppercase no-underline transition-colors duration-200"
+            className={buttonVariants({ variant: "hero2", size: "hero" })}
           >
             Apply Now
           </Link>

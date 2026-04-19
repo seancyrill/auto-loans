@@ -1,7 +1,8 @@
-import { ApplicationFormType } from "@/app/context/form-context"
+import { ApplicationFormType } from "@/app/context/form-context-types"
 import { NextRequest, NextResponse } from "next/server"
 import nodemailer from "nodemailer"
 import { getEmailHTML } from "../email-template"
+import { lenderEmailFinder } from "../lender-emai-finder"
 
 export async function POST(req: NextRequest) {
   const GMAIL_USER = process.env.GMAIL_USER
@@ -11,9 +12,13 @@ export async function POST(req: NextRequest) {
     throw new Error("Submit Route Error: Cannot read env!")
   }
 
-  const { applicationData, lender } = await req.json()
+  const { applicationData } = await req.json()
 
-  const { firstName, lastName, mobile } = applicationData as ApplicationFormType
+  const { firstName, lastName, mobile, lender } = applicationData as ApplicationFormType
+
+  if (!lender) {
+    return NextResponse.json({ message: "Missing Lender Data" }, { status: 400 })
+  }
 
   if (!firstName || !lastName || !mobile) {
     return NextResponse.json({ success: false, message: "Missing basic requiremnets" }, { status: 400 })
@@ -39,14 +44,4 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json({ success: true })
-}
-
-function lenderEmailFinder(lender: string) {
-  switch (lender) {
-    case "gdfi":
-      return "seancyrill@gmail.com"
-
-    default:
-      return "seancyrill@gmail.com"
-  }
 }

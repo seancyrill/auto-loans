@@ -6,6 +6,10 @@ import { useInView } from "../utils/in-view"
 
 const faqs = [
   {
+    question: "Who are your partner lenders?",
+    answer: "We currently only work with Global Dominion Financing Inc. for now, other lenders are underway.",
+  },
+  {
     question: "How long does the application process take?",
     answer:
       "Most applications are completed in under 15 minutes. Once submitted, our team reviews your documents and typically returns a decision within 24 hours — often sooner.",
@@ -33,7 +37,7 @@ const faqs = [
   {
     question: "Can I apply if I'm unemployed?",
     answer:
-      "Yes. As long as you have any source of income and proofs, we will find a way for you to get a great approval rate.",
+      "Yes. As long as you have any source of income and proofs, we will find a way for you to get a best approval rate.",
   },
 ]
 

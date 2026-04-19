@@ -47,14 +47,14 @@ export function StatusMessageModal({ open, message, isError, button, onClose }: 
     <dialog
       ref={dialogRef}
       onClick={handleBackdropClick}
-      className="backdrop:bg-negative/50 animate-modal-in m-auto w-fit max-w-2xl min-w-80 rounded-2xl p-0 shadow-2xl outline-none backdrop:backdrop-blur-sm"
+      className="backdrop:bg-negative/50 animate-modal-in m-auto max-w-[calc(100vw-2rem)] rounded-2xl shadow-2xl outline-none backdrop:backdrop-blur-sm"
       style={{
         borderColor: isError
           ? "color-mix(in srgb, var(--error) 40%, transparent)"
           : "color-mix(in srgb, var(--accent) 30%, transparent)",
       }}
     >
-      <div className="bg-primary flex flex-col p-7">
+      <div className="bg-primary flex max-w-sm min-w-80 flex-col gap-4 p-6">
         <div className="flex items-center gap-4">
           <div
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg"
@@ -78,14 +78,11 @@ export function StatusMessageModal({ open, message, isError, button, onClose }: 
         <p className="mt-1 text-sm leading-relaxed">{message}</p>
 
         {/* ── Actions ── */}
-        <div className={`flex gap-2 ${button ? "justify-between" : "justify-end"}`}>
-          {/* Optional action button */}
-          {button && (
-            <Button className="w-full" variant={"red"} onClick={button.function}>
-              {button.text}
-            </Button>
-          )}
-        </div>
+        {button && (
+          <Button className="mx-auto w-fit text-sm" size={"sm"} onClick={button.function}>
+            {button.text}
+          </Button>
+        )}
       </div>
     </dialog>
   )

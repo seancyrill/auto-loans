@@ -4,6 +4,8 @@ import { ArrowRight, CheckSquare2 } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import { LoanOption } from "../context/form-context-types"
+import { buttonVariants } from "../ui/button"
+import { cn } from "../utils/cn"
 import ScrollHint from "./scroll-hint"
 
 const stats = [
@@ -18,8 +20,6 @@ const loanTypes: { icon: string; label: LoanOption }[] = [
   { icon: "🩺", label: "Doctor's Loan" },
   { icon: "🏠", label: "Real Estate Loan" },
 ]
-
-const lenderLogos = ["./gdfi-logo.png", "sbfinance-logo.png", "./asialink-logo.png"]
 
 export default function Hero() {
   const [active, setActive] = useState(0)
@@ -112,19 +112,16 @@ export default function Hero() {
             <div
               className={`mb-16 flex flex-wrap items-center gap-4 transition-all delay-[400ms] duration-700 ${visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
             >
-              <Link
-                href="/form"
-                className="group bg-secondary text-primary hover:bg-accent hover:text-secondary inline-flex items-center gap-3 px-8 py-4 font-sans text-sm font-semibold tracking-widest uppercase no-underline transition-colors duration-200"
-              >
+              <Link href="/form" className={buttonVariants({ variant: "hero1", size: "hero" })}>
                 Start Application
                 <ArrowRight size={18} />
               </Link>
-              <Link
-                href="/how-it-works"
-                className="text-secondary/50 hover:text-secondary border-secondary/20 hover:border-secondary/60 inline-flex items-center gap-2 border-b pb-0.5 font-sans text-sm tracking-widest uppercase no-underline transition-colors duration-200"
+              <a
+                href="#howitworks"
+                className={cn(buttonVariants({ variant: "herolink", size: "herosm" }), "text-secondary/50 px-0")}
               >
                 See how it works
-              </Link>
+              </a>
             </div>
 
             {/* Stats */}
@@ -192,10 +189,7 @@ export default function Hero() {
                 </ul>
               </div>
 
-              <Link
-                href="/form"
-                className="bg-secondary text-primary hover:bg-accent hover:text-secondary block w-full py-4 text-center font-sans text-xs font-semibold tracking-[0.15em] uppercase no-underline transition-colors duration-200"
-              >
+              <Link href="/form" className={cn(buttonVariants({ variant: "hero1", size: "hero" }), "w-full text-xs")}>
                 {`Apply Now — It's Easy`}
               </Link>
             </div>

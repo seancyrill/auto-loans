@@ -2,15 +2,19 @@
 
 import LoadingSpinner from "@/app/components/loading-spinner"
 import { useApplication } from "@/app/context/form-context"
+import { useStatus } from "@/app/context/status-provider"
 import { useStepper } from "@/app/context/stepper-context"
 import { Button } from "@/app/ui/button"
+import { useRouter } from "next/navigation"
 import ProgressBar from "../components/progress-bar"
 
 export default function GenerateForm() {
+  const router = useRouter()
   const { currentStep, goNext, goPrev, hasPrev, isLastStep } = useStepper()
   const { applicationData, applicationImages, applicationLoading, resetApplication, setApplicationLoading } =
     useApplication()
-  const StepComponent = currentStep.component
+  const { showStatus, clearStatus } = useStatus()
+  const StepComponent = currentStep?.component
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
@@ -21,18 +25,30 @@ export default function GenerateForm() {
 
     setApplicationLoading({ loading: true, text: "Submitting" })
 
-    // const res = await fetch("/api/submit/generate", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ applicationData, lender: "gdfi", applicationImages }),
-    // })
+    const res = await fetch("/api/submit/generate", {
+      method: "POST",
+      body: JSON.stringify({ applicationData, applicationImages }),
+    })
 
-    // const data = await res.json()
-    // if (data.success) {
-    //   setApplicationLoading({ loading: false, text: "" })
-    //   alert("Submitted successfully!")
-    //   // resetApplication()
-    // }
+    const data = await res.json()
+    if (data.success) {
+      setApplicationLoading({ loading: false, text: "" })
+
+      showStatus({
+        message:
+          "Your application is successfully sent to your Loan Consultant. They will review everything to give you the best chance of approval. Wait for them to contact you.",
+        button: {
+          text: "OK",
+          function: () => {
+            router.push("/")
+            clearStatus()
+          },
+        },
+      })
+      resetApplication()
+    } else {
+      console.error(data.error)
+    }
   }
 
   if (applicationLoading.loading) {
@@ -49,8 +65,8 @@ export default function GenerateForm() {
         </div>
       </div>
 
-      <div className="flex w-full max-w-120 flex-1 flex-col items-center justify-between gap-4 overflow-scroll p-4 pt-6 pb-18.5">
-        <StepComponent />
+      <div className="flex w-full max-w-120 flex-1 flex-col items-center gap-4 overflow-scroll p-4 pt-6 pb-18.5">
+        {!!StepComponent ? <StepComponent /> : <p>No fields to show.</p>}
         <div className="text-secondary/50 text-center text-xs">
           <p>You can always skip a field</p>
           <p>Your progress is saved on your device, come back anytime</p>
