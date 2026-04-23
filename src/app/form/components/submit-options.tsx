@@ -162,7 +162,11 @@ export function SubmitModal({ open, onClose }: SubmitModalProps) {
         </div>
         <p className="text-secondary/50 w-full text-center text-xs">
           By choosing either options, you agree to our{" "}
-          <Link href={"/privacy-policy"} className="cursor-pointer py-1 italic underline hover:opacity-80">
+          <Link
+            target="_blank"
+            href={"/privacy-policy"}
+            className="cursor-pointer py-1 italic underline hover:opacity-80"
+          >
             Privacy Policy
           </Link>
           .
