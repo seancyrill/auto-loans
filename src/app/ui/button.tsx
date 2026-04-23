@@ -10,9 +10,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "rounded-md text-primary bg-secondary hover:bg-accent hover:text-secondary",
-        yellow: "rounded-md text-primary bg-accent",
-        subtle: "rounded-md border bg-primary",
+        default: "rounded-md text-primary bg-secondary hover:bg-secondary/80 hover:text-neutral",
+        yellow: "rounded-md text-primary bg-accent hover:bg-secondary/80",
+        subtle: "rounded-md border bg-primary hover:bg-secondary/80 hover:text-neutral",
         ghost: "rounded-md bg-primary text-negative",
         link: "rounded-md bg-transparent underline-offset-4 hover:underline px-0",
         red: "rounded-md text-primary bg-error",

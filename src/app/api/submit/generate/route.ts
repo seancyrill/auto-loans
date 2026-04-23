@@ -5,6 +5,7 @@ import { getEmailHTML } from "../email-template"
 import { fillGdfiApplication } from "../fill-pdf"
 import { lenderEmailFinder } from "../lender-emai-finder"
 import { parseImageAttachments } from "../parse-image-attachments"
+import { generateSanglaPDF } from "../sangla-pdf"
 
 export async function POST(req: NextRequest) {
   const GMAIL_USER = process.env.GMAIL_USER
@@ -39,6 +40,9 @@ export async function POST(req: NextRequest) {
   // process images
   const imageAttachments = await parseImageAttachments(applicationImages ?? [])
 
+  // create sangla details pdf
+  const sanglaDetails = await generateSanglaPDF(applicationData.motorVehicle)
+
   // setup mailer
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -58,6 +62,7 @@ export async function POST(req: NextRequest) {
     html: getEmailHTML(fullName, `0${mobile}`),
     attachments: [
       ...imageAttachments,
+      ...sanglaDetails,
       {
         filename: "Application Form.pdf",
         content: Buffer.from(filledPdf),

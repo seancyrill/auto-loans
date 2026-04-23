@@ -8,7 +8,7 @@ import {
   NatureOfWork,
 } from "@/app/context/form-context-types"
 import { Input } from "@/app/ui/input"
-import { SelectionMenu, SelectionMenuMultiple } from "@/app/ui/selection"
+import { SelectionMenuMultiple } from "@/app/ui/selection"
 
 export default function IncomeInfo() {
   const { updateApplicationData, applicationData } = useApplication()
@@ -65,32 +65,6 @@ export default function IncomeInfo() {
         value={applicationData.prcLicenseNumber}
         onChange={(e) => updateApplicationData("prcLicenseNumber", e.target.value)}
         label="PRC License No. (if applicable)"
-      />
-
-      {/* Toggle motor vehicle section on/off */}
-      <SelectionMenu
-        label="Do you own a vehicle? (not used as collateral)"
-        columns={2}
-        value={applicationData.motorVehicle ? "yes" : "no"}
-        onChange={(val) =>
-          updateApplicationData(
-            "motorVehicle",
-            val === "yes"
-              ? {
-                  year: "",
-                  makeModel: "",
-                  color: "",
-                  plateNumber: "",
-                  mileageKm: "",
-                  placeOfRegistration: "",
-                }
-              : null,
-          )
-        }
-        options={[
-          { value: "yes", label: "Yes" },
-          { value: "no", label: "No" },
-        ]}
       />
     </>
   )

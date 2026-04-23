@@ -35,7 +35,7 @@ export default function AddressInformation() {
 
   return (
     <>
-      <div className="flex w-full gap-1">
+      <div className="flex w-full flex-nowrap gap-1">
         <Input
           value={applicationData.presentAddress}
           onChange={handleEditPresentAddress}
@@ -62,7 +62,7 @@ export default function AddressInformation() {
 
       <div className="flex w-full flex-col gap-1">
         {!sameAsPresent && (
-          <div className="flex w-full gap-1">
+          <div className="flex w-full flex-nowrap gap-1">
             <Input
               value={applicationData.permanentAddress}
               onChange={(e) => updateApplicationData("permanentAddress", e.target.value)}

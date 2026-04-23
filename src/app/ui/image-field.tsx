@@ -85,28 +85,29 @@ export function ImageField({ name, label, labelClassName }: ImageFieldProps) {
         />
 
         {preview ? (
-          <img src={preview} alt={label} className="h-full w-full rounded-sm object-contain" />
+          <div className="relative max-h-32">
+            <img src={preview} alt={label} className="h-full w-full object-contain" />
+            <Button
+              type="button"
+              size={"xs"}
+              variant={"subtle"}
+              className="hover:text-error hover:bg-neutral absolute right-1 bottom-1"
+              onClick={() => {
+                setPreview(null)
+                onChange(null)
+                if (inputRef.current) inputRef.current.value = ""
+              }}
+            >
+              Remove
+            </Button>
+          </div>
         ) : (
           <div className="grid place-content-center gap-1 px-4 py-6">
             <Upload className="text-off mx-auto" />
-            <span className="text-off">Click or drag an image here</span>
+            <p className="text-off text-center">Click or drag an image here</p>
           </div>
         )}
       </div>
-
-      {preview && (
-        <button
-          type="button"
-          className="border-off text-negative hover:border-error hover:text-error mt-1 self-start rounded-md border px-3 py-1.5 text-xs transition-colors"
-          onClick={() => {
-            setPreview(null)
-            onChange(null)
-            if (inputRef.current) inputRef.current.value = ""
-          }}
-        >
-          Remove
-        </button>
-      )}
     </div>
   )
 }
@@ -196,28 +197,28 @@ export function ImageFieldMultiple({
           />
           <div className="grid place-content-center gap-1 px-4 py-6">
             <Upload className="text-off mx-auto" />
-            <span className="text-off">
+            <p className="text-off text-center">
               Click or drag images here{" "}
               <span className="text-xs">
                 ({previews.length}/{limit})
               </span>
-            </span>
+            </p>
           </div>
         </div>
       )}
 
       {/* Previews grid */}
       {previews.length > 0 && (
-        <div className="mt-2 grid grid-cols-3 gap-2">
+        <div className="mt-2 grid grid-cols-2 gap-2">
           {previews.map((src, i) => (
-            <div key={i} className="relative">
+            <div key={i} className="relative max-h-32">
               <img src={src} alt={`${label} ${i + 1}`} className="h-full w-full rounded-sm object-contain" />
               <Button
                 type="button"
                 onClick={() => handleRemove(i)}
-                className="hover:text-error absolute right-1 bottom-1"
+                className="hover:text-error hover:bg-neutral absolute right-1 bottom-1"
                 size={"xs"}
-                variant={"ghost"}
+                variant={"subtle"}
               >
                 Remove
               </Button>

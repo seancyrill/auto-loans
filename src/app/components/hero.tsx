@@ -2,10 +2,13 @@
 
 import { ArrowRight, CheckSquare2 } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
+import { useApplication } from "../context/form-context"
 import { LoanOption } from "../context/form-context-types"
 import { buttonVariants } from "../ui/button"
 import { cn } from "../utils/cn"
+import HeroBG from "./bg/hero-bg"
 import ScrollHint from "./scroll-hint"
 
 const stats = [
@@ -22,6 +25,9 @@ const loanTypes: { icon: string; label: LoanOption }[] = [
 ]
 
 export default function Hero() {
+  const { updateApplicationData } = useApplication()
+  const router = useRouter()
+
   const [active, setActive] = useState(0)
   const [visible, setVisible] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
@@ -36,44 +42,24 @@ export default function Hero() {
     return () => clearInterval(interval)
   }, [])
 
+  const selectLoanOption = (opt: LoanOption) => {
+    updateApplicationData("loanOption", opt)
+    router.push("/form/generate")
+  }
+
   return (
     <section ref={heroRef} id="hero" className="bg-primary relative flex min-h-screen flex-col overflow-hidden">
-      {/* Subtle grid */}
-      <div
-        className="absolute inset-0 opacity-[0.035]"
-        style={{
-          backgroundImage: `linear-gradient(var(--secondary) 1px, transparent 1px), linear-gradient(90deg, var(--secondary) 1px, transparent 1px)`,
-          backgroundSize: "80px 80px",
-        }}
-      />
-
-      {/* Soft radial wash — top right */}
-      <div
-        className="pointer-events-none absolute top-[-15%] right-[-8%] h-[640px] w-[640px] rounded-full opacity-20"
-        style={{ background: "radial-gradient(circle, var(--accent) 0%, transparent 68%)" }}
-      />
-
-      {/* Soft radial wash — bottom left */}
-      <div
-        className="pointer-events-none absolute bottom-[-10%] left-[-5%] h-[480px] w-[480px] rounded-full opacity-10"
-        style={{ background: "radial-gradient(circle, var(--secondary) 0%, transparent 70%)" }}
-      />
-
-      {/* Vertical hairline */}
-      <div
-        className="absolute top-0 right-[18%] h-full w-px opacity-10"
-        style={{ background: "linear-gradient(to bottom, transparent, var(--secondary), transparent)" }}
-      />
+      <HeroBG />
 
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col px-8 pt-[18dvh] pb-20">
         {/* Badge */}
         <div
           className={`transition-all delay-100 duration-700 ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
         >
-          <span className="border-secondary/20 bg-secondary/5 text-secondary mb-10 inline-flex items-center gap-2 border px-4 py-2 font-sans text-[0.65rem] tracking-[0.2em] uppercase">
+          <p className="border-secondary/20 bg-secondary/5 text-secondary mb-10 inline-flex items-center gap-2 border px-4 py-2 font-sans text-[0.65rem] tracking-[0.2em] uppercase">
             <span className="bg-accent h-1.5 w-1.5 animate-pulse rounded-full" />
             Fully Digital Loan Portal
-          </span>
+          </p>
         </div>
 
         <div className="grid flex-1 grid-cols-1 items-start gap-16 lg:grid-cols-[1fr_420px]">
@@ -103,9 +89,10 @@ export default function Hero() {
             <p
               className={`text-secondary/60 mb-12 max-w-lg font-sans text-sm leading-relaxed transition-all delay-300 duration-700 sm:text-lg ${visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"}`}
             >
-              <span className="italic">Generate</span> your documents, or get{" "}
-              <span className="italic">Loan Consultants</span> to guide you, and get approved — entirely online.
-              Minimize branch visits and back-and-forth calls. Just a smooth, transparent process built around you.
+              <span className="italic">Generate</span>
+              {" your documents, or get "}
+              <span className="italic">Loan Consultants</span>
+              {` to guide you, and get approved — entirely online. Minimize branch visits and back-and-forth calls. Just a smooth, transparent process built around you.`}
             </p>
 
             {/* CTAs */}
@@ -160,11 +147,11 @@ export default function Hero() {
                 {loanTypes.map((loan, i) => (
                   <button
                     key={loan.label}
-                    onClick={() => setActive(i)}
-                    className={`flex items-center gap-3 border p-4 text-left transition-all duration-200 ${
+                    onClick={() => selectLoanOption(loan.label)}
+                    className={`flex cursor-pointer items-center gap-3 border p-4 text-left transition-all duration-200 ${
                       active === i
-                        ? "border-accent bg-accent/10 text-secondary"
-                        : "border-secondary/10 bg-primary/60 text-secondary/50"
+                        ? "border-accent bg-accent/10 text-accent"
+                        : "border-secondary/10 bg-primary/60 text-secondary/50 hover:border-accent/40 hover:text-secondary"
                     }`}
                   >
                     <span className="text-xl">{loan.icon}</span>

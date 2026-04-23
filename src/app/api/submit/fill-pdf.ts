@@ -198,16 +198,17 @@ export function fillPage2(page: PDFPage, data: ApplicationFormType, font: PDFFon
     t(page, data.natureOfWorkOther, 432, 839, font)
   }
 
+  // REMOVED - not necessary, recycled form to handle sangla details instaed
   // ─── MOTOR VEHICLE ────────────────────────────────────────────────────────
-  if (data.motorVehicle) {
-    const mv = data.motorVehicle
-    t(page, mv.year, 163, 766, font)
-    t(page, mv.makeModel, 290, 766, font)
-    t(page, mv.color, 414, 766, font)
-    t(page, mv.plateNumber, 498, 766, font)
-    t(page, mv.mileageKm, 209, 751, font)
-    t(page, mv.placeOfRegistration, 360, 751, font)
-  }
+  // if (data.motorVehicle) {
+  //   const mv = data.motorVehicle
+  //   t(page, mv.year, 163, 766, font)
+  //   t(page, mv.makeModel, 290, 766, font)
+  //   t(page, mv.color, 414, 766, font)
+  //   t(page, mv.plateNumber, 498, 766, font)
+  //   t(page, mv.mileageKm, 209, 751, font)
+  //   t(page, mv.placeOfRegistration, 360, 751, font)
+  // }
 
   // ─── CHARACTER REFERENCES ─────────────────────────────────────────────────
 

@@ -34,7 +34,7 @@ export type StepConfig = {
 interface StepperContextValue {
   steps: StepConfig[]
   currentStepIndex: number
-  currentStep: StepConfig
+  currentStep: StepConfig | undefined
   hasNext: boolean
   hasPrev: boolean
   isLastStep: boolean
@@ -155,12 +155,12 @@ export function StepperProvider({ children }: StepperProviderProps) {
           },
         ]
       : []),
-    ...(applicationData.motorVehicle !== null
+    ...(applicationData.loanOption === "Sangla ORCR"
       ? [
           {
             component: MotorVehicle,
-            title: "Owned Vehicle Information",
-            description: "Details of vehicles in your name",
+            title: "Sangla Information",
+            description: "Details of vehicle",
           },
         ]
       : []),

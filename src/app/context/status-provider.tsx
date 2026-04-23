@@ -6,6 +6,7 @@ import { StatusMessageModal } from "../components/status-message"
 export interface StatusMessageState {
   open: boolean
   message: string
+  note?: string
   isError?: boolean
   button?: { text: string; function: () => void }
 }

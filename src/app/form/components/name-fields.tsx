@@ -4,7 +4,7 @@ import { Input } from "@/app/ui/input"
 export default function NameFields() {
   const { applicationData, updateApplicationData } = useApplication()
   return (
-    <div className="flex w-full gap-1">
+    <div className="flex w-full flex-nowrap gap-1">
       <Input
         value={applicationData.firstName}
         onChange={(e) => updateApplicationData("firstName", e.target.value)}

@@ -18,3 +18,7 @@ COE
 
 If remittance
 Proof of remittance 3 months
+
+
+hero buttons should set loan type AND start application
+Beware sa scammer wala kamo tayo sisingilin na advance payment

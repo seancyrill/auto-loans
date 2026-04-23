@@ -3,11 +3,17 @@
 import { ArrowRight } from "lucide-react"
 import { useState } from "react"
 import { useInView } from "../utils/in-view"
+import SimpleBG from "./bg/simple-bg"
 
 const faqs = [
   {
     question: "Who are your partner lenders?",
     answer: "We currently only work with Global Dominion Financing Inc. for now, other lenders are underway.",
+  },
+  {
+    question: "Do I have to pay?",
+    answer:
+      "The entire application process is FREE from start to finish; please beware of anyone claiming otherwise or requesting payment.",
   },
   {
     question: "How long does the application process take?",
@@ -53,9 +59,7 @@ export default function FAQ() {
       id="faq"
       className="bg-primary relative flex min-h-screen flex-col items-center justify-center overflow-hidden py-20"
     >
-      {/* Decorative block — top right */}
-      <div className="border-accent/10 pointer-events-none absolute top-8 right-8 h-40 w-40 border" />
-      <div className="border-accent/10 pointer-events-none absolute bottom-16 left-16 h-40 w-40 border" />
+      <SimpleBG />
 
       <div className="relative z-10 mx-auto max-w-7xl px-8">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[340px_1fr] lg:gap-20">

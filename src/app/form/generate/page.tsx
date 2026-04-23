@@ -32,20 +32,21 @@ export default function GenerateForm() {
 
     const data = await res.json()
     if (data.success) {
-      setApplicationLoading({ loading: false, text: "" })
-
       showStatus({
         message:
           "Your application is successfully sent to your Loan Consultant. They will review everything to give you the best chance of approval. Wait for them to contact you.",
+        note: "The entire application process is FREE from start to finish. Beware of scammers.",
         button: {
           text: "OK",
           function: () => {
             router.push("/")
             clearStatus()
+            resetApplication()
           },
         },
       })
-      resetApplication()
+
+      setApplicationLoading({ loading: false, text: "" })
     } else {
       console.error(data.error)
     }
@@ -59,9 +60,14 @@ export default function GenerateForm() {
     <form onSubmit={(e) => handleSubmit(e)} className="relative flex flex-1 flex-col items-center overflow-clip">
       <div className="bg-primary sticky top-0 z-10 w-full pt-17">
         <ProgressBar />
+
         <div className="border-off flex w-full flex-col items-center border-b pt-1 pb-3 shadow-sm sm:gap-2 sm:p-6">
-          <h1 className="text-xl font-bold sm:text-3xl">{currentStep.title}</h1>
-          <h2 className="text-lg sm:text-xl">{currentStep.description}</h2>
+          {currentStep && (
+            <>
+              <h1 className="text-xl font-bold sm:text-3xl">{currentStep.title}</h1>
+              <h2 className="text-lg sm:text-xl">{currentStep.description}</h2>
+            </>
+          )}
         </div>
       </div>
 

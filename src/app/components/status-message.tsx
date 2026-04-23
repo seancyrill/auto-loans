@@ -9,7 +9,7 @@ interface StatusMessageModalProps extends StatusMessageState {
   onClose: () => void
 }
 
-export function StatusMessageModal({ open, message, isError, button, onClose }: StatusMessageModalProps) {
+export function StatusMessageModal({ open, message, note, isError, button, onClose }: StatusMessageModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   // Drive open/close via native dialog API
@@ -76,6 +76,13 @@ export function StatusMessageModal({ open, message, isError, button, onClose }: 
         </div>
 
         <p className="mt-1 text-sm leading-relaxed">{message}</p>
+
+        {note && (
+          <p className="border-secondary/20 bg-secondary/5 text-secondary flex items-center gap-4 border px-4 py-2 font-sans text-sm">
+            <span className="bg-accent size-2 min-w-2 animate-pulse rounded-full" />
+            {note}
+          </p>
+        )}
 
         {/* ── Actions ── */}
         {button && (

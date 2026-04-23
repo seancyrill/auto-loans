@@ -1,20 +1,22 @@
 "use client"
 import { useApplication } from "@/app/context/form-context"
+import { ImageField } from "@/app/ui/image-field"
 import { Input } from "@/app/ui/input"
 
 export default function MotorVehicle() {
   const { applicationData, updateApplicationData } = useApplication()
 
-  if (!applicationData?.motorVehicle) {
-    return null
-  }
-
   return (
     <>
+      <div className="grid w-full grid-cols-2 gap-1">
+        <ImageField label="OR" name="OR" />
+        <ImageField label="CR" name="CR" />
+      </div>
+
       <Input
         value={applicationData.motorVehicle.year}
         onChange={(e) =>
-          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, year: e.target.value })
+          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle, year: e.target.value })
         }
         placeholder="2020"
         label="Year"
@@ -22,7 +24,7 @@ export default function MotorVehicle() {
       <Input
         value={applicationData.motorVehicle.makeModel}
         onChange={(e) =>
-          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, makeModel: e.target.value })
+          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle, makeModel: e.target.value })
         }
         placeholder="Toyota Vios"
         label="Make / Model"
@@ -30,7 +32,7 @@ export default function MotorVehicle() {
       <Input
         value={applicationData.motorVehicle.color}
         onChange={(e) =>
-          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, color: e.target.value })
+          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle, color: e.target.value })
         }
         placeholder="White"
         label="Color"
@@ -38,7 +40,7 @@ export default function MotorVehicle() {
       <Input
         value={applicationData.motorVehicle.plateNumber}
         onChange={(e) =>
-          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, plateNumber: e.target.value })
+          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle, plateNumber: e.target.value })
         }
         placeholder="ABC 1234"
         label="Plate No."
@@ -46,7 +48,7 @@ export default function MotorVehicle() {
       <Input
         value={applicationData.motorVehicle.mileageKm}
         onChange={(e) =>
-          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle!, mileageKm: e.target.value })
+          updateApplicationData("motorVehicle", { ...applicationData.motorVehicle, mileageKm: e.target.value })
         }
         placeholder="50000"
         label="Mileage (Kms)"
@@ -55,7 +57,7 @@ export default function MotorVehicle() {
         value={applicationData.motorVehicle.placeOfRegistration}
         onChange={(e) =>
           updateApplicationData("motorVehicle", {
-            ...applicationData.motorVehicle!,
+            ...applicationData.motorVehicle,
             placeOfRegistration: e.target.value,
           })
         }

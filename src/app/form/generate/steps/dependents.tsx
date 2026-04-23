@@ -16,6 +16,15 @@ export default function Dependents() {
     setRows((prev) => [...prev, prev.length])
   }
 
+  const nameOnChange = (val: string, i: number) => {
+    // auto fill child
+    if (val && !applicationData?.dependents?.[i]?.name && !applicationData?.dependents?.[i]?.relationship) {
+      updateArrayItem("dependents", i, { relationship: "Child" })
+    }
+
+    updateArrayItem("dependents", i, { name: val })
+  }
+
   return (
     <>
       {rows.map((i) => (
@@ -23,7 +32,7 @@ export default function Dependents() {
           <h3 className="text-center font-bold">{i + 1}</h3>
           <Input
             value={depRefs[i]?.name ?? ""}
-            onChange={(e) => updateArrayItem("dependents", i, { name: e.target.value })}
+            onChange={(e) => nameOnChange(e.target.value, i)}
             placeholder="Name"
             label="Name"
           />

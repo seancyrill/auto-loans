@@ -86,7 +86,7 @@ export type ApplicationFormType = {
 
   coBorrower: CoBorrowerType
 
-  motorVehicle: MotorVehicle | null
+  motorVehicle: MotorVehicle
   characterReferences: CharacterReference[]
   tradeReferences: TradeReference[]
   bankAccounts: BankAccountEntry[]
@@ -351,7 +351,14 @@ export const initialApplicationData: ApplicationFormType = {
   // Co-Borrower
   coBorrower: initialCoBorrower,
   // Motor Vehicle
-  motorVehicle: null,
+  motorVehicle: {
+    year: "",
+    makeModel: "",
+    color: "",
+    plateNumber: "",
+    mileageKm: "",
+    placeOfRegistration: "",
+  },
   // Arrays
   characterReferences: [],
   tradeReferences: [],
