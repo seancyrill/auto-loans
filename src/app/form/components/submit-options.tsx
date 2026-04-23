@@ -74,10 +74,10 @@ export function SubmitModal({ open, onClose }: SubmitModalProps) {
           function: () => {
             router.push("/")
             clearStatus()
+            resetApplication()
           },
         },
       })
-      // resetApplication()
     } else {
       console.error(data.error)
     }
