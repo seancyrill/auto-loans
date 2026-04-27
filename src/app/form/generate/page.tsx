@@ -7,7 +7,6 @@ import { useStepper } from "@/app/context/stepper-context"
 import { Button } from "@/app/ui/button"
 import { useFocusFirstEmpty } from "@/hooks/use-focus-empty"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 import ProgressBar from "../components/progress-bar"
 
 export default function GenerateForm() {
@@ -19,66 +18,6 @@ export default function GenerateForm() {
   const StepComponent = currentStep?.component
 
   useFocusFirstEmpty({ trigger: currentStep?.title })
-
-  useEffect(() => {
-    const id = setTimeout(() => {
-      const root = document
-
-      const radioButtons = Array.from(root.querySelectorAll('[role="radio"]'))
-      const checkboxButtons = Array.from(root.querySelectorAll('[role="checkbox"]'))
-      const nativeCheckboxes = Array.from(root.querySelectorAll('input[type="checkbox"]'))
-      const fileInputs = Array.from(root.querySelectorAll('input[type="file"]'))
-      const textInputs = Array.from(
-        root.querySelectorAll(
-          'input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea',
-        ),
-      )
-
-      console.log("=== useFocusFirstEmpty debug ===")
-      console.log(
-        "role=radio buttons:",
-        radioButtons.map((el) => ({
-          text: el.textContent?.trim().slice(0, 20),
-          ariaChecked: el.getAttribute("aria-checked"),
-          ariaHidden: el.getAttribute("aria-hidden"),
-          visible: getComputedStyle(el).display !== "none",
-        })),
-      )
-      console.log(
-        "role=checkbox buttons:",
-        checkboxButtons.map((el) => ({
-          text: el.textContent?.trim().slice(0, 20),
-          ariaChecked: el.getAttribute("aria-checked"),
-          ariaHidden: el.getAttribute("aria-hidden"),
-          visible: getComputedStyle(el).display !== "none",
-        })),
-      )
-      console.log(
-        "native checkboxes:",
-        nativeCheckboxes.map((el) => ({
-          name: (el as HTMLInputElement).name,
-          checked: (el as HTMLInputElement).checked,
-          ariaHidden: el.getAttribute("aria-hidden"),
-          srOnly: el.classList.contains("sr-only"),
-        })),
-      )
-      console.log(
-        "file inputs:",
-        fileInputs.map((el) => ({
-          name: (el as HTMLInputElement).name,
-          display: getComputedStyle(el).display,
-        })),
-      )
-      console.log(
-        "text inputs:",
-        textInputs.map((el) => ({
-          name: (el as HTMLInputElement).name || (el as HTMLInputElement).placeholder,
-          value: (el as HTMLInputElement).value,
-        })),
-      )
-    }, 50)
-    return () => clearTimeout(id)
-  }, [currentStep])
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
