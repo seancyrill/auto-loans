@@ -9,7 +9,9 @@ import { ChangeEvent, useState } from "react"
 export default function AddressInformation() {
   const { applicationData, updateApplicationData } = useApplication()
 
-  const [sameAsPresent, setSameAsPresent] = useState(true)
+  const [sameAsPresent, setSameAsPresent] = useState(
+    applicationData.presentAddress === applicationData.permanentAddress,
+  )
   const handleToggleSameAsPresent = () => {
     const nextValue = !sameAsPresent
 

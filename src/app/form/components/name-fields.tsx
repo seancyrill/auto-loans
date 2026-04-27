@@ -1,25 +1,14 @@
-"use client"
-
 import { useApplication } from "@/app/context/form-context"
 import { Input } from "@/app/ui/input"
-import { useEffect, useRef } from "react"
 
 export default function NameFields() {
   const { applicationData, updateApplicationData } = useApplication()
-  const fnRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    if (fnRef.current && !applicationData.firstName) {
-      fnRef.current?.focus()
-    }
-  }, [])
 
   return (
     <div className="flex w-full flex-nowrap gap-1">
       <Input
         value={applicationData.firstName}
         onChange={(e) => updateApplicationData("firstName", e.target.value)}
-        ref={fnRef}
         required
         placeholder="Juan"
         label="First Name"

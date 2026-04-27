@@ -13,7 +13,7 @@ const buttonVariants = cva(
         default: "rounded-md text-primary bg-secondary hover:bg-secondary/80 hover:text-neutral",
         yellow: "rounded-md text-primary bg-accent hover:bg-secondary/80",
         subtle: "rounded-md border bg-primary hover:bg-secondary/80 hover:text-neutral",
-        ghost: "rounded-md bg-primary text-negative",
+        ghost: "rounded-md bg-primary text-negative hover:border hover:text-secondary/80",
         link: "rounded-md bg-transparent underline-offset-4 hover:underline px-0",
         red: "rounded-md text-primary bg-error",
         hero1:

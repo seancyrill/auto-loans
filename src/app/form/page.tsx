@@ -1,5 +1,6 @@
 "use client"
 
+import { useFocusFirstEmpty } from "@/hooks/use-focus-empty"
 import { useMemo, useState } from "react"
 import LoadingSpinner from "../components/loading-spinner"
 import { useApplication } from "../context/form-context"
@@ -18,6 +19,8 @@ const lenderLogos: { val: LenderOption; logo: string }[] = [
 export default function Form() {
   const { applicationData, updateApplicationData, applicationLoading } = useApplication()
   const [open, setOpen] = useState(false)
+
+  useFocusFirstEmpty()
 
   const lender = useMemo(() => lenderLogos.find((ldr) => ldr.val === applicationData.lender), [applicationData.lender])
 
