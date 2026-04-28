@@ -42,12 +42,14 @@ export default function CoborrowerAddressInformation() {
             onChange={(e) => updateCoBorrower("addressPresYears", e.target.value)}
             placeholder="0"
             label="for Yrs"
+            type="number"
             className="w-full"
           />
           <Input
             value={co.addressPresMonths}
             onChange={(e) => updateCoBorrower("addressPresMonths", e.target.value)}
             placeholder="0"
+            type="number"
             label="& Mos"
             className="w-full"
           />
@@ -68,6 +70,7 @@ export default function CoborrowerAddressInformation() {
                 value={co.addressPermYears}
                 onChange={(e) => updateCoBorrower("addressPermYears", e.target.value)}
                 placeholder="0"
+                type="number"
                 className="w-full"
                 label="for Yrs"
               />
@@ -75,6 +78,7 @@ export default function CoborrowerAddressInformation() {
                 value={co.addressPermMonths}
                 onChange={(e) => updateCoBorrower("addressPermMonths", e.target.value)}
                 placeholder="0"
+                type="number"
                 className="w-full"
                 label="& Mos"
               />

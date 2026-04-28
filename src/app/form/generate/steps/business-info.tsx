@@ -18,6 +18,7 @@ export default function BusinessInfo() {
         value={applicationData.businessTelNumber}
         onChange={(e) => updateApplicationData("businessTelNumber", e.target.value)}
         label="Business Tel. No."
+        type="tel"
       />
       <InputAmount
         currency="PHP"

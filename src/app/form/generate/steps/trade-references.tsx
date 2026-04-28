@@ -46,6 +46,7 @@ export default function TradeReferences() {
             minLength={12}
             placeholder="9XX XXX XXXX"
             label="Mobile Number"
+            type="number"
             mobile
           />
         </div>

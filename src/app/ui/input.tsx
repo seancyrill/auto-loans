@@ -74,7 +74,9 @@ const InputAmount = React.forwardRef<HTMLInputElement, InputAmountProps>(
       if (/^\d*\.?\d*$/.test(raw)) onChange(raw)
     }
 
-    return <Input {...props} ref={ref} inputMode="decimal" value={format(value)} onChange={handleChange} />
+    return (
+      <Input {...props} ref={ref} inputMode="decimal" value={format(value)} type="number" onChange={handleChange} />
+    )
   },
 )
 InputAmount.displayName = "InputAmount"

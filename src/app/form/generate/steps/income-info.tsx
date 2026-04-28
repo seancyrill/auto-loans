@@ -49,21 +49,29 @@ export default function IncomeInfo() {
       )}
 
       {/* TIN / SSS / GSIS */}
-      <Input value={applicationData.tin} onChange={(e) => updateApplicationData("tin", e.target.value)} label="TIN" />
+      <Input
+        value={applicationData.tin}
+        onChange={(e) => updateApplicationData("tin", e.target.value)}
+        type="number"
+        label="TIN"
+      />
       <Input
         value={applicationData.sssNumber}
         onChange={(e) => updateApplicationData("sssNumber", e.target.value)}
+        type="number"
         label="SSS Number"
       />
       <Input
         value={applicationData.gsisNumber}
         onChange={(e) => updateApplicationData("gsisNumber", e.target.value)}
+        type="number"
         label="GSIS Number"
       />
 
       <Input
         value={applicationData.prcLicenseNumber}
         onChange={(e) => updateApplicationData("prcLicenseNumber", e.target.value)}
+        type="number"
         label="PRC License No. (if applicable)"
       />
     </>

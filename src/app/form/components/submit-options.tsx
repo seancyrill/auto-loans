@@ -69,6 +69,7 @@ export function SubmitModal({ open, onClose }: SubmitModalProps) {
         message:
           "Your application is successfully sent to your Loan Consultant. Please wait for them to contact and guide you. ",
         note: "The entire application process is FREE from start to finish. Beware of scammers.",
+        closeRunsButtonFn: true,
         button: {
           text: "OK",
           function: () => {

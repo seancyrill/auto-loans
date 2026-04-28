@@ -19,6 +19,7 @@ export default function MotorVehicle() {
           updateApplicationData("motorVehicle", { ...applicationData.motorVehicle, year: e.target.value })
         }
         placeholder="2020"
+        type="number"
         label="Year"
       />
       <Input
@@ -51,6 +52,7 @@ export default function MotorVehicle() {
           updateApplicationData("motorVehicle", { ...applicationData.motorVehicle, mileageKm: e.target.value })
         }
         placeholder="50000"
+        type="number"
         label="Mileage (Kms)"
       />
       <Input

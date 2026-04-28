@@ -57,6 +57,7 @@ export default function Form() {
             }}
             maxLength={12}
             minLength={12}
+            type="tel"
             placeholder="9XX XXX XXXX"
             label="Mobile Number"
             mobile

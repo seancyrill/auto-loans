@@ -48,6 +48,7 @@ export default function CharacterReferences() {
             minLength={12}
             placeholder="9XX XXX XXXX"
             label="Mobile Number"
+            type="tel"
             mobile
           />
         </div>

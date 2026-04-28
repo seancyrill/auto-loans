@@ -49,6 +49,7 @@ export default function AddressInformation() {
             value={applicationData.addressPresYears}
             onChange={(e) => updateApplicationData("addressPresYears", e.target.value)}
             placeholder="0"
+            type="number"
             label="for Yrs"
             className="w-full"
           />
@@ -56,6 +57,7 @@ export default function AddressInformation() {
             value={applicationData.addressPresMonths}
             onChange={(e) => updateApplicationData("addressPresMonths", e.target.value)}
             placeholder="0"
+            type="number"
             label="& Mos"
             className="w-full"
           />
@@ -76,6 +78,7 @@ export default function AddressInformation() {
                 value={applicationData.addressPermYears}
                 onChange={(e) => updateApplicationData("addressPermYears", e.target.value)}
                 placeholder="0"
+                type="number"
                 className="w-full"
                 label="for Yrs"
               />
@@ -83,6 +86,7 @@ export default function AddressInformation() {
                 value={applicationData.addressPermMonths}
                 onChange={(e) => updateApplicationData("addressPermMonths", e.target.value)}
                 placeholder="0"
+                type="number"
                 className="w-full"
                 label="& Mos"
               />

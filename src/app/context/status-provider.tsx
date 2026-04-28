@@ -9,6 +9,7 @@ export interface StatusMessageState {
   note?: string
   isError?: boolean
   button?: { text: string; function: () => void }
+  closeRunsButtonFn?: boolean
 }
 
 interface StatusContextValue {

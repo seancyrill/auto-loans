@@ -40,6 +40,7 @@ export default function Dependents() {
             value={depRefs[i]?.age ?? ""}
             onChange={(e) => updateArrayItem("dependents", i, { age: e.target.value })}
             placeholder="8"
+            type="number"
             label="Age"
           />
           <Input

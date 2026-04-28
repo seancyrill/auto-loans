@@ -19,12 +19,14 @@ export default function WorkInfo() {
             value={applicationData.employmentYears}
             onChange={(e) => updateApplicationData("employmentYears", e.target.value)}
             placeholder="0"
+            type="number"
             label="for Yrs"
           />
           <Input
             value={applicationData.employmentMonths}
             onChange={(e) => updateApplicationData("employmentMonths", e.target.value)}
             placeholder="0"
+            type="number"
             label="& Mos"
           />
         </div>

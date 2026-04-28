@@ -43,12 +43,14 @@ export default function CoborrowerIncomeInfo() {
             value={co.employmentYears}
             onChange={(e) => updateCoBorrower("employmentYears", e.target.value)}
             placeholder="0"
+            type="number"
             label="for Yrs"
           />
           <Input
             value={co.employmentMonths}
             onChange={(e) => updateCoBorrower("employmentMonths", e.target.value)}
             placeholder="0"
+            type="number"
             label="& Mos"
           />
         </div>
@@ -70,9 +72,19 @@ export default function CoborrowerIncomeInfo() {
         onChange={(e) => updateCoBorrower("businessTelNumber", e.target.value)}
         label="Business Tel. No."
       />
-      <Input value={co.tin} onChange={(e) => updateCoBorrower("tin", e.target.value)} label="TIN" />
-      <Input value={co.sssNumber} onChange={(e) => updateCoBorrower("sssNumber", e.target.value)} label="SSS No." />
-      <Input value={co.gsisNumber} onChange={(e) => updateCoBorrower("gsisNumber", e.target.value)} label="GSIS No." />
+      <Input value={co.tin} onChange={(e) => updateCoBorrower("tin", e.target.value)} type="number" label="TIN" />
+      <Input
+        value={co.sssNumber}
+        onChange={(e) => updateCoBorrower("sssNumber", e.target.value)}
+        type="number"
+        label="SSS No."
+      />
+      <Input
+        value={co.gsisNumber}
+        onChange={(e) => updateCoBorrower("gsisNumber", e.target.value)}
+        type="number"
+        label="GSIS No."
+      />
     </>
   )
 }

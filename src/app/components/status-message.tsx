@@ -1,7 +1,7 @@
 "use client"
 
 import { Check, TriangleAlert, X } from "lucide-react"
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { StatusMessageState } from "../context/status-provider"
 import { Button } from "../ui/button"
 
@@ -9,7 +9,15 @@ interface StatusMessageModalProps extends StatusMessageState {
   onClose: () => void
 }
 
-export function StatusMessageModal({ open, message, note, isError, button, onClose }: StatusMessageModalProps) {
+export function StatusMessageModal({
+  open,
+  message,
+  note,
+  isError,
+  button,
+  onClose,
+  closeRunsButtonFn,
+}: StatusMessageModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   // Drive open/close via native dialog API
@@ -23,24 +31,31 @@ export function StatusMessageModal({ open, message, note, isError, button, onClo
     }
   }, [open])
 
+  const handleClose = useCallback(() => {
+    if (closeRunsButtonFn && button?.function) {
+      button?.function()
+    }
+    onClose()
+  }, [closeRunsButtonFn, button, onClose])
+
   // Wire ESC key to onClose
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
     const handleCancel = (e: Event) => {
       e.preventDefault()
-      onClose()
+      handleClose()
     }
     dialog.addEventListener("cancel", handleCancel)
     return () => dialog.removeEventListener("cancel", handleCancel)
-  }, [onClose])
+  }, [handleClose])
 
   // Close on backdrop click
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     const rect = dialogRef.current?.getBoundingClientRect()
     if (!rect) return
     const outside = e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom
-    if (outside) onClose()
+    if (outside) handleClose()
   }
 
   return (
@@ -70,7 +85,7 @@ export function StatusMessageModal({ open, message, note, isError, button, onClo
 
           <h2 className="flex-1 font-semibold">{isError ? "Error" : "Success"}</h2>
 
-          <Button variant={"ghost"} size={"xs"} onClick={onClose} className="px-2">
+          <Button variant={"ghost"} size={"xs"} onClick={handleClose} className="px-2">
             <X size={20} />
           </Button>
         </div>

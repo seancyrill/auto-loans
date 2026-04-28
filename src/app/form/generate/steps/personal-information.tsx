@@ -41,6 +41,7 @@ export default function PersonalInformation() {
         maxLength={12}
         minLength={12}
         placeholder="9XX XXX XXXX"
+        type="tel"
         label="Mobile Number"
         mobile
       />
@@ -112,6 +113,7 @@ export default function PersonalInformation() {
         value={applicationData.schoolYearGraduated}
         onChange={(e) => updateApplicationData("schoolYearGraduated", e.target.value)}
         placeholder="2020"
+        type="number"
         label="Year Graduated / Last Year of Stay"
       />
     </>

@@ -5,8 +5,10 @@ import { useApplication } from "@/app/context/form-context"
 import { useStatus } from "@/app/context/status-provider"
 import { useStepper } from "@/app/context/stepper-context"
 import { Button } from "@/app/ui/button"
+import { useRepositionNav } from "@/hooks/reposition-nav"
 import { useFocusFirstEmpty } from "@/hooks/use-focus-empty"
 import { useRouter } from "next/navigation"
+import { useRef } from "react"
 import ProgressBar from "../components/progress-bar"
 
 export default function GenerateForm() {
@@ -16,6 +18,9 @@ export default function GenerateForm() {
     useApplication()
   const { showStatus, clearStatus } = useStatus()
   const StepComponent = currentStep?.component
+
+  const navRef = useRef<HTMLDivElement>(null)
+  useRepositionNav(navRef)
 
   useFocusFirstEmpty({ trigger: currentStep?.title })
 
@@ -39,6 +44,7 @@ export default function GenerateForm() {
         message:
           "Your application is successfully sent to your Loan Consultant. They will review everything to give you the best chance of approval. Wait for them to contact you.",
         note: "The entire application process is FREE from start to finish. Beware of scammers.",
+        closeRunsButtonFn: true,
         button: {
           text: "OK",
           function: () => {
@@ -83,7 +89,10 @@ export default function GenerateForm() {
       </div>
 
       {/* Navigation */}
-      <div className="border-off/50 bg-primary fixed bottom-0 left-0 flex w-full flex-col items-center justify-center border-t p-2 sm:p-4">
+      <div
+        className="border-off/50 bg-primary fixed bottom-0 left-0 flex w-full flex-col items-center justify-center border-t p-2 sm:p-4"
+        ref={navRef}
+      >
         <div className={`flex w-full max-w-120 items-center gap-4 px-4 ${hasPrev ? "justify-between" : "justify-end"}`}>
           <Button type="button" onClick={goPrev} variant={"subtle"} className={hasPrev ? "" : "hidden"}>
             Back

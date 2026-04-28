@@ -79,7 +79,9 @@ export default function CoborrowerInformation() {
         }}
         maxLength={12}
         minLength={12}
+        type="tel"
         label="Mobile Number"
+        placeholder="9XX XXX XXXX"
         mobile
       />
 
