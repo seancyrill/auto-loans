@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD
 
   if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
-    throw new Error("Submit Route Error: Cannot read env!")
+    return NextResponse.json({ success: false, message: "Cannot read env" }, { status: 500 })
   }
 
   const { applicationData } = await req.json()
@@ -34,6 +34,10 @@ export async function POST(req: NextRequest) {
   })
 
   const lenderEmail = lenderEmailFinder(lender)
+
+  if (!lenderEmail) {
+    return NextResponse.json({ success: false, message: "Couldnt find lender email" }, { status: 500 })
+  }
 
   // send docs to processor
   await transporter.sendMail({

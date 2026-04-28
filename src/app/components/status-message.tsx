@@ -70,12 +70,12 @@ export function StatusMessageModal({ open, message, note, isError, button, onClo
 
           <h2 className="flex-1 font-semibold">{isError ? "Error" : "Success"}</h2>
 
-          <Button variant={"ghost"} onClick={onClose}>
+          <Button variant={"ghost"} size={"xs"} onClick={onClose} className="px-2">
             <X size={20} />
           </Button>
         </div>
 
-        <p className="mt-1 text-sm leading-relaxed">{message}</p>
+        <p className="eading-relaxed">{message}</p>
 
         {note && (
           <p className="border-secondary/20 bg-secondary/5 text-secondary flex items-center gap-4 border px-4 py-2 font-sans text-sm">
@@ -86,7 +86,7 @@ export function StatusMessageModal({ open, message, note, isError, button, onClo
 
         {/* ── Actions ── */}
         {button && (
-          <Button className="mx-auto w-fit text-sm" size={"sm"} onClick={button.function}>
+          <Button className="ml-auto w-fit text-sm" variant={"subtle"} size={"sm"} onClick={button.function}>
             {button.text}
           </Button>
         )}

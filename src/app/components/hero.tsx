@@ -44,7 +44,7 @@ export default function Hero() {
 
   const selectLoanOption = (opt: LoanOption) => {
     updateApplicationData("loanOption", opt)
-    router.push("/form/generate")
+    router.push("/form")
   }
 
   return (

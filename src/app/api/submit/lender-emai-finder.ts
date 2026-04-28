@@ -1,9 +1,16 @@
 export function lenderEmailFinder(lender: string) {
+  const GDFI_EMAIL = process.env.GDFI_EMAIL
+  const DEFAULT_EMAIL = process.env.DEFAULT_EMAIL
+
+  if (!DEFAULT_EMAIL || !GDFI_EMAIL) {
+    return null
+  }
+
   switch (lender) {
     case "gdfi":
-      return process.env.GDFI_EMAIL
+      return GDFI_EMAIL
 
     default:
-      return "seancyrill@gmail.com"
+      return DEFAULT_EMAIL
   }
 }
