@@ -14,6 +14,22 @@ export const metadata: Metadata = {
   title: "Auto Loans",
   description:
     "Generate your documents, or get Loan Consultants to guide you, and get approved — entirely online. Minimize branch visits and back-and-forth calls. Just a smooth, transparent process built around you.",
+  openGraph: {
+    title: "Auto Loans",
+    description:
+      "Generate your documents, or get Loan Consultants to guide you, and get approved — entirely online. Minimize branch visits and back-and-forth calls. Just a smooth, transparent process built around you.",
+    url: "https://auto-loans.netlify.app",
+    siteName: "Auto Loans",
+    images: [
+      {
+        url: "https://auto-loans.netlify.app/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Auto Loans preview",
+      },
+    ],
+    type: "website",
+  },
 }
 
 export default function RootLayout({
