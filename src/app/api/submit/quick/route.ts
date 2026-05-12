@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   const { firstName, lastName, mobile, lender } = applicationData as ApplicationFormType
 
   if (!lender) {
-    return NextResponse.json({ message: "Missing Lender Data" }, { status: 400 })
+    return NextResponse.json({ message: "Missing Lender Data" }, { status: 500 })
   }
 
   if (!firstName || !lastName || !mobile) {

@@ -26,6 +26,8 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
     [firstName, middleName, lastName, nameSuffix],
   )
 
+  console.log(applicationData.signature)
+
   // Load from localStorage on mount
   useEffect(() => {
     const loadFromStorage = () => {
