@@ -80,7 +80,7 @@ export default function GenerateForm() {
         </div>
       </div>
 
-      <div className="flex w-full max-w-120 flex-1 flex-col items-center gap-4 overflow-scroll p-4 pt-6 pb-18.5">
+      <div className="flex w-full max-w-120 flex-1 flex-col items-center gap-4 p-4 pt-6 pb-18.5">
         {!!StepComponent ? <StepComponent /> : <p>No fields to show.</p>}
         <div className="text-secondary/50 text-center text-xs">
           <p>You can always skip a field</p>

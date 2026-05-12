@@ -1,7 +1,26 @@
 "use client"
 
 import { createContext, ReactNode, useCallback, useContext, useState } from "react"
-import WrapUp from "../form/generate/steps/wrap-up"
+import AddressInformation from "../form/generate/steps/address-info"
+import BankAccounts from "../form/generate/steps/bank-accounts"
+import BasicRequirements from "../form/generate/steps/basic-requirements"
+import BusinessInfo from "../form/generate/steps/business-info"
+import CharacterReferences from "../form/generate/steps/character-references"
+import CoborrowerAddressInformation from "../form/generate/steps/coborrower-address-info"
+import CoborrowerIncomeInfo from "../form/generate/steps/coborrower-income-info"
+import CoborrowerInformation from "../form/generate/steps/coborrower-info"
+import CommissionsInfo from "../form/generate/steps/commissions-info"
+import Dependents from "../form/generate/steps/dependents"
+import IncomeInfo from "../form/generate/steps/income-info"
+import InterestIncomeInfo from "../form/generate/steps/interest-income-info"
+import LoanOptions from "../form/generate/steps/loan-options"
+import MotorVehicle from "../form/generate/steps/motor-vehicle"
+import PensionInfo from "../form/generate/steps/pension-info"
+import PersonalInformation from "../form/generate/steps/personal-information"
+import RemittanceInfo from "../form/generate/steps/remittance-info"
+import SaleOfAssetsInfo from "../form/generate/steps/sale-of-assets-info"
+import TradeReferences from "../form/generate/steps/trade-references"
+import WorkInfo from "../form/generate/steps/work-info"
 import { useApplication } from "./form-context"
 import { useStatus } from "./status-provider"
 
@@ -43,143 +62,143 @@ interface StepperProviderProps {
 export function StepperProvider({ children }: StepperProviderProps) {
   const { applicationData } = useApplication()
   const steps: StepConfig[] = [
-    // {
-    //   component: LoanOptions,
-    //   title: "Select Loan Type",
-    //   description: "Choose your preferred loan product",
-    // },
-    // {
-    //   component: PersonalInformation,
-    //   title: "Personal Information",
-    //   description: "Basic identity and contact details",
-    // },
-    // {
-    //   component: Dependents,
-    //   title: "Dependents",
-    //   description: "Not married or employed",
-    // },
-    // {
-    //   component: AddressInformation,
-    //   title: "Address",
-    //   description: "Your current place of residence",
-    // },
-    // {
-    //   component: BasicRequirements,
-    //   title: "Basic Requirements",
-    //   description: "Essential documents for verification",
-    // },
-    // {
-    //   component: IncomeInfo,
-    //   title: "Income Information",
-    //   description: "Overview of your monthly earnings",
-    // },
-    // ...(applicationData.incomeSources.includes("employment")
-    //   ? [
-    //       {
-    //         component: WorkInfo,
-    //         title: "Employment Information",
-    //         description: "Current job and employer details",
-    //       },
-    //     ]
-    //   : []),
-    // ...(applicationData.incomeSources.includes("business")
-    //   ? [
-    //       {
-    //         component: BusinessInfo,
-    //         title: "Business Information",
-    //         description: "Details regarding your business operations",
-    //       },
-    //     ]
-    //   : []),
-    // ...(applicationData.incomeSources.includes("remittance")
-    //   ? [
-    //       {
-    //         component: RemittanceInfo,
-    //         title: "Remittance",
-    //         description: "Funds received from family or abroad",
-    //       },
-    //     ]
-    //   : []),
-    // ...(applicationData.incomeSources.includes("pension")
-    //   ? [
-    //       {
-    //         component: PensionInfo,
-    //         title: "Pension",
-    //         description: "Regular retirement or social benefits",
-    //       },
-    //     ]
-    //   : []),
-    // ...(applicationData.incomeSources.includes("commissions")
-    //   ? [
-    //       {
-    //         component: CommissionsInfo,
-    //         title: "Commissions",
-    //         description: "Performance-based or variable pay",
-    //       },
-    //     ]
-    //   : []),
-    // ...(applicationData.incomeSources.includes("interest Income")
-    //   ? [
-    //       {
-    //         component: InterestIncomeInfo,
-    //         title: "Interest Income",
-    //         description: "Earnings from investments or savings",
-    //       },
-    //     ]
-    //   : []),
-    // ...(applicationData.incomeSources.includes("sale Of Assets")
-    //   ? [
-    //       {
-    //         component: SaleOfAssetsInfo,
-    //         title: "Sale of Assets",
-    //         description: "Proceeds from sold property or goods",
-    //       },
-    //     ]
-    //   : []),
-    // ...(applicationData.loanOption === "Sangla ORCR"
-    //   ? [
-    //       {
-    //         component: MotorVehicle,
-    //         title: "Sangla Information",
-    //         description: "Details of vehicle",
-    //       },
-    //     ]
-    //   : []),
-    // {
-    //   component: BankAccounts,
-    //   title: "Bank Accounts",
-    //   description: "Your active banking relationships",
-    // },
-    // {
-    //   component: CoborrowerInformation,
-    //   title: "Coborrower",
-    //   description: "Basic details of your loan partner",
-    // },
-    // {
-    //   component: CoborrowerAddressInformation,
-    //   title: "Coborrower Address",
-    //   description: "Coborrower's current residence",
-    // },
-    // {
-    //   component: CoborrowerIncomeInfo,
-    //   title: "Coborrower Income",
-    //   description: "Earnings details of your coborrower",
-    // },
-    // {
-    //   component: CharacterReferences,
-    //   title: "Character References",
-    //   description: "Contacts not living in your household",
-    // },
-    // {
-    //   component: TradeReferences,
-    //   title: "Trade References",
-    //   description: "Business clients or major suppliers",
-    // },
     {
-      component: WrapUp,
-      title: "Confirm",
-      description: "Signature",
+      component: LoanOptions,
+      title: "Select Loan Type",
+      description: "Choose your preferred loan product",
     },
+    {
+      component: PersonalInformation,
+      title: "Personal Information",
+      description: "Basic identity and contact details",
+    },
+    {
+      component: Dependents,
+      title: "Dependents",
+      description: "Not married or employed",
+    },
+    {
+      component: AddressInformation,
+      title: "Address",
+      description: "Your current place of residence",
+    },
+    {
+      component: BasicRequirements,
+      title: "Basic Requirements",
+      description: "Essential documents for verification",
+    },
+    {
+      component: IncomeInfo,
+      title: "Income Information",
+      description: "Overview of your monthly earnings",
+    },
+    ...(applicationData.incomeSources.includes("employment")
+      ? [
+          {
+            component: WorkInfo,
+            title: "Employment Information",
+            description: "Current job and employer details",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("business")
+      ? [
+          {
+            component: BusinessInfo,
+            title: "Business Information",
+            description: "Details regarding your business operations",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("remittance")
+      ? [
+          {
+            component: RemittanceInfo,
+            title: "Remittance",
+            description: "Funds received from family or abroad",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("pension")
+      ? [
+          {
+            component: PensionInfo,
+            title: "Pension",
+            description: "Regular retirement or social benefits",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("commissions")
+      ? [
+          {
+            component: CommissionsInfo,
+            title: "Commissions",
+            description: "Performance-based or variable pay",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("interest Income")
+      ? [
+          {
+            component: InterestIncomeInfo,
+            title: "Interest Income",
+            description: "Earnings from investments or savings",
+          },
+        ]
+      : []),
+    ...(applicationData.incomeSources.includes("sale Of Assets")
+      ? [
+          {
+            component: SaleOfAssetsInfo,
+            title: "Sale of Assets",
+            description: "Proceeds from sold property or goods",
+          },
+        ]
+      : []),
+    ...(applicationData.loanOption === "Sangla ORCR"
+      ? [
+          {
+            component: MotorVehicle,
+            title: "Sangla Information",
+            description: "Details of vehicle",
+          },
+        ]
+      : []),
+    {
+      component: BankAccounts,
+      title: "Bank Accounts",
+      description: "Your active banking relationships",
+    },
+    {
+      component: CoborrowerInformation,
+      title: "Coborrower",
+      description: "Basic details of your loan partner",
+    },
+    {
+      component: CoborrowerAddressInformation,
+      title: "Coborrower Address",
+      description: "Coborrower's current residence",
+    },
+    {
+      component: CoborrowerIncomeInfo,
+      title: "Coborrower Income",
+      description: "Earnings details of your coborrower",
+    },
+    {
+      component: CharacterReferences,
+      title: "Character References",
+      description: "Contacts not living in your household",
+    },
+    {
+      component: TradeReferences,
+      title: "Trade References",
+      description: "Business clients or major suppliers",
+    },
+    // {
+    //   component: WrapUp,
+    //   title: "Confirm",
+    //   description: "Signature",
+    // },
   ]
 
   const { showStatus } = useStatus()
