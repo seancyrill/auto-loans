@@ -3,6 +3,7 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import React, { useEffect, useImperativeHandle, useRef, useState } from "react"
 import SignatureCanvas from "react-signature-canvas"
+import { SignatureValue } from "../context/form-context-types"
 import { cn } from "../utils/cn"
 import { Button } from "./button"
 
@@ -36,7 +37,7 @@ export type SignaturePadProps = VariantProps<typeof signaturePadVariants> & {
   className?: string
   canvasClassName?: string
   penColor?: string
-  onSave?: (dataURL: string) => void
+  onSave?: (value: SignatureValue) => void
   onClear?: () => void
   disabled?: boolean
   initialValue?: string | null
@@ -79,8 +80,10 @@ const SignaturePad = React.forwardRef<SignaturePadRef, SignaturePadProps>(
 
     const handleEnd = () => {
       if (!sigRef.current || sigRef.current.isEmpty()) return
-      const dataURL = sigRef.current.getTrimmedCanvas().toDataURL("image/png")
-      onSave?.(dataURL)
+      const full = sigRef.current.getCanvas().toDataURL("image/png")
+      const trimmed = sigRef.current.getTrimmedCanvas().toDataURL("image/png")
+
+      onSave?.({ full, trimmed })
       setIsEmpty(false)
     }
 
@@ -93,8 +96,7 @@ const SignaturePad = React.forwardRef<SignaturePadRef, SignaturePadProps>(
     useImperativeHandle(ref, () => ({
       clear: handleClear,
       isEmpty: () => sigRef.current?.isEmpty() ?? true,
-      toDataURL: () =>
-        sigRef.current && !sigRef.current.isEmpty() ? sigRef.current.getTrimmedCanvas().toDataURL("image/png") : null,
+      toDataURL: () => null,
     }))
 
     return (

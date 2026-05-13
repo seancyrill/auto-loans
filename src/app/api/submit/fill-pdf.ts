@@ -1,7 +1,8 @@
 import { ApplicationFormType, NatureOfWork } from "@/app/context/form-context-types"
+import { getFullName } from "@/app/utils/full-name"
 import fs from "fs"
 import path from "path"
-import { PDFDocument, PDFFont, PDFPage, rgb, StandardFonts } from "pdf-lib"
+import { PDFDocument, PDFFont, PDFImage, PDFPage, rgb, StandardFonts } from "pdf-lib"
 
 const BLACK = rgb(0, 0, 0)
 const FONT_SIZE = 10
@@ -9,16 +10,24 @@ const FONT_SIZE = 10
 export async function fillGdfiApplication(data: ApplicationFormType): Promise<Uint8Array> {
   const pdfPath = path.join(process.cwd(), "src/templates/gdfi-application.pdf")
   const templateBytes = fs.readFileSync(pdfPath)
-
   const pdfDoc = await PDFDocument.load(templateBytes)
   const pages = pdfDoc.getPages()
   const font = await pdfDoc.embedFont(StandardFonts.Courier)
 
+  const signature = await embedSignature(pdfDoc, data?.signature?.trimmed ?? null)
+  const cbSignature = await embedSignature(pdfDoc, data?.coBorrower?.signature?.trimmed ?? null)
+
   fillPage1(pages[0], data, font)
   fillPage2(pages[1], data, font)
-  fillPage3(pages[2], data, font)
-
+  fillPage3(pages[2], data, font, signature, cbSignature)
+  fillPage4(pages[3], data, font, signature, cbSignature)
   return pdfDoc.save()
+}
+
+async function embedSignature(pdfDoc: PDFDocument, dataURL: string | null): Promise<PDFImage | null> {
+  if (!dataURL) return null
+  const buffer = Buffer.from(dataURL.replace(/^data:image\/\w+;base64,/, ""), "base64")
+  return pdfDoc.embedPng(buffer)
 }
 
 function t(page: PDFPage, text: string, x: number, y: number, font: PDFFont, size = FONT_SIZE) {
@@ -28,6 +37,19 @@ function t(page: PDFPage, text: string, x: number, y: number, font: PDFFont, siz
 
 function check(page: PDFPage, x: number, y: number, font: PDFFont) {
   page.drawText("X", { x: x + 3, y: y + 2, size: 7, font, color: BLACK })
+}
+
+function drawSignature(
+  page: PDFPage,
+  signature: PDFImage | null,
+  x: number,
+  y: number,
+  maxWidth = 200,
+  maxHeight = 80,
+) {
+  if (!signature) return
+  const dims = signature.scaleToFit(maxWidth, maxHeight)
+  page.drawImage(signature, { x, y, width: dims.width, height: dims.height })
 }
 
 export function fillPage1(page: PDFPage, data: ApplicationFormType, font: PDFFont) {
@@ -322,9 +344,29 @@ export function fillPage2(page: PDFPage, data: ApplicationFormType, font: PDFFon
   })
 }
 
-export function fillPage3(page: PDFPage, data: ApplicationFormType, font: PDFFont) {
-  // ─── "To:" BANK / BRANCH LINE ─────────────────────────────────────────────
+export function fillPage3(
+  page: PDFPage,
+  data: ApplicationFormType,
+  font: PDFFont,
+  signature: PDFImage | null,
+  cbSignature: PDFImage | null,
+) {
   const toBankName = data.authorizeBankDetails[0]?.bankBranch || data.bankAccounts[0]?.bankBranch || ""
+  const fullName = getFullName({
+    firstName: data.firstName,
+    lastName: data.lastName,
+    middleName: data.middleName,
+    nameSuffix: data.nameSuffix,
+  })
+  const cb = data.coBorrower
+  const cbFullName = getFullName({
+    firstName: cb.firstName,
+    lastName: cb.lastName,
+    middleName: cb.middleName,
+    nameSuffix: cb.nameSuffix,
+  })
+
+  // ─── "To:" BANK / BRANCH LINE ─────────────────────────────────────────────
   t(page, toBankName, 65, 911, font)
 
   // ─── AUTHORIZATION TABLE ──────────────────────────────────────────────────
@@ -336,4 +378,58 @@ export function fillPage3(page: PDFPage, data: ApplicationFormType, font: PDFFon
     t(page, entry.accountNumber, 393, y, font, 7)
     t(page, entry.accountType, 470, y, font, 7)
   })
+
+  // ─── SIGNATURE ──────────────────────────────────────────────────
+  if (data.signature) {
+    t(page, fullName, 112, 694, font)
+    drawSignature(page, signature, 129, 693)
+
+    t(page, fullName, 90, 286, font)
+    drawSignature(page, signature, 134, 296)
+
+    drawSignature(page, signature, 31, 605)
+    drawSignature(page, signature, 32, 584)
+    drawSignature(page, signature, 32, 561)
+  }
+
+  if (cb.signature) {
+    t(page, cbFullName, 362, 694, font)
+    drawSignature(page, cbSignature, 381, 694)
+
+    t(page, cbFullName, 322, 286, font)
+    drawSignature(page, cbSignature, 349, 297)
+
+    drawSignature(page, cbSignature, 298, 606)
+    drawSignature(page, cbSignature, 299, 584)
+    drawSignature(page, cbSignature, 299, 561)
+  }
+}
+
+export function fillPage4(
+  page: PDFPage,
+  data: ApplicationFormType,
+  font: PDFFont,
+  signature: PDFImage | null,
+  cbSignature: PDFImage | null,
+) {
+  const fullName = getFullName({
+    firstName: data.firstName,
+    lastName: data.lastName,
+    middleName: data.middleName,
+    nameSuffix: data.nameSuffix,
+  })
+  const cb = data.coBorrower
+  const cbFullName = getFullName({
+    firstName: cb.firstName,
+    lastName: cb.lastName,
+    middleName: cb.middleName,
+    nameSuffix: cb.nameSuffix,
+  })
+
+  // ─── SIGNATURE ──────────────────────────────────────────────────
+  t(page, fullName, 117, 323, font)
+  drawSignature(page, signature, 133, 335)
+
+  t(page, cbFullName, 355, 323, font)
+  drawSignature(page, cbSignature, 383, 334)
 }

@@ -31,7 +31,7 @@ export type ApplicationImageType = { name: string; image: string }
 export type ApplicationFormType = {
   loanOption: LoanOption
   lender: LenderOption
-  signature: string | null
+  signature: SignatureValue | null
 
   // Personal Information
   firstName: string
@@ -207,6 +207,7 @@ export type TradeReference = {
 }
 
 export type CoBorrowerType = {
+  signature: SignatureValue | null
   firstName: string
   middleName: string
   lastName: string
@@ -248,6 +249,11 @@ export type CoBorrowerType = {
   businessTelNumber: string
 }
 
+export type SignatureValue = {
+  full: string // restored to canvas on reload
+  trimmed: string // embedded into PDF
+}
+
 /**
  * Resolves to: "characterReferences" | "tradeReferences" | "bankAccounts" | "authorizeBankDetails" | "dependents"
  */
@@ -256,6 +262,7 @@ export type FormArrayFields = {
 }[keyof ApplicationFormType]
 
 const initialCoBorrower: CoBorrowerType = {
+  signature: null,
   firstName: "",
   middleName: "",
   lastName: "",
