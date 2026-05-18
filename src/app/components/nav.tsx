@@ -9,6 +9,7 @@ const links = [
   { label: "How it Works", href: "#howitworks" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
+  { label: "Privacy", href: "privacy-policy" },
 ]
 
 export default function Nav() {
@@ -84,13 +85,13 @@ export default function Nav() {
             className="flex cursor-pointer flex-col items-end gap-1.25 border-none bg-transparent p-1.5 md:hidden"
           >
             <span
-              className={`block h-px transition-all duration-300 ${open ? "w-6 translate-y-[6.5px] rotate-45" : "w-6"} ${scrolled ? "bg-primary" : "bg-secondary"}`}
+              className={`block h-[1.5px] transition-all duration-300 ${open ? "w-6 translate-y-[6.5px] rotate-45" : "w-6"} ${scrolled ? "bg-primary" : "bg-secondary"}`}
             />
             <span
-              className={`block h-px transition-all duration-300 ${open ? "w-6 opacity-0" : "w-4"} ${scrolled ? "bg-primary" : "bg-secondary"}`}
+              className={`block h-[1.5px] transition-all duration-300 ${open ? "w-6 opacity-0" : "w-4"} ${scrolled ? "bg-primary" : "bg-secondary"}`}
             />
             <span
-              className={`block h-px transition-all duration-300 ${open ? "w-6 -translate-y-[6.5px] -rotate-45" : "w-5"} ${scrolled ? "bg-primary" : "bg-secondary"}`}
+              className={`block h-[1.5px] transition-all duration-300 ${open ? "w-6 -translate-y-[6.5px] -rotate-45" : "w-5"} ${scrolled ? "bg-primary" : "bg-secondary"}`}
             />
           </button>
         </nav>

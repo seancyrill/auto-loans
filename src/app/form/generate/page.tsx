@@ -70,7 +70,7 @@ export default function GenerateForm() {
       <div className="bg-primary sticky top-0 z-10 w-full pt-17">
         <ProgressBar />
 
-        <div className="border-off flex w-full flex-col items-center border-b pt-1 pb-3 shadow-sm sm:gap-2 sm:p-6">
+        <div className="border-off flex w-full flex-col items-center border-b px-4 pt-1 pb-3 shadow-sm sm:gap-2 sm:p-6">
           {currentStep && (
             <>
               <h1 className="text-xl font-bold sm:text-3xl">{currentStep.title}</h1>

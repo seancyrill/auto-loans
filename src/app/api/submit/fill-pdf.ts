@@ -44,8 +44,8 @@ function drawSignature(
   signature: PDFImage | null,
   x: number,
   y: number,
-  maxWidth = 200,
-  maxHeight = 80,
+  maxWidth = 100,
+  maxHeight = 40,
 ) {
   if (!signature) return
   const dims = signature.scaleToFit(maxWidth, maxHeight)
@@ -382,26 +382,26 @@ export function fillPage3(
   // ─── SIGNATURE ──────────────────────────────────────────────────
   if (data.signature) {
     t(page, fullName, 112, 694, font)
-    drawSignature(page, signature, 129, 693)
+    drawSignature(page, signature, 129, 693, 133, 53)
 
     t(page, fullName, 90, 286, font)
-    drawSignature(page, signature, 134, 296)
+    drawSignature(page, signature, 134, 296, 133, 53)
 
     drawSignature(page, signature, 31, 605)
-    drawSignature(page, signature, 32, 584)
-    drawSignature(page, signature, 32, 561)
+    drawSignature(page, signature, 132, 584)
+    drawSignature(page, signature, 232, 561)
   }
 
   if (cb.signature) {
     t(page, cbFullName, 362, 694, font)
-    drawSignature(page, cbSignature, 381, 694)
+    drawSignature(page, cbSignature, 381, 694, 133, 53)
 
     t(page, cbFullName, 322, 286, font)
-    drawSignature(page, cbSignature, 349, 297)
+    drawSignature(page, cbSignature, 349, 297, 133, 53)
 
     drawSignature(page, cbSignature, 298, 606)
-    drawSignature(page, cbSignature, 299, 584)
-    drawSignature(page, cbSignature, 299, 561)
+    drawSignature(page, cbSignature, 399, 584)
+    drawSignature(page, cbSignature, 499, 561)
   }
 }
 
@@ -428,8 +428,8 @@ export function fillPage4(
 
   // ─── SIGNATURE ──────────────────────────────────────────────────
   t(page, fullName, 117, 323, font)
-  drawSignature(page, signature, 133, 335)
+  drawSignature(page, signature, 133, 335, 133, 53)
 
   t(page, cbFullName, 355, 323, font)
-  drawSignature(page, cbSignature, 383, 334)
+  drawSignature(page, cbSignature, 383, 334, 133, 53)
 }

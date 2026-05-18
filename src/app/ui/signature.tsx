@@ -67,16 +67,29 @@ const SignaturePad = React.forwardRef<SignaturePadRef, SignaturePadProps>(
       if (!initialValue || !sigRef.current) return
 
       const canvas = sigRef.current.getCanvas()
-      const ctx = canvas.getContext("2d")
-      if (!ctx) return
 
-      const img = new Image()
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0)
+      const redraw = () => {
+        const ctx = canvas.getContext("2d")
+        if (!ctx) return
+        const img = new Image()
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height)
+          ctx.drawImage(img, 0, 0, canvas.offsetWidth, canvas.offsetHeight)
+        }
+        img.src = initialValue
       }
 
-      img.src = initialValue
-    }, [])
+      const instance = sigRef.current
+      const originalResize = instance._resizeCanvas?.bind(instance)
+      if (originalResize) {
+        instance._resizeCanvas = () => {
+          originalResize()
+          redraw()
+        }
+      }
+
+      redraw()
+    }, [initialValue])
 
     const handleEnd = () => {
       if (!sigRef.current || sigRef.current.isEmpty()) return
