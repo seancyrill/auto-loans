@@ -1,4 +1,27 @@
-export function getEmailHTML(name: string, phone: string) {
+type EmailType = "quick" | "generate" | "notify"
+
+const config: Record<EmailType, { color: string; title: string; subtitle: string }> = {
+  quick: {
+    color: "#1a1a2e",
+    title: "New Quick Submission",
+    subtitle: "Someone has filled out a form and quick submitted. Contact and guide them immediately:",
+  },
+  generate: {
+    color: "#b69e74",
+    title: "New Generated Submission",
+    subtitle: "Someone has filled out the forms and generated documents. Please check everything:",
+  },
+  notify: {
+    color: "#cccccc",
+    title: "Someone is Interested",
+    subtitle:
+      "Someone just tried to fill up the first form. This is just a notification. If you dont get a submission later on, try to convince them:",
+  },
+}
+
+export function getEmailHTML(name: string, phone: string, type: EmailType = "quick") {
+  const { color, subtitle, title } = config[type]
+
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +44,7 @@ export function getEmailHTML(name: string, phone: string) {
  
           <!-- Top accent bar -->
           <tr>
-            <td style="background-color:#1a1a2e; height:5px; font-size:0; line-height:0;">&nbsp;</td>
+            <td style="background-color:${color}; height:5px; font-size:0; line-height:0;">&nbsp;</td>
           </tr>
  
           <!-- Header -->
@@ -30,7 +53,7 @@ export function getEmailHTML(name: string, phone: string) {
               <p style="margin:0 0 6px 0; font-size:11px; font-weight:600; letter-spacing:2px;
                          color:#6b7280; text-transform:uppercase;">Form Notification</p>
               <h1 style="margin:0; font-size:22px; font-weight:700; color:#1a1a2e; line-height:1.3;">
-                New Applicant Received
+                ${title}
               </h1>
             </td>
           </tr>
@@ -46,7 +69,7 @@ export function getEmailHTML(name: string, phone: string) {
           <tr>
             <td style="padding: 28px 40px 8px 40px;">
               <p style="margin:0; font-size:15px; color:#374151; line-height:1.7;">
-                Someone has filled out a form on your application. Here are the details submitted:
+                ${subtitle}
               </p>
             </td>
           </tr>

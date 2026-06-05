@@ -1,6 +1,6 @@
+import { GMAIL_USER, transporter } from "@/app/lib/mailer"
 import { getFullName } from "@/app/utils/full-name"
 import { NextRequest, NextResponse } from "next/server"
-import nodemailer from "nodemailer"
 import { getEmailHTML } from "../email-template"
 import { fillGdfiApplication } from "../fill-pdf"
 import { lenderEmailFinder } from "../lender-emai-finder"
@@ -8,10 +8,9 @@ import { parseImageAttachments } from "../parse-image-attachments"
 import { generateSanglaPDF } from "../sangla-pdf"
 
 export async function POST(req: NextRequest) {
-  const GMAIL_USER = process.env.GMAIL_USER
   const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD
 
-  if (!GMAIL_USER || !GMAIL_APP_PASSWORD) {
+  if (!GMAIL_APP_PASSWORD) {
     return NextResponse.json({ success: false, message: "Cannot read env" }, { status: 500 })
   }
 
@@ -42,16 +41,6 @@ export async function POST(req: NextRequest) {
 
   // create sangla details pdf
   const sanglaDetails = await generateSanglaPDF(applicationData.motorVehicle)
-
-  // setup mailer
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_APP_PASSWORD,
-    },
-  })
-
   const lenderEmail = lenderEmailFinder(lender)
 
   if (!lenderEmail) {
@@ -60,10 +49,10 @@ export async function POST(req: NextRequest) {
 
   // send docs to processor
   await transporter.sendMail({
-    from: "SDG Financing",
+    from: `"SDG Financing" <${GMAIL_USER}>`,
     to: lenderEmail,
     subject: "New Form Submission",
-    html: getEmailHTML(fullName, `0${mobile}`),
+    html: getEmailHTML(fullName, `0${mobile}`, "generate"),
     attachments: [
       ...imageAttachments,
       ...sanglaDetails,

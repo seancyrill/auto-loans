@@ -17,6 +17,8 @@ export type ApplicationContextType = {
   ) => void
   applicationImages: { name: string; image: string }[]
   updateImages: (name: string, images: string[]) => void
+  hasSubmitted: boolean
+  setHasSubmitted: Dispatch<SetStateAction<boolean>>
 }
 
 export type ApplicationLoadingType = {

@@ -14,8 +14,14 @@ import ProgressBar from "../components/progress-bar"
 export default function GenerateForm() {
   const router = useRouter()
   const { currentStep, goNext, goPrev, hasPrev, isLastStep } = useStepper()
-  const { applicationData, applicationImages, applicationLoading, resetApplication, setApplicationLoading } =
-    useApplication()
+  const {
+    applicationData,
+    applicationImages,
+    applicationLoading,
+    resetApplication,
+    setApplicationLoading,
+    setHasSubmitted,
+  } = useApplication()
   const { showStatus, clearStatus } = useStatus()
   const StepComponent = currentStep?.component
 
@@ -40,6 +46,8 @@ export default function GenerateForm() {
 
     const data = await res.json()
     if (data.success) {
+      setHasSubmitted(true)
+
       showStatus({
         message:
           "Your application is successfully sent to your Loan Consultant. They will review everything to give you the best chance of approval. Wait for them to contact you.",

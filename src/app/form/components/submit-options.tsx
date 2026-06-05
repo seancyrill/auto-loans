@@ -15,7 +15,7 @@ type SubmitModalProps = {
 
 export function SubmitModal({ open, onClose }: SubmitModalProps) {
   const router = useRouter()
-  const { resetApplication, applicationData, setApplicationLoading } = useApplication()
+  const { resetApplication, applicationData, setApplicationLoading, setHasSubmitted } = useApplication()
   const { showStatus, clearStatus } = useStatus()
   const dialogRef = useRef<HTMLDialogElement>(null)
 
@@ -55,7 +55,7 @@ export function SubmitModal({ open, onClose }: SubmitModalProps) {
     const res = await fetch("/api/submit/quick", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ applicationData, lender: "gdfi" }),
+      body: JSON.stringify({ applicationData }),
     })
 
     setApplicationLoading({ loading: false, text: "" })
@@ -63,6 +63,7 @@ export function SubmitModal({ open, onClose }: SubmitModalProps) {
     const data = await res.json()
     if (data.success) {
       onClose()
+      setHasSubmitted(true)
       setApplicationLoading({ loading: false, text: "" })
 
       showStatus({

@@ -18,6 +18,7 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
   const [applicationData, setApplicationData] = useState<ApplicationFormType>(initialApplicationData)
   const [applicationLoading, setApplicationLoading] = useState<ApplicationLoadingType>({ loading: true, text: "" })
   const [applicationImages, setApplicationImages] = useState<ApplicationImageType[]>([])
+  const [hasSubmitted, setHasSubmitted] = useState(false)
 
   const { firstName, middleName, lastName, nameSuffix } = applicationData
 
@@ -25,8 +26,6 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
     () => getFullName({ firstName, middleName, lastName, nameSuffix }),
     [firstName, middleName, lastName, nameSuffix],
   )
-
-  console.log(applicationData.signature)
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -48,7 +47,10 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
       } catch (error) {
         console.error("Error loading application data from storage:", error)
       } finally {
-        setApplicationLoading({ loading: false, text: "" })
+        // just to let notify fail at start
+        setTimeout(() => {
+          setApplicationLoading({ loading: false, text: "" })
+        }, 50)
       }
     }
 
@@ -66,6 +68,28 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
       }
     }
   }, [applicationData, applicationLoading.loading, applicationImages])
+
+  // notify interest
+  useEffect(() => {
+    // dont notify on localstorage load
+    if (applicationLoading.loading) {
+      return
+    }
+
+    if (applicationData.mobile?.length >= 10 && !hasSubmitted) {
+      const timer = setTimeout(() => {
+        fetch("/api/submit/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ applicationData }),
+        })
+      }, 2000)
+
+      return () => clearTimeout(timer)
+    }
+
+    // no loading dependency, stops notifying at restart
+  }, [applicationData.mobile, hasSubmitted])
 
   // works for all flat fields
   const updateApplicationData = <K extends keyof ApplicationFormType>(field: K, value: ApplicationFormType[K]) => {
@@ -116,6 +140,7 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
   const resetApplication = (setInto?: ApplicationFormType) => {
     setApplicationData(setInto ?? initialApplicationData)
     setApplicationImages([])
+    setHasSubmitted(false)
   }
 
   return (
@@ -133,6 +158,8 @@ export const ApplicationProvider = ({ children }: { children: ReactNode }) => {
         setApplicationLoading,
         applicationImages,
         updateImages,
+        hasSubmitted,
+        setHasSubmitted,
       }}
     >
       {children}
